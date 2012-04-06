@@ -1,0 +1,26 @@
+set (HEADER_FILES
+    commandline.h
+  )
+
+set (SOURCE_FILES
+    main.cpp
+    commandline.cpp
+  )
+
+INCLUDE_DIRECTORIES(
+    ${Boost_INCLUDE_DIRS}
+    ${FDB_LIB_INCLUDE}
+    )
+
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+
+ADD_EXECUTABLE(FDB_ex2
+    ${HEADER_FILES}
+    ${SOURCE_FILES} )
+
+SET_OUT_DIR(FDB_ex2)
+
+
+ADD_DEPENDENCIES( FDB_ex2 FDB_LIB)
+TARGET_LINK_LIBRARIES( FDB_ex2 FDB_LIB)
+

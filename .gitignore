@@ -1,0 +1,7 @@
+/_wiki
+/build/
+/bin/
+dep/RoM/redux_runtime.dll
+dep/RoM/redux_nvtt.dll
+*.aps
+resources/test_data/

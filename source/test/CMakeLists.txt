@@ -1,0 +1,27 @@
+INCLUDE_DIRECTORIES(
+    ${FDB_LIB_INCLUDE}
+    ${GTEST_INCLUDE_DIRS}
+    )
+
+set (SOURCE_FILES
+    commandline.cpp
+    FDBFieldanalyser.cpp
+    )
+
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+
+ADD_EXECUTABLE(FDB_Test
+    ${SOURCE_FILES}
+    )
+
+SET_OUT_DIR(FDB_Test)
+
+TARGET_LINK_LIBRARIES(FDB_Test  ${GTEST_BOTH_LIBRARIES} FDB_LIB)
+ADD_DEPENDENCIES( FDB_Test FDB_LIB)
+
+#GTEST_ADD_TESTS("${FDB_ex2_SOURCE_DIR}/bin/FDB_Test" "" FDBFieldanalyser.cpp)
+ADD_TEST(FDB_Test2 "${FDB_ex2_SOURCE_DIR}/bin/FDB_Test")
+
+
+
+
