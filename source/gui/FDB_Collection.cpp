@@ -49,7 +49,10 @@ bool FDB_Collection::OpenDefault()
 	Close();
 
 	string dir = GetROMInstallDir();
-	return Open((dir + "fdb/*.fdb").c_str());
+	if (wxDirExists(dir))
+		return Open((dir + "fdb/*.fdb").c_str());
+	else
+		return false;
 }
 
 void FDB_Collection::Close()
