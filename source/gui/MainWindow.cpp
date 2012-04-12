@@ -116,22 +116,12 @@ MainWindow::FT_ICONS MainWindow::GetFileTypeIcon(const FDBPackage::file_info& in
 
 void MainWindow::OnLoadFDB( wxCommandEvent& event )
 {
-	LoadFDBs(true);
-}
-
-void MainWindow::OnAddFDB( wxCommandEvent& event )
-{
-	LoadFDBs(false);
-}
-
-void MainWindow::LoadFDBs(bool clear)
-{
 	wxFileDialog dlg(this, _("Open FDB Files"), GetROMInstallDir(), wxEmptyString,
                            "FDB files (*.fdb)|*.fdb", wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_MULTIPLE);
 
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	
-	if (clear)	fdb_pack.Close();
+	fdb_pack.Close();
 
 	wxArrayString filenames;
 	dlg.GetPaths(filenames);

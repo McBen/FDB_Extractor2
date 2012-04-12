@@ -49,7 +49,6 @@ namespace BASE_DLG
 			enum
 			{
 				wxCMD_LOAD_FDB = 6000,
-				wxCMD_ADD_FDB,
 				FDBex_ExtractFolder,
 				FDBex_ExtractFiles,
 			};
@@ -63,7 +62,6 @@ namespace BASE_DLG
 			
 			// Virtual event handlers, overide them in your derived class
 			virtual void OnLoadFDB( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnAddFDB( wxCommandEvent& event ) { event.Skip(); }
 			virtual void m_extract_folderOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 			virtual void m_extract_fileOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 			virtual void directory_ctrlOnTreeItemMenu( wxTreeEvent& event ) { event.Skip(); }

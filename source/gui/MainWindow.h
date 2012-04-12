@@ -24,7 +24,6 @@ class MainWindow : public BASE_DLG::MainWindow
 		void directory_ctrlOnTreeSelChanged( wxTreeEvent& event );
 		void directory_ctrlOnTreeItemMenu( wxTreeEvent& event );
 		void OnLoadFDB( wxCommandEvent& event );
-		void OnAddFDB( wxCommandEvent& event );
 		void file_ctrlOnLeftDClick( wxMouseEvent& event );
 		void file_ctrlOnContextMenu(wxContextMenuEvent& event);
 

@@ -211,7 +211,7 @@
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">img/folder.png ; Load From File</property>
+                            <property name="bitmap">img/folder.png; Load From File</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxCMD_LOAD_FDB</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -231,27 +231,6 @@
                             <event name="OnToolRClicked"></event>
                             <event name="OnUpdateUI"></event>
                         </object>
-                        <object class="tool" expanded="1">
-                            <property name="bitmap">img/folder_add.png ; Load From File</property>
-                            <property name="context_menu">0</property>
-                            <property name="id">wxCMD_ADD_FDB</property>
-                            <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Add FDB</property>
-                            <property name="name">m_add_fdb</property>
-                            <property name="permission">protected</property>
-                            <property name="statusbar"></property>
-                            <property name="tooltip">Add FDB Files</property>
-                            <event name="OnAuiToolBarBeginDrag"></event>
-                            <event name="OnAuiToolBarMiddleClick"></event>
-                            <event name="OnAuiToolBarOverflowClick"></event>
-                            <event name="OnAuiToolBarRightClick"></event>
-                            <event name="OnAuiToolBarToolDropDown"></event>
-                            <event name="OnMenuSelection"></event>
-                            <event name="OnToolClicked">OnAddFDB</event>
-                            <event name="OnToolEnter"></event>
-                            <event name="OnToolRClicked"></event>
-                            <event name="OnUpdateUI"></event>
-                        </object>
                         <object class="toolSeparator" expanded="1">
                             <property name="permission">protected</property>
                         </object>
@@ -264,7 +243,7 @@
                             <property name="name">m_extract_folder</property>
                             <property name="permission">protected</property>
                             <property name="statusbar"></property>
-                            <property name="tooltip"></property>
+                            <property name="tooltip">Extract current Folder</property>
                             <event name="OnAuiToolBarBeginDrag"></event>
                             <event name="OnAuiToolBarMiddleClick"></event>
                             <event name="OnAuiToolBarOverflowClick"></event>
@@ -285,7 +264,7 @@
                             <property name="name">m_extract_file</property>
                             <property name="permission">protected</property>
                             <property name="statusbar"></property>
-                            <property name="tooltip"></property>
+                            <property name="tooltip">Extract selected File(s)</property>
                             <event name="OnAuiToolBarBeginDrag"></event>
                             <event name="OnAuiToolBarMiddleClick"></event>
                             <event name="OnAuiToolBarOverflowClick"></event>

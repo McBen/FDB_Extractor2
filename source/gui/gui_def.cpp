@@ -24,13 +24,11 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_toolBar1->SetToolBitmapSize( wxSize( 16,16 ) );
 	m_toolBar1->AddTool( wxCMD_LOAD_FDB, _("Load FDBs"), wxBitmap( wxT("img/folder.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Open FDB Files"), wxEmptyString, NULL ); 
 	
-	m_toolBar1->AddTool( wxCMD_ADD_FDB, _("Add FDB"), wxBitmap( wxT("img/folder_add.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Add FDB Files"), wxEmptyString, NULL ); 
-	
 	m_toolBar1->AddSeparator(); 
 	
-	m_toolBar1->AddTool( FDBex_ExtractFolder, _("Extract Folder"), wxBitmap( wxT("img/ex_folder.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL ); 
+	m_toolBar1->AddTool( FDBex_ExtractFolder, _("Extract Folder"), wxBitmap( wxT("img/ex_folder.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Extract current Folder"), wxEmptyString, NULL ); 
 	
-	m_toolBar1->AddTool( FDBex_ExtractFiles, _("Extract Files"), wxBitmap( wxT("img/cog_go.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL ); 
+	m_toolBar1->AddTool( FDBex_ExtractFiles, _("Extract Files"), wxBitmap( wxT("img/cog_go.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Extract selected File(s)"), wxEmptyString, NULL ); 
 	
 	m_toolBar1->Realize(); 
 	
@@ -70,7 +68,6 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	
 	// Connect Events
 	this->Connect( wxCMD_LOAD_FDB, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainWindow::OnLoadFDB ) );
-	this->Connect( wxCMD_ADD_FDB, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainWindow::OnAddFDB ) );
 	this->Connect( FDBex_ExtractFolder, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MainWindow::m_extract_folderOnUpdateUI ) );
 	this->Connect( FDBex_ExtractFiles, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MainWindow::m_extract_fileOnUpdateUI ) );
 	directory_ctrl->Connect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( MainWindow::directory_ctrlOnTreeItemMenu ), NULL, this );
@@ -82,7 +79,6 @@ MainWindow::~MainWindow()
 {
 	// Disconnect Events
 	this->Disconnect( wxCMD_LOAD_FDB, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainWindow::OnLoadFDB ) );
-	this->Disconnect( wxCMD_ADD_FDB, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainWindow::OnAddFDB ) );
 	this->Disconnect( FDBex_ExtractFolder, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MainWindow::m_extract_folderOnUpdateUI ) );
 	this->Disconnect( FDBex_ExtractFiles, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MainWindow::m_extract_fileOnUpdateUI ) );
 	directory_ctrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( MainWindow::directory_ctrlOnTreeItemMenu ), NULL, this );
