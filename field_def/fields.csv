@@ -1564,20 +1564,20 @@ data\cultivatepetgrow.db;;0014;04;2;
 data\cultivatepetgrow.db;;0018;04;2;
 data\cultivatepetgrow.db;;001c;04;2;
 data\cultivatepetgrow.db;;0020;04;2;=2
-data\cultivatepetlearnmagic.db;;0000;04;2;
+data\cultivatepetlearnmagic.db;guid;0000;04;2;
 data\cultivatepetlearnmagic.db;;0004;04;1;
 data\cultivatepetlearnmagic.db;;0008;04;1;
-data\cultivatepetlearnmagic.db;;000c;04;2;
-data\cultivatepetlearnmagic.db;;002c;04;2;
-data\cultivatepetlearnmagic.db;;0030;04;2;
+data\cultivatepetlearnmagic.db;pet_level;000c;04;2;pet level
+data\cultivatepetlearnmagic.db;skill;002c;04;2;available passive skill
+data\cultivatepetlearnmagic.db;skill_level;0030;04;2;maximum skill level for this level
 data\cultivatepetlearnmagic.db;;0034;04;2;=500
-data\cultivatepetlifeskill.db;;0000;04;2;
-data\cultivatepetlifeskill.db;;0004;04;2;
-data\cultivatepetlifeskill.db;;0008;04;2;
-data\cultivatepetlifeskill.db;;000c;04;2;
-data\cultivatepetlifeskill.db;;0010;04;2;
-data\cultivatepetlifeskill.db;;0014;04;2;
-data\cultivatepetlifeskill.db;;0020;04;2;
+data\cultivatepetlifeskill.db;guid;0000;04;2;
+data\cultivatepetlifeskill.db;product_type;0004;04;2;index of product in pet's products list for specified tools type
+data\cultivatepetlifeskill.db;craft_type;0008;04;2;0-2 (ore, wood, herb)
+data\cultivatepetlifeskill.db;craft_time;000c;04;2;in seconds (10)
+data\cultivatepetlifeskill.db;skill_level;0010;04;2;required level
+data\cultivatepetlifeskill.db;tools;0014;04;2;tools id for this product (e.g. 204228)
+data\cultivatepetlifeskill.db;product;0020;04;2;treasure id of product
 data\cultivatepettalk.db;;0000;04;2;
 data\cultivatepettalk.db;;0004;40;5;
 data\cultivatepettalk.db;;0044;04;2;
@@ -1613,12 +1613,14 @@ data\cultivatepetvalueevent.db;;0028;04;3;
 data\cultivatepetvalueevent.db;;002c;04;3;
 data\cultivatepetvalueevent.db;;0030;04;3;
 data\cultivatepetvalueevent.db;;0034;04;3;
-data\dissolutiontable.db;;0000;04;2;
-data\dissolutiontable.db;;0004;04;2;
-data\dissolutiontable.db;;0008;04;2;
-data\dissolutiontable.db;;000c;04;3;
-data\dissolutiontable.db;;0010;04;2;
-data\dissolutiontable.db;;0014;04;3;
+data\dissolutiontable.db;guid;0000;04;2;
+data\dissolutiontable.db;level;0004;04;2;level of item
+data\dissolutiontable.db;weapon;0008;04;2;jewel id for weapons
+data\dissolutiontable.db;weapon_rate;000c;04;3;jevel rate
+data\dissolutiontable.db;armour;0010;04;2;... for armour
+data\dissolutiontable.db;armour_rate;0014;04;3;
+data\dissolutiontable.db;accessory;0018;04;3;
+data\dissolutiontable.db;accessory_rate;001c;04;3;
 data\eqrefine.db;;0000;04;2;
 data\eqrefine.db;;0004;04;3;
 data\eqrefine.db;;0008;04;3;
