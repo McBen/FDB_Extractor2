@@ -211,7 +211,7 @@ void MainWindow::OnExtractFocusFile(wxCommandEvent& WXUNUSED(event))
 	long item = file_ctrl->GetNextItem(-1,wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
 	if (item==-1) return;
 
-	wxString curname = directory_ctrl->GetCurrentDir()+"\\"+file_ctrl->GetItemText(item);
+	wxString curname = directory_ctrl->GetCurrentDir()+file_ctrl->GetItemText(item);
 
 	wxFileDialog dlg(this, _("Save file"),last_export_path,file_ctrl->GetItemText(item),"", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 	if (dlg.ShowModal()==wxID_CANCEL) return;
