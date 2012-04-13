@@ -211,7 +211,7 @@
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">img/folder.png; Load From File</property>
+                            <property name="bitmap">wxART_FOLDER; wxART_TOOLBAR; Load From Art Provider</property>
                             <property name="context_menu">0</property>
                             <property name="id">wxCMD_LOAD_FDB</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -235,7 +235,7 @@
                             <property name="permission">protected</property>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">img/ex_folder.png; Load From File</property>
+                            <property name="bitmap">wxART_GO_FORWARD; wxART_TOOLBAR; Load From Art Provider</property>
                             <property name="context_menu">0</property>
                             <property name="id">FDBex_ExtractFolder</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -256,7 +256,7 @@
                             <event name="OnUpdateUI">m_extract_folderOnUpdateUI</event>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">img/cog_go.png; Load From File</property>
+                            <property name="bitmap">wxART_EXECUTABLE_FILE; wxART_TOOLBAR; Load From Art Provider</property>
                             <property name="context_menu">0</property>
                             <property name="id">FDBex_ExtractFiles</property>
                             <property name="kind">wxITEM_NORMAL</property>

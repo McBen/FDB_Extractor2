@@ -3,7 +3,7 @@
 #include "DirectoryListCtrl.h"
 #include "FileListCtrl.h"
 #include "resource.h"
-
+#include "../../resources/images/wxresource.h"
 
 using namespace std;
 
@@ -23,6 +23,10 @@ END_EVENT_TABLE()
 
 MainWindow::MainWindow() : BASE_DLG::MainWindow(NULL)
 {
+	m_toolBar1->SetToolNormalBitmap(wxCMD_LOAD_FDB, wxResourceGetBitmap(wxRES_folder));
+	m_toolBar1->SetToolNormalBitmap(FDBex_ExtractFiles, wxResourceGetBitmap(wxRES_cog_go));
+	m_toolBar1->SetToolNormalBitmap(FDBex_ExtractFolder, wxResourceGetBitmap(wxRES_ex_folder));
+
 	SetIcon(wxICON(IDI_ICON1)); // TODO: BUG: Idk why this isn't working
 
 	directory_ctrl->SetDataSource(&fdb_pack);

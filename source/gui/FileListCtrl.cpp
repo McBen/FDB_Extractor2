@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FileListCtrl.h"
+#include "../../resources/images/wxresource.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ FileListCtrl::FileListCtrl(wxWindow *parent, wxWindowID id, const wxPoint &pos, 
 	AppendColumn("Time",70);
 	AppendColumn("Comment");
 
-	wxBitmap images("img/filetype_icons.png",wxBITMAP_TYPE_PNG); // TODO: load from resource
+	wxBitmap images = wxResourceGetBitmap(wxRES_filetype_icons);
 	file_icons.Create(16,16);
 	file_icons.Add(images);
 	SetImageList(&file_icons,wxIMAGE_LIST_NORMAL);

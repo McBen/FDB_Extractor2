@@ -7,6 +7,7 @@ set (HEADER_FILES
 	DirectoryListCtrl.h
     FileListCtrl.h
     FDB_Collection.h
+    ../../resources/images/wxresource.h
   )
 
 set (SOURCE_FILES
@@ -17,6 +18,7 @@ set (SOURCE_FILES
 	DirectoryListCtrl.cpp
     FileListCtrl.cpp
     FDB_Collection.cpp
+    ../../resources/images/wxresource.cpp
   )
 
 IF (WIN32)
@@ -46,5 +48,3 @@ SET_OUT_DIR(FDB_Extractor2)
 
 ADD_DEPENDENCIES( FDB_Extractor2 FDB_LIB )
 TARGET_LINK_LIBRARIES( FDB_Extractor2 FDB_LIB ${wxWidgets_LIBRARIES})
-
-configure_file(${FDB_ex2_SOURCE_DIR}/resources/filetype_icons.png ${EXECUTABLE_OUTPUT_PATH}/img/filetype_icons.png COPYONLY)

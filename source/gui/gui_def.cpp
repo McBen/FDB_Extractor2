@@ -22,13 +22,13 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	
 	m_toolBar1 = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL );
 	m_toolBar1->SetToolBitmapSize( wxSize( 16,16 ) );
-	m_toolBar1->AddTool( wxCMD_LOAD_FDB, _("Load FDBs"), wxBitmap( wxT("img/folder.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Open FDB Files"), wxEmptyString, NULL ); 
+	m_toolBar1->AddTool( wxCMD_LOAD_FDB, _("Load FDBs"), wxArtProvider::GetBitmap( wxART_FOLDER, wxART_TOOLBAR ), wxNullBitmap, wxITEM_NORMAL, _("Open FDB Files"), wxEmptyString, NULL ); 
 	
 	m_toolBar1->AddSeparator(); 
 	
-	m_toolBar1->AddTool( FDBex_ExtractFolder, _("Extract Folder"), wxBitmap( wxT("img/ex_folder.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Extract current Folder"), wxEmptyString, NULL ); 
+	m_toolBar1->AddTool( FDBex_ExtractFolder, _("Extract Folder"), wxArtProvider::GetBitmap( wxART_GO_FORWARD, wxART_TOOLBAR ), wxNullBitmap, wxITEM_NORMAL, _("Extract current Folder"), wxEmptyString, NULL ); 
 	
-	m_toolBar1->AddTool( FDBex_ExtractFiles, _("Extract Files"), wxBitmap( wxT("img/cog_go.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, _("Extract selected File(s)"), wxEmptyString, NULL ); 
+	m_toolBar1->AddTool( FDBex_ExtractFiles, _("Extract Files"), wxArtProvider::GetBitmap( wxART_EXECUTABLE_FILE, wxART_TOOLBAR ), wxNullBitmap, wxITEM_NORMAL, _("Extract selected File(s)"), wxEmptyString, NULL ); 
 	
 	m_toolBar1->Realize(); 
 	
