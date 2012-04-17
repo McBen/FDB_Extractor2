@@ -67,6 +67,7 @@ class FDBPackage
         size_t  GetFileCount();
         const char* GetFileName(size_t index);
         void  GetFileInfo(size_t index, file_info&);
+		BYTE* GetFileRawData(size_t index, file_info& pinfo);
         int   GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size, file_info* pinfo = NULL);
 
         size_t      FindFile(const char* fname);
