@@ -104,7 +104,11 @@ void CommandLine::ParseArguments(variables_map vm)
         else
         {
             cerr << "no FDB File set\n";
-            boost::throw_exception(invalid_command_line_syntax("fdb_file", invalid_command_line_syntax::missing_parameter)); 
+			#if BOOST_VERSION<105000
+	            boost::throw_exception(invalid_command_line_syntax("fdb_file", invalid_command_line_syntax::missing_parameter)); 
+			#else
+		        boost::throw_exception(invalid_command_line_syntax(invalid_command_line_syntax::missing_parameter,"fdb_file")); 
+			#endif
         }
     }
 
