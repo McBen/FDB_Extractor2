@@ -2170,41 +2170,41 @@ data\learnmagic.db;imageid;0014;04;2;=0
 data\learnmagic.db;note;0020;04;2;=0
 data\learnmagic.db;shortnote;0024;04;2;=0
 data\learnmagic.db;spmagiccount;0090;04;2;
-data\learnmagic.db;spmagicinfo;0094;04;2;
+data\learnmagic.db;spmagicinfo;0094;04;2;array, each entry contains 6DWords, see below
 data\learnmagic.db;;0098;04;2;
 data\learnmagic.db;;00a8;04;2;
-data\learnmagic.db;;00ac;04;2;
+data\learnmagic.db;skill_2;00ac;04;2;
 data\learnmagic.db;;00b0;04;2;
 data\learnmagic.db;;00c0;04;2;
-data\learnmagic.db;;00c4;04;2;
+data\learnmagic.db;skill_3;00c4;04;2;
 data\learnmagic.db;;00c8;04;2;
 data\learnmagic.db;;00d8;04;2;
-data\learnmagic.db;;00dc;04;2;
+data\learnmagic.db;skill_4;00dc;04;2;
 data\learnmagic.db;;00e0;04;2;
 data\learnmagic.db;;00f0;04;2;
-data\learnmagic.db;;00f4;04;2;
+data\learnmagic.db;skill_5;00f4;04;2;
 data\learnmagic.db;;00f8;04;2;
 data\learnmagic.db;;0108;04;2;
-data\learnmagic.db;;010c;04;2;
+data\learnmagic.db;skill_6;010c;04;2;
 data\learnmagic.db;;0110;04;2;
 data\learnmagic.db;;0120;04;2;
-data\learnmagic.db;;0124;04;2;
+data\learnmagic.db;skill_7;0124;04;2;
 data\learnmagic.db;;0128;04;2;
 data\learnmagic.db;;0138;04;2;
-data\learnmagic.db;;013c;04;2;
+data\learnmagic.db;skill_8;013c;04;2;
 data\learnmagic.db;;0140;04;2;
 data\learnmagic.db;;0150;04;2;
-data\learnmagic.db;;0154;04;2;
+data\learnmagic.db;skill_9;0154;04;2;
 data\learnmagic.db;;0158;04;2;
 data\learnmagic.db;;0168;04;2;
-data\learnmagic.db;;016c;04;2;
+data\learnmagic.db;skill_10;016c;04;2;
 data\learnmagic.db;;0170;04;2;
 data\learnmagic.db;;0178;04;2;
 data\learnmagic.db;;0180;04;2;
-data\learnmagic.db;;0184;04;2;
+data\learnmagic.db;skill_11;0184;04;2;
 data\learnmagic.db;;0188;04;2;
 data\learnmagic.db;;0198;04;2;
-data\learnmagic.db;;019c;04;2;
+data\learnmagic.db;skill_12;019c;04;2;
 data\learnmagic.db;;01a0;04;2;
 data\learnmagic.db;;01b0;04;2;
 data\learnmagic.db;;01b4;04;2;
@@ -6544,15 +6544,15 @@ data\plantgrowaction.db;;0008;04;2;
 data\plantgrowaction.db;;000c;04;2;
 data\plantgrowaction.db;;0010;04;0;
 data\plantgrowaction.db;;0014;04;0;
-data\plantproduct.db;;0000;04;2;
-data\plantproduct.db;;0004;04;2;
-data\plantproduct.db;;0008;04;2;
-data\plantproduct.db;;000c;04;2;
-data\plantproduct.db;;0010;04;2;
-data\plantproduct.db;;0014;04;2;
-data\plantproduct.db;;0018;04;2;
-data\plantproduct.db;;001c;04;3;
-data\plantproduct.db;;0020;20;5;
+data\plantproduct.db;guid;0000;04;2;
+data\plantproduct.db;seed;0004;04;2;seed id
+data\plantproduct.db;c1;0008;04;2;grow ratio 1 on harverting (plant health?)
+data\plantproduct.db;c2;000c;04;2;grow ratio 2 on harvesting (feed?)
+data\plantproduct.db;tid1;0010;04;2;treasure id 1
+data\plantproduct.db;tid2;0014;04;2;treasure id 2 (rare product usually)
+data\plantproduct.db;tid3;0018;04;2;treasure id 3 (0 or equals tid1)
+data\plantproduct.db;bonus;001c;04;3;chance of getting bonus (rare or tid1 x2?)
+data\plantproduct.db;script;0020;20;5;server script, which calculates chance for lucky or speed potion
 data\playerobject.db;guid;0000;04;2;
 data\playerobject.db;outputlanguage;0008;04;1;
 data\playerobject.db;name;000c;04;2;=0
@@ -8133,12 +8133,12 @@ data\weaponargtable.db;;0182;04;1;
 data\weaponargtable.db;;0186;04;2;
 data\weaponargtable.db;;018a;5a;5;
 data\weaponobject.db;guid;0000;04;2;item - ID
-data\weaponobject.db;;0004;04;2;=2
+data\weaponobject.db;dbtype;0004;04;2;=2
 data\weaponobject.db;outputlanguage;0008;04;1;
 data\weaponobject.db;name;000c;04;2;=0
 data\weaponobject.db;name_plural;0010;04;2;=0
 data\weaponobject.db;imageid;0014;04;2;reference to imageobject.db
-data\weaponobject.db;maxheap;001c;04;2;
+data\weaponobject.db;maxheap;001c;04;2;max items count on stack
 data\weaponobject.db;note;0020;04;2;=0
 data\weaponobject.db;shortnote;0024;04;2;=0
 data\weaponobject.db;mode;0028;04;2;
@@ -8146,7 +8146,7 @@ data\weaponobject.db;pricestype;002c;04;2;
 data\weaponobject.db;selltype;0030;04;2;
 data\weaponobject.db;cost;0034;04;2;Price if sold to a trade *10 (215 = 21Gold)
 data\weaponobject.db;buyunit;0038;04;2;
-data\weaponobject.db;rare;0040;04;2;
+data\weaponobject.db;rare;0040;04;2;base quality (0 white, 1 green, etc)
 data\weaponobject.db;generaterate;0044;04;3;
 data\weaponobject.db;maxworldcount;0048;04;3;
 data\weaponobject.db;limitvoc;004c;04;1;
@@ -8166,7 +8166,7 @@ data\weaponobject.db;;0084;04;2;
 data\weaponobject.db;specialmoneycost;0088;04;2;
 data\weaponobject.db;;0090;04;2;=2
 data\weaponobject.db;itemtype;0094;04;2;
-data\weaponobject.db;incmagic_onuse;0098;04;2;
+data\weaponobject.db;incmagic_onuse;0098;04;2;call magic skill on use
 data\weaponobject.db;disappearrate;00a4;04;2;=0
 data\weaponobject.db;dissolutionrate;00a8;04;3;
 data\weaponobject.db;srcrecipe;00ac;04;2;recipe which create this item recipeobject.db
@@ -8218,7 +8218,7 @@ data\weaponobject.db;attackrange;018c;04;2;
 data\weaponobject.db;attackspeed;0190;04;2;
 data\weaponobject.db;usetype;0194;04;2;"'=1 can be used; =2 can be used and triggers 'srvscript' "
 data\weaponobject.db;srvscript;0198;80;5;see 'usetype' above
-data\weaponobject.db;cliscript;0218;04;2;=0
+data\weaponobject.db;cliscript;0218;04;2;=0, client script on use
 data\weaponobject.db;checkusescript;0298;bd;5;script which tests if item is ready to use
 data\weaponobject.db;isstandardcost;0355;04;0;
 data\weaponobject.db;cardid;0368;04;2;=0
@@ -8230,20 +8230,20 @@ data\weaponobject.db;runelimetlv;04ac;04;2;
 data\weaponobject.db;selectbaseattrcount;04b8;04;2;
 data\weaponobject.db;baseattrcount;04bc;04;2;
 data\weaponobject.db;itemuniquetype;0540;04;2;=0
-data\weaponobject.db;ddmg;0694;04;1;
-data\weaponobject.db;dmdmg;0698;04;2;
+data\weaponobject.db;ddmg;0694;04;1;phys damage
+data\weaponobject.db;dmdmg;0698;04;2;magic damage
 data\weaponobject.db;bodymaxcount;06ac;04;2;=0
 data\weaponobject.db;refinelv;06bc;04;2;
 data\weaponobject.db;addpowerquality;06c0;04;2;
-data\worldmaptable.db;;0000;04;2;
-data\worldmaptable.db;;0004;40;5;
-data\worldmaptable.db;;0044;40;5;
-data\worldmaptable.db;;0084;04;2;
-data\worldmaptable.db;;008c;04;2;
-data\worldmaptable.db;;0090;04;1;
-data\worldmaptable.db;;0094;04;1;
-data\worldmaptable.db;;0098;04;1;
-data\worldmaptable.db;;009c;04;1;
+data\worldmaptable.db;;0000;04;2;guid
+data\worldmaptable.db;;0004;40;5;wdb path
+data\worldmaptable.db;;0044;40;5;zone name
+data\worldmaptable.db;;0084;04;2;zone ID
+data\worldmaptable.db;;008c;04;2;count
+data\worldmaptable.db;;0090;04;1;x1
+data\worldmaptable.db;;0094;04;1;x2
+data\worldmaptable.db;;0098;04;1;y1
+data\worldmaptable.db;;009c;04;1;y2
 data\zoneobject.db;guid;0000;04;2;
 data\zoneobject.db;;0004;04;2;=23
 data\zoneobject.db;outputlanguage;0008;04;1;
