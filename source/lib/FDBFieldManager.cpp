@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "csv_parser.hpp"
 
+#include <boost/algorithm/string.hpp>
+
 #include <iostream>
 #include <iomanip>
 #include <ctype.h>
@@ -157,6 +159,7 @@ void FDBFieldManager::LoadCSV()
 
 		FDB_DBField new_field;
 		new_field.name = row[1];
+		boost::algorithm::trim(new_field.name);
 		new_field.position = Hex2Dec(row[2].c_str());
 		new_field.size = Hex2Dec(row[3].c_str());
 		new_field.type = (FDB_DBField::field_type)atoi(row[4].c_str());
