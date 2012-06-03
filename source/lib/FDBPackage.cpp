@@ -177,7 +177,7 @@ void    FDBPackage::GetFileInfo(size_t index, file_info& s_info)
     assert(strcmp(temp_name,s_info.name)==0);
     assert(file_positions[index].ftype == s_info.ftype);
     assert(file_positions[index].mtime == s_info.mtime);
-    delete(temp_name);
+    delete[] (temp_name);
 
     if (s_info.ftype==2)
     {

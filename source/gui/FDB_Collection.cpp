@@ -8,6 +8,14 @@
 #include "wx/dir.h"
 #include "Export_DLG.h"
 
+#ifdef _DEBUG
+// BUG: missing implementation (wxWidget)
+void operator delete(void *p,int,char const *,int)
+{
+	delete p;
+}
+#endif
+
 using namespace std;
 
 FDB_Collection::FDB_Collection()
@@ -71,7 +79,7 @@ void FDB_Collection::UpdateDirectories()
 		{
 			wxString path;
 			wxFileName::SplitPath((*pack)->GetFileName(i),NULL,&path,NULL,NULL);
-			directories.insert(path);
+			directories.insert(path.ToStdString());
 		}
 	}
 }

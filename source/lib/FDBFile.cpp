@@ -72,6 +72,7 @@ bool FDBFile::WriteRAW(const char* filename)
 {
     FILE* outf;
     if (fopen_s(&outf,filename,"wb")) return false;
+	if (!outf) return false;
 
     size_t res = fwrite(data,data_size,1,outf);
     fclose(outf);

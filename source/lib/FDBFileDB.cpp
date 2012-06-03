@@ -26,6 +26,7 @@ bool FDBFileDB::WriteCSV(const char* filename)
 	FILE* outf;
 	std::string name(filename);
 	if (fopen_s(&outf, filename, "wt")) return false;
+	if (!outf) return false;
 
 	// Head
 	for (field_list::iterator field=fields->begin();field!=fields->end();++field)

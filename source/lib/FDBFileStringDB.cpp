@@ -18,6 +18,7 @@ bool FDBFileStringDB::WriteINI(const char* filename)
 
     FILE* outf;
     if (fopen_s(&outf, filename, "wb")) return false;
+	if (!outf) return false;
 
     const char* run = (const char*)data;
     const char* end = (const char*)data+data_size;
@@ -57,6 +58,7 @@ bool FDBFileStringDB::WriteSQLITE3(const char* filename, const char*tabname)
 	FILE* outf;
 	string name(filename);
 	if (fopen_s(&outf, filename, "wt")) return false;
+	if (!outf) return false;
 
 	// Options
     boost::filesystem::path filepath(filename);

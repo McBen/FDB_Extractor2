@@ -49,6 +49,7 @@ bool FDBFileImageTGA::WriteRAW(const char* filename)
 
     FILE* outf;
     if (fopen_s(&outf,filename,"wb")) return false;
+	if (!outf) return false;
 
     fwrite(&TGA_HEADER,sizeof(TGA_HEADER),1,outf);
 
@@ -103,6 +104,7 @@ bool FDBFileImageDDS::WriteRAW(const char* filename)
     // write
     FILE* outf;
     if (fopen_s(&outf,filename,"wb")) return false;
+	if (!outf) return false;
 
     DWORD magic = 0x20534444;
     fwrite(&magic,sizeof(DWORD),1,outf);
@@ -145,6 +147,7 @@ bool FDBFileImageBMP::WriteRAW(const char* filename)
 
     FILE* outf;
     if (fopen_s(&outf,filename,"wb")) return false;
+	if (!outf) return false;
 
     fwrite(&bmfh,sizeof(BITMAPFILEHEADER),1,outf);
     fwrite(&bminfo,sizeof(BITMAPINFOHEADER),1,outf);
