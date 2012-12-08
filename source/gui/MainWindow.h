@@ -36,7 +36,7 @@ class MainWindow : public BASE_DLG::MainWindow
 		void m_extract_fileOnUpdateUI( wxUpdateUIEvent& event );
 
 	private:
-		void LoadFDBs(bool clear);
+		void ShowBasePath(const wxString& path);
 		void RebuildView();
 
 		wxString FormatNumber(size_t num);
@@ -49,6 +49,7 @@ class MainWindow : public BASE_DLG::MainWindow
 
 		wxArrayString files_to_delete;
 		wxString last_export_path;
+		wxString last_open_path;
 
 		DECLARE_EVENT_TABLE()
 };

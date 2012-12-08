@@ -43,7 +43,11 @@ MainWindow::MainWindow() : BASE_DLG::MainWindow(NULL)
 
 	directory_ctrl->SetDataSource(&fdb_pack);
 	
-	fdb_pack.OpenDefault();
+	if (fdb_pack.OpenDefault())
+	{
+		string path = GetROMInstallDir();
+		ShowBasePath(path+"fdb");
+	}
 
 	RebuildView();
 
@@ -55,6 +59,11 @@ MainWindow::~MainWindow()
 {
 	file_ctrl->Disconnect(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(MainWindow::file_ctrlOnContextMenu), NULL, this);
 	DeleteTempFiles();
+}
+
+void MainWindow::ShowBasePath(const wxString& path)
+{
+	this->SetTitle("FDB - " + path);
 }
 
 void MainWindow::RebuildView()
@@ -133,11 +142,15 @@ MainWindow::FT_ICONS MainWindow::GetFileTypeIcon(const FDBPackage::file_info& in
 
 void MainWindow::OnLoadFDB( wxCommandEvent& event )
 {
-	wxFileDialog dlg(this, _("Open FDB Files"), GetROMInstallDir(), wxEmptyString,
-                           "FDB files (*.fdb)|*.fdb", wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_MULTIPLE);
+	if (last_open_path.IsEmpty()) last_open_path = GetROMInstallDir();
 
-	if (dlg.ShowModal() == wxID_CANCEL) return;
+	wxFileDialog dlg(this, _("Open FDB Files"), last_open_path, wxEmptyString,
+                           "FDB files (*.fdb)|*.fdb", wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_MULTIPLE);
 	
+	if (dlg.ShowModal() == wxID_CANCEL) return;
+	last_open_path = dlg.GetDirectory();
+	ShowBasePath(last_open_path);
+
 	fdb_pack.Close();
 
 	wxArrayString filenames;
@@ -145,6 +158,7 @@ void MainWindow::OnLoadFDB( wxCommandEvent& event )
 
 	for (size_t t=0;t<filenames.size();++t)
 		fdb_pack.Open(filenames[t]);
+
 
 	RebuildView();
 }
@@ -222,6 +236,7 @@ void MainWindow::OnExtractFocusFile(wxCommandEvent& WXUNUSED(event))
 
 	wxFileDialog dlg(this, _("Save file"),last_export_path,file_ctrl->GetItemText(item),"", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 	if (dlg.ShowModal()==wxID_CANCEL) return;
+	last_export_path = dlg.GetDirectory();
 
 	fdb_pack.ExtractFile(curname, dlg.GetPath());
 }
