@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,6 +22,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	
 	m_toolBar1 = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL );
 	m_toolBar1->SetToolBitmapSize( wxSize( 16,16 ) );
+	m_toolBar1->SetToolSeparation( 10 );
 	m_toolBar1->AddTool( wxCMD_LOAD_FDB, _("Load FDBs"), wxArtProvider::GetBitmap( wxART_FOLDER, wxART_TOOLBAR ), wxNullBitmap, wxITEM_NORMAL, _("Open FDB Files"), wxEmptyString, NULL ); 
 	
 	m_toolBar1->AddSeparator(); 
@@ -45,6 +46,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	directory_ctrl = new DirectoryListCtrl( m_panel5, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_HIDE_ROOT );
 	bSizer4->Add( directory_ctrl, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	m_panel5->SetSizer( bSizer4 );
 	m_panel5->Layout();
 	bSizer4->Fit( m_panel5 );
@@ -55,11 +57,13 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	file_ctrl = new FileListCtrl( m_panel6, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
 	bSizer5->Add( file_ctrl, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	m_panel6->SetSizer( bSizer5 );
 	m_panel6->Layout();
 	bSizer5->Fit( m_panel6 );
 	m_splitter1->SplitVertically( m_panel5, m_panel6, 220 );
 	bSizer1->Add( m_splitter1, 1, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
@@ -98,6 +102,7 @@ Export_DLG::Export_DLG( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_textCtrl1 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE|wxTE_READONLY|wxNO_BORDER );
+	m_textCtrl1->SetMaxLength( 0 ); 
 	m_textCtrl1->Enable( false );
 	
 	bSizer4->Add( m_textCtrl1, 0, wxALIGN_CENTER|wxALL|wxEXPAND, 5 );
@@ -109,7 +114,9 @@ Export_DLG::Export_DLG( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bSizer4->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bSizer4 );
 	this->Layout();

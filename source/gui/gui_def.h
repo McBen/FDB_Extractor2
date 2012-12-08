@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -50,7 +50,7 @@ namespace BASE_DLG
 			{
 				wxCMD_LOAD_FDB = 6000,
 				FDBex_ExtractFolder,
-				FDBex_ExtractFiles,
+				FDBex_ExtractFiles
 			};
 			
 			wxToolBar* m_toolBar1;
