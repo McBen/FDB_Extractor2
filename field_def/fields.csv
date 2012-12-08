@@ -1662,14 +1662,14 @@ data\eqrefineabilityobject.db;eqtypevalue10;00e4;04;2;=0
 data\eqrefineabilityobject.db;exeqpowerrate;00f4;04;2;Base values increase
 data\exptable.db;guid;0000;04;2;
 data\exptable.db;level;0004;04;2;
-data\exptable.db;;0008;04;2;
+data\exptable.db;lvlup_ratio;0008;04;2;how many mobs you need to kill for lvlup
 data\exptable.db;;000c;04;2;
 data\exptable.db;;0010;04;2;
 data\exptable.db;;0014;04;2;
 data\exptable.db;quest_xp_base;0018;04;2;
 data\exptable.db;quest_money_base;001c;04;2;
-data\exptable.db;;0020;04;3;
-data\exptable.db;;0024;04;2;
+data\exptable.db;exp;0020;04;3;how much exp from one killed mob
+data\exptable.db;skill_cost;0024;04;2;talent points for skills: ExpTable[level] for primary and ExpTable[level-1] for passive skills.
 data\exptable.db;;002c;04;3;
 data\exptable.db;;0030;04;3;
 data\exptable.db;;0034;04;2;
