@@ -23,9 +23,21 @@ END_EVENT_TABLE()
 
 MainWindow::MainWindow() : BASE_DLG::MainWindow(NULL)
 {
+	// not supported by wxFormBuilder so by hand:
 	m_toolBar1->SetToolNormalBitmap(wxCMD_LOAD_FDB, wxResourceGetBitmap(wxRES_folder));
 	m_toolBar1->SetToolNormalBitmap(FDBex_ExtractFiles, wxResourceGetBitmap(wxRES_cog_go));
 	m_toolBar1->SetToolNormalBitmap(FDBex_ExtractFolder, wxResourceGetBitmap(wxRES_ex_folder));
+
+
+	#if wxCHECK_VERSION(2, 9, 0)
+		m_toolBar1->AddStretchableSpace();
+	#else
+		m_toolBar1->AddSeparator();
+	#endif
+
+	m_toolBar1->AddTool( 7000, _("Wiki"), wxArtProvider::GetBitmap( wxART_QUESTION, wxART_BUTTON ), wxNullBitmap, wxITEM_NORMAL, _("Open FDBex2 Webpage"), wxEmptyString, NULL ); 
+	m_toolBar1->Realize(); 
+
 
 	SetIcon(wxICON(IDI_ICON1)); // TODO: BUG: Idk why this isn't working
 
@@ -36,6 +48,7 @@ MainWindow::MainWindow() : BASE_DLG::MainWindow(NULL)
 	RebuildView();
 
 	file_ctrl->Connect(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(MainWindow::file_ctrlOnContextMenu), NULL, this);
+	this->Connect( 7000, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainWindow::OnOpenWebPage ) );
 };
 
 MainWindow::~MainWindow()
@@ -254,3 +267,8 @@ void MainWindow::m_extract_fileOnUpdateUI( wxUpdateUIEvent& event )
 {
 	event.Enable( file_ctrl->GetSelectedItemCount()>0 );
 }
+
+void MainWindow::OnOpenWebPage(wxCommandEvent& WXUNUSED(event))
+{
+	wxLaunchDefaultBrowser("http://github.com/McBen/FDB_Extractor2/wiki");
+};
