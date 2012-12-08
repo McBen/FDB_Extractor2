@@ -24,6 +24,7 @@ void Export_DLG::Step(const char* fname)
 {
 	++pos;
 
+#pragma warning(suppress: 28159)
 	if (next_update_tick < GetTickCount())
 	{
 		m_gauge1->SetValue(pos);

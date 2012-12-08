@@ -171,13 +171,16 @@ void    FDBPackage::GetFileInfo(size_t index, file_info& s_info)
     s_info.name = file_names_data+file_name_pos[index];
     s_info.rest_size = s_info.total_size - file_info_size_base - s_info.name_length;
 
-    // Debug (in release we could just skip the name) --- it's just redundant data
-    char* temp_name = new char[s_info.name_length];
-    fread(temp_name, s_info.name_length,1,file);
-    assert(strcmp(temp_name,s_info.name)==0);
-    assert(file_positions[index].ftype == s_info.ftype);
-    assert(file_positions[index].mtime == s_info.mtime);
-    delete[] (temp_name);
+	#ifdef _DEBUG
+		char* temp_name = new char[s_info.name_length];
+		fread(temp_name, s_info.name_length,1,file);
+		assert(strcmp(temp_name,s_info.name)==0);
+		assert(file_positions[index].ftype == s_info.ftype);
+		assert(file_positions[index].mtime == s_info.mtime);
+		delete[] (temp_name);
+	#else
+		fseek(file,s_info.name_length,SEEK_CUR);
+	#endif
 
     if (s_info.ftype==2)
     {
@@ -194,6 +197,7 @@ BYTE*   FDBPackage::GetFileRawData(size_t index, file_info& sinfo)
     GetFileInfo(index, sinfo);
 
     BYTE* rawdata = (BYTE*)malloc(sinfo.rest_size);
+	if (!rawdata) return NULL;
     fread(rawdata, sinfo.rest_size,1,file);
 
 	return rawdata;
