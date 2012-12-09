@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "utils.h"
+#include <sstream>
 
 namespace std
 {
@@ -62,6 +63,46 @@ namespace std
 
 		return "";
 	}
+
+	//bool GetFileVersion(const string& filename, DWORD& hi,DWORD& lo)
+	//{
+	//    try
+	//	{
+	//		DWORD size, dummy;
+	//		size = GetFileVersionInfoSize(filename.c_str(), &dummy);
+	//		if (size)
+	//		{
+	//			char *buf = (char *)malloc(size);
+	//			GetFileVersionInfo(filename.c_str(), NULL, size, buf);
+	//			VS_FIXEDFILEINFO *qbuf;
+	//			UINT len;
+	//			if (VerQueryValue(buf, "\\", (void **)&qbuf, &len)) 
+	//			{
+	//				hi = qbuf->dwFileVersionMS;
+	//				lo = qbuf->dwFileVersionLS;
+	//				free(buf);
+	//				return true;
+	//			}
+	//			free(buf);
+	//		}
+	//    } catch(...)	{};
+
+	//	return false;
+	//}
+
+
+	//string GetFileVersionString(const string& filename)
+	//{
+	//	DWORD hi, lo;
+	//	if (!GetFileVersion(filename, hi,lo)) return "";
+
+	//	ostringstream out;
+	//	if (LOWORD(lo))      out << HIWORD(hi) <<"."<< LOWORD(hi) <<"."<< HIWORD(lo) <<"."<< LOWORD(lo);
+	//	else if (HIWORD(lo)) out << HIWORD(hi) <<"."<< LOWORD(hi) <<"."<< HIWORD(lo);
+	//	else                 out << HIWORD(hi) <<"."<< LOWORD(hi);
+
+	//	return out.str();
+	//}
 }
 
 
