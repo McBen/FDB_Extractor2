@@ -20,7 +20,7 @@ class FDBFileStringDB : public  FDBFile
         FDBFileStringDB(const FDBPackage::file_info& s_info, BYTE* data );
 
         bool WriteINI(const char*);
-        bool WriteSQLITE3(const char*, const char* table_name);
+        bool WriteSQLITE3(const char*);
         FDBPackage::e_export_format DefaultFormat()    { return FDBPackage::EX_INI; };
         bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_INI)||(e==FDBPackage::EX_SQLITE3)||(FDBFile::ExportFormatIsValid(e)); };
 

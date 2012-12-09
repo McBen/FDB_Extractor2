@@ -2,202 +2,13 @@
 
 #include "FDBFileDB.h"
 #include "FDBFieldManager.h"
+#include "ExportFormat.h"
 #include "utils.h"
 #include <iostream>
 #include <iomanip>
 #include <ctype.h>
 using namespace std;
 
-
-class DBExport
-{
-	protected:
-		FILE* outf;
-		const char* table_name;
-		bool not_first_value;
-
-	public:
-		DBExport(const char* filename, const char* _table_name);
-		~DBExport();
-
-		virtual void TableStart() {}
-		virtual void TableField(const std::string& name, DWORD position, FDB_DBField::field_type type, size_t size ) {}
-		virtual void TableEnd() {}
-		virtual void EntryStart() {}
-		virtual void EntryField(FDB_DBField::field_type type, void*data) {}
-		virtual void EntryEnd() {}
-};
-
-DBExport::DBExport(const char* filename, const char* _table_name )
-{
-	if (fopen_s(&outf, filename, "wt"))	outf=NULL;
-	table_name =  _table_name;
-}
-
-DBExport::~DBExport()
-{
-	if (outf) fclose(outf);
-}
-
-class DBExport_CSV : public DBExport
-{
-	public:
-		DBExport_CSV(const char* filename, const char* _table_name) : DBExport(filename,_table_name)
-		{
-		}
-
-		void TableStart()
-		{
-			not_first_value = false;
-		}
-
-		void TableField(const std::string& name, DWORD position, FDB_DBField::field_type type, size_t size ) 
-		{
-			if (not_first_value) fprintf(outf,";");
-			else not_first_value = true;
-
-			if (name.empty()) 
-				fprintf(outf,"unk%i",position);
-			else
-				fprintf(outf, name.c_str());
-		}
-
-		void TableEnd()
-		{
-			fprintf(outf,"\n");
-		}
-
-		void EntryStart() 
-		{
-			not_first_value = false;
-		}
-
-		void EntryField(FDB_DBField::field_type type, void*data) 
-		{
-			if (not_first_value) fprintf(outf,";");
-			else not_first_value = true;
-
-			switch (type)
-			{
-				case FDB_DBField::F_BYTE:
-					fprintf(outf,"%i",*(BYTE*)data);
-					break; 
-				case FDB_DBField::F_INT:
-					fprintf(outf,"%i",*(int*)data);
-					break;                       
-				case FDB_DBField::F_BOOL:
-				case FDB_DBField::F_DWORD:
-					fprintf(outf,"%u",*(unsigned int*)data);
-					break;                       
-				case FDB_DBField::F_FLOAT:
-					fprintf(outf,"%g",*(float*)data);
-					break; 
-
-				case FDB_DBField::F_STRING: 
-					fputs(EscapeCSV_String((char*)data).c_str(), outf);
-					break;
-				default:
-					assert(false);
-			}
-		}
-
-		void EntryEnd() 
-	{
-		fprintf(outf,"\n");
-	}
-};
-
-class DBExport_Sqlite3 : public DBExport
-{
-	public:
-		DBExport_Sqlite3(const char* filename, const char* _table_name) : DBExport(filename,_table_name)
-		{
-			// Options
-			boost::filesystem::path filepath(filename);
-			fprintf(outf, "-- %s\n", filepath.filename().generic_string().c_str());
-			//fprintf(outf, "/*!40101 SET NAMES utf8 */;\n");
-			fprintf(outf, "\n");
-		}
-
-		void TableStart()
-		{
-			not_first_value = false;
-
-			// TODO: fprintf(outf, "BEGIN TRANSACTION;\n");
-			//    fprintf(outf, "\nEND TRANSACTION;\n");
-
-			fprintf(outf, "DROP TABLE IF EXISTS `%s`;\n", table_name);
-			fprintf(outf, "CREATE TABLE `%s` (\n", table_name);
-		}
-
-		void TableField(const std::string& name, DWORD position, FDB_DBField::field_type type, size_t size) 
-		{
-			if (not_first_value) fprintf(outf,",\n");
-			else not_first_value = true;
-
-			if (name.empty()) 
-				fprintf(outf," `unk%i` ",position);
-			else
-				fprintf(outf," `%s` ",name.c_str());
-
-			switch (type)
-			{
-				case FDB_DBField::F_BOOL:   fprintf(outf,"BOOLEAN"); break;
-				case FDB_DBField::F_BYTE:   fprintf(outf,"TINYINT"); break; 
-				case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
-				case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
-				case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
-				case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%i)",size); break;
-				default:
-					assert(false);
-			}
-		}
-
-		void TableEnd()
-		{
-			fprintf(outf,"\n);\n\n");
-		}
-
-		void EntryStart() 
-		{
-			not_first_value = false;
-			fprintf(outf,"INSERT INTO `%s` VALUES (",table_name);
-		}
-
-		void EntryField(FDB_DBField::field_type type, void*data) 
-		{
-			if (not_first_value) fprintf(outf,",");
-			else not_first_value = true;
-
-			switch (type)
-			{
-				case FDB_DBField::F_BYTE:
-					fprintf(outf,"%i",*(BYTE*)data);
-					break; 
-				case FDB_DBField::F_INT:
-					fprintf(outf,"%i",*(int*)data);
-					break;                       
-				case FDB_DBField::F_BOOL:
-				case FDB_DBField::F_DWORD:
-					fprintf(outf,"%u",*(unsigned int*)data);
-					break;                       
-				case FDB_DBField::F_FLOAT:
-					fprintf(outf,"%g",*(float*)data);
-					break; 
-
-				case FDB_DBField::F_STRING: 
-					fprintf(outf,"'%s'", EscapeSQLITE3_String((char*)data).c_str());
-					break;
-				default:
-					assert(false);
-			}
-		}
-
-		void EntryEnd() 
-		{
-			fprintf(outf,");\n");
-		}
-};
 
 
 FDBFileDB::FDBFileDB(const FDBPackage::file_info& s_info, BYTE* data )
@@ -212,65 +23,136 @@ FDBFileDB::FDBFileDB(const FDBPackage::file_info& s_info, BYTE* data )
 
 bool FDBFileDB::WriteCSV(const char* filename)
 {
+	DBExport_CSV out(filename);
+	return DoExport(out, NULL);
+}
+
+bool FDBFileDB::WriteSQLITE3(const char* filename)
+{
+	boost::filesystem::path filepath(filename);
+	const char* table_name = filepath.stem().generic_string().c_str();
+
+	DBExport_Sqlite3 out(filename);
+	return DoExport(out, table_name);
+}
+
+bool FDBFileDB::DoExport(DBExport& exporter, const char* table_name)
+{
 	field_list* fields = g_field_manager.GetFieldDefinition(f_info, data);
+	return ExportTable(exporter, table_name, fields);
+}
 
-	DBExport_CSV out(filename,"");
-
-	// Head
-	out.TableStart();
+bool FDBFileDB::ExportTable(DBExport& exporter, const char* table_name, field_list* fields)
+{
+	exporter.TableStart(table_name);
 	for (field_list::iterator field=fields->begin();field!=fields->end();++field)
 	{
-		out.TableField(field->name,field->position,field->type,field->size);
+		exporter.TableField(field->name,field->position,field->type,field->size);
 	}
-	out.TableEnd();
+	exporter.TableEnd();
 
-	// Entries
+
 	for (DWORD idx=0;idx<head->entry_count;++idx)
 	{
-		out.EntryStart();
+        exporter.EntryStart();
 
 		BYTE* line = entries+idx*head->entry_size;
 
 		for (field_list::iterator field=fields->begin();field!=fields->end();++field)
 		{
-			out.EntryField(field->type,line+field->position);
+			exporter.EntryField(field->type,line+field->position);
 		}
-		out.EntryEnd();
+		exporter.EntryEnd();
 	}
-
 
 	return true;
 }
 
-bool FDBFileDB::WriteSQLITE3(const char* filename, const char* table_name)
+FDB_DBField* FindField(field_list* fields, const string&name)
 {
-	field_list* fields = g_field_manager.GetFieldDefinition(f_info, data);
-
-	DBExport_Sqlite3 out(filename, table_name);
-
-
-	out.TableStart();
 	for (field_list::iterator field=fields->begin();field!=fields->end();++field)
 	{
-		out.TableField(field->name,field->position,field->type,field->size);
+		if (field->name==name) return &field[0];
 	}
-	out.TableEnd();
+	return NULL;
+}
+
+bool FDBFileDB_LearnMagic::DoExport(DBExport& exporter, const char* table_name)
+{
+	field_list* fields = g_field_manager.GetFieldDefinition(f_info, data);
+	bool r = ExportTable(exporter, table_name, fields);
+	if (!r) return false;
 
 
-    // Entries
-	for (DWORD idx=0;idx<head->entry_count;++idx)
+	FDB_DBField* spmagicinfo = FindField(fields,"spmagicinfo");
+	FDB_DBField* spmagiccount = FindField(fields,"spmagiccount");
+	if (spmagicinfo)
 	{
-        out.EntryStart();
+		exporter.TableStart("spmagicinfo");
+		exporter.TableField((*fields)[0].name, (*fields)[0].position, (*fields)[0].type, (*fields)[0].size);
+		exporter.TableField("id",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i1",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i2",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i3",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i4",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i5",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i6",4,FDB_DBField::F_DWORD,4);
+		exporter.TableEnd();
 
-		BYTE* line = entries+idx*head->entry_size;
-
-		for (field_list::iterator field=fields->begin();field!=fields->end();++field)
+		for (DWORD idx=0;idx<head->entry_count;++idx)
 		{
-			out.EntryField(field->type,line+field->position);
+			BYTE* line = entries+idx*head->entry_size;
+			DWORD count = *(DWORD*)(line+spmagiccount->position);
+			assert(count < spmagicinfo->size/(6*4));
+
+			for (DWORD i=0;i<count;++i)
+			{
+				exporter.EntryStart();
+				exporter.EntryField((*fields)[0].type, line+ (*fields)[0].position);
+				DWORD temp = i+1;
+				exporter.EntryField(FDB_DBField::F_DWORD,&temp);
+
+				for (DWORD t=0;t<6;++t)
+					exporter.EntryField(FDB_DBField::F_DWORD,line + spmagicinfo->position+t*4 + i*6*4);
+				exporter.EntryEnd();
+			}
 		}
-		out.EntryEnd();
 	}
 
+	FDB_DBField* normalmagicinfo = FindField(fields,"normalmagicinfo");
+	FDB_DBField* normalmagiccount = FindField(fields,"normalmagiccount");
+	if (normalmagicinfo)
+	{
+		exporter.TableStart("normalmagicinfo");
+		exporter.TableField((*fields)[0].name, (*fields)[0].position, (*fields)[0].type, (*fields)[0].size);
+		exporter.TableField("id",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i1",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i2",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i3",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i4",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i5",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("i6",4,FDB_DBField::F_DWORD,4);
+		exporter.TableEnd();
+
+		for (DWORD idx=0;idx<head->entry_count;++idx)
+		{
+			BYTE* line = entries+idx*head->entry_size;
+			DWORD count = *(DWORD*)(line+normalmagiccount->position);
+			assert(count < normalmagicinfo->size/(6*4));
+
+			for (DWORD i=0;i<count;++i)
+			{
+				exporter.EntryStart();
+				exporter.EntryField((*fields)[0].type, line+ (*fields)[0].position);
+				DWORD temp = i+1;
+				exporter.EntryField(FDB_DBField::F_DWORD,&temp);
+
+				for (DWORD t=0;t<6;++t)
+					exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+t*4 + i*6*4);
+				exporter.EntryEnd();
+			}
+		}
+	}
 
 	return true;
 }

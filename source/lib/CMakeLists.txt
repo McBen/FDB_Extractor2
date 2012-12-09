@@ -4,6 +4,7 @@ set (HEADER_FILES
     utils.h
     decrypte.h
     FDBFile.h
+    ExportFormat.h
     FDBFileDB.h
     FDBFileStringDB.h
     FDBField.h
@@ -19,6 +20,7 @@ set (HEADER_FILES
 set (SOURCE_FILES
     csv_parser.cpp
     FDBFile.cpp
+    ExportFormat.cpp
     FDBFileDB.cpp
     FDBFileStringDB.cpp
     FDBField.cpp

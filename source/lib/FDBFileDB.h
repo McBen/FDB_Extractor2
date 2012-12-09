@@ -2,11 +2,12 @@
 
 #include "FDBFile.h"
 #include "FDBFieldManager.h"
+#include "ExportFormat.h"
 
 
 class FDBFileDB : public  FDBFile
 {
-	private:
+	protected:
 		FDBPackage::file_info f_info;
         FDBFieldManager::s_file_header* head;
         BYTE* entries;
@@ -18,15 +19,19 @@ class FDBFileDB : public  FDBFile
         bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_CSV)||(e==FDBPackage::EX_SQLITE3)||(FDBFile::ExportFormatIsValid(e)); };
 
 		bool WriteCSV(const char*);
-		bool WriteSQLITE3(const char*, const char* table_name);
+		bool WriteSQLITE3(const char*);
+
+	protected:
+		virtual bool DoExport(DBExport& exporter, const char* table_name);
+		bool ExportTable(DBExport& exporter, const char* table_name, field_list* fields);
 };
 
 
 class FDBFileDB_LearnMagic : public FDBFileDB
 {
 	public:
-		FDBFileDB_LearnMagic(const FDBPackage::file_info& s_info, BYTE* data ) : FDBFileDB(s_info, data )
-		{};
-		//	bool WriteCSV(const char*);
-		//	bool WriteSQLITE3(const char*, const char* table_name);
+		FDBFileDB_LearnMagic(const FDBPackage::file_info& s_info, BYTE* data ) : FDBFileDB(s_info, data ) {};
+
+	protected:
+		bool DoExport(DBExport& exporter, const char* table_name);
 };

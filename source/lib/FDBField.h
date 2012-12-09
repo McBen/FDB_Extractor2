@@ -12,6 +12,7 @@ class FDB_DBField
 			F_FLOAT,
 			F_BYTE,
 			F_STRING,
+			F_ARRAY,
 
 			NOF_FIELD_TYPE
 		};
@@ -38,5 +39,4 @@ class FDB_DBField
 
 typedef std::vector<FDB_DBField> field_list;
 extern field_list empty_field_list; 
-
 

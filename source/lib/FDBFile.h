@@ -17,7 +17,7 @@ class FDBFile
         virtual bool WriteINI(const char* filename);
         virtual bool WriteLUA(const char* filename);
         virtual bool WriteCSV(const char* filename);
-        virtual bool WriteSQLITE3(const char* filename, const char* table_name);
+        virtual bool WriteSQLITE3(const char* filename);
 
     protected:
         size_t  data_size;

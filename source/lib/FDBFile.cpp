@@ -56,11 +56,7 @@ bool FDBFile::WriteToFile(const char* filename, FDBPackage::e_export_format e)
             break;
 
         case FDBPackage::EX_SQLITE3:
-            {
-                boost::filesystem::path filepath(filename);
-                res = WriteSQLITE3(GetTargetName( filename, e).c_str(),  filepath.stem().generic_string().c_str());
-            }
-
+            res = WriteSQLITE3(GetTargetName( filename, e).c_str());
             break;
     }
 
@@ -95,7 +91,7 @@ bool FDBFile::WriteCSV(const char* filename)
     return WriteRAW(filename);
 }
 
-bool FDBFile::WriteSQLITE3(const char* filename, const char* table_name)    
+bool FDBFile::WriteSQLITE3(const char* filename) 
 { 
     return WriteRAW(filename);
 }

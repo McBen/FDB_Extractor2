@@ -51,21 +51,21 @@ string FDBFileStringDB::GetLang(const string& filename)
 }
 
 
-bool FDBFileStringDB::WriteSQLITE3(const char* filename, const char*tabname)
+bool FDBFileStringDB::WriteSQLITE3(const char* filename)
 {
-	string lang = GetLang(tabname);
-
 	FILE* outf;
 	string name(filename);
 	if (fopen_s(&outf, filename, "wt")) return false;
 	if (!outf) return false;
 
 	// Options
-    boost::filesystem::path filepath(filename);
+	boost::filesystem::path filepath(filename);
 	fprintf(outf, "-- %s\n", filepath.filename().generic_string().c_str());
 	fprintf(outf, "\n");
 	
 	// Head
+	string lang = filepath.stem().generic_string();
+
     fprintf(outf, "BEGIN TRANSACTION;\n");
     
 	fprintf(outf, "CREATE TABLE IF NOT EXISTS `strings` (`guid` TEXT PRIMARY KEY);\n");
