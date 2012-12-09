@@ -3,6 +3,7 @@
 #include "FDBFile.h"
 #include "FDBFieldManager.h"
 
+
 class FDBFileDB : public  FDBFile
 {
 	private:
@@ -20,3 +21,12 @@ class FDBFileDB : public  FDBFile
 		bool WriteSQLITE3(const char*, const char* table_name);
 };
 
+
+class FDBFileDB_LearnMagic : public FDBFileDB
+{
+	public:
+		FDBFileDB_LearnMagic(const FDBPackage::file_info& s_info, BYTE* data ) : FDBFileDB(s_info, data )
+		{};
+		//	bool WriteCSV(const char*);
+		//	bool WriteSQLITE3(const char*, const char* table_name);
+};

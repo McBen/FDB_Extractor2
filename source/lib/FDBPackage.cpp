@@ -388,7 +388,9 @@ FDBFile* FDBPackage::CreateFileObject(const file_info& s_info, BYTE* data)
             return new FDBFileStringDB(s_info,data);
         }
 
-        // if (name == "voctable.db" || name == "weaponargtable.db") with_garbage = true;
+		if (filename=="learnmagic.db") 
+			return new FDBFileDB_LearnMagic(s_info,data);
+
         return new FDBFileDB(s_info,data);
     }
 
