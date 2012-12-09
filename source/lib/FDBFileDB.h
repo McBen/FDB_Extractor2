@@ -34,4 +34,5 @@ class FDBFileDB_LearnMagic : public FDBFileDB
 
 	protected:
 		bool DoExport(DBExport& exporter, const char* table_name);
+		bool WriteSubArray(DBExport& exporter, field_list* fields, std::string name);
 };

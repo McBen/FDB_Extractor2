@@ -84,46 +84,20 @@ bool FDBFileDB_LearnMagic::DoExport(DBExport& exporter, const char* table_name)
 	if (!r) return false;
 
 
-	FDB_DBField* spmagicinfo = FindField(fields,"spmagicinfo");
-	FDB_DBField* spmagiccount = FindField(fields,"spmagiccount");
-	if (spmagicinfo)
-	{
-		exporter.TableStart("spmagicinfo");
-		exporter.TableField((*fields)[0].name, (*fields)[0].position, (*fields)[0].type, (*fields)[0].size);
-		exporter.TableField("id",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i1",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i2",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i3",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i4",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i5",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i6",4,FDB_DBField::F_DWORD,4);
-		exporter.TableEnd();
+	WriteSubArray(exporter, fields, "spmagic");
+	WriteSubArray(exporter, fields, "normalmagic");
 
-		for (DWORD idx=0;idx<head->entry_count;++idx)
-		{
-			BYTE* line = entries+idx*head->entry_size;
-			DWORD count = *(DWORD*)(line+spmagiccount->position);
-			assert(count < spmagicinfo->size/(6*4));
+	return true;
+}
 
-			for (DWORD i=0;i<count;++i)
-			{
-				exporter.EntryStart();
-				exporter.EntryField((*fields)[0].type, line+ (*fields)[0].position);
-				DWORD temp = i+1;
-				exporter.EntryField(FDB_DBField::F_DWORD,&temp);
 
-				for (DWORD t=0;t<6;++t)
-					exporter.EntryField(FDB_DBField::F_DWORD,line + spmagicinfo->position+t*4 + i*6*4);
-				exporter.EntryEnd();
-			}
-		}
-	}
-
-	FDB_DBField* normalmagicinfo = FindField(fields,"normalmagicinfo");
-	FDB_DBField* normalmagiccount = FindField(fields,"normalmagiccount");
+bool FDBFileDB_LearnMagic::WriteSubArray(DBExport& exporter, field_list* fields, std::string name)
+{
+	FDB_DBField* normalmagicinfo = FindField(fields,name+"info");
+	FDB_DBField* normalmagiccount = FindField(fields,name+"count");
 	if (normalmagicinfo)
 	{
-		exporter.TableStart("normalmagicinfo");
+		exporter.TableStart(name.c_str());
 		exporter.TableField((*fields)[0].name, (*fields)[0].position, (*fields)[0].type, (*fields)[0].size);
 		exporter.TableField("id",4,FDB_DBField::F_DWORD,4);
 		exporter.TableField("i1",4,FDB_DBField::F_DWORD,4);
@@ -156,7 +130,5 @@ bool FDBFileDB_LearnMagic::DoExport(DBExport& exporter, const char* table_name)
 
 	return true;
 }
-
-
 
 
