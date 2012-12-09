@@ -4,6 +4,7 @@
 #include "FileListCtrl.h"
 #include "resource.h"
 #include "../../resources/images/wxresource.h"
+#include "../VersionNo.h"
 
 using namespace std;
 
@@ -63,7 +64,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::ShowBasePath(const wxString& path)
 {
-	this->SetTitle("FDB - " + path);
+	this->SetTitle("FDB Extractor " STRFILEVER " - "+ path);
 }
 
 void MainWindow::RebuildView()

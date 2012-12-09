@@ -39,10 +39,14 @@ ENDIF()
 
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
+SOURCE_GROUP("" FILES "../VersionNo.h")
+
 ADD_EXECUTABLE(FDB_Extractor2 WIN32
     ${HEADER_FILES}
     ${SOURCE_FILES}
-    ${SOURCE_RESOURCES})
+    ${SOURCE_RESOURCES}
+    "../VersionNo.h"
+    )
 
 SET_OUT_DIR(FDB_Extractor2)
 

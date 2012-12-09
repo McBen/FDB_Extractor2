@@ -14,9 +14,13 @@ INCLUDE_DIRECTORIES(
 
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
+SOURCE_GROUP("" FILES "../VersionNo.h")
+
 ADD_EXECUTABLE(FDB_ex2
     ${HEADER_FILES}
-    ${SOURCE_FILES} )
+    ${SOURCE_FILES}
+    "../VersionNo.h"
+    )
 
 SET_OUT_DIR(FDB_ex2)
 

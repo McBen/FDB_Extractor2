@@ -41,9 +41,13 @@ INCLUDE_DIRECTORIES(
     )
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
- add_library(FDB_LIB
+SOURCE_GROUP("" FILES "../VersionNo.h")
+
+add_library(FDB_LIB
     ${HEADER_FILES}
-    ${SOURCE_FILES} )
+    ${SOURCE_FILES}
+    "../VersionNo.h"
+    )
 
 ADD_DEPENDENCIES( FDB_LIB zlib lzo_lib)
 TARGET_LINK_LIBRARIES(FDB_LIB zlib lzo_lib)

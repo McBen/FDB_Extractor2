@@ -2,6 +2,7 @@
 
 #include "utils.h"
 #include "commandline.h"
+#include "../VersionNo.h"
 
 #include <iostream>
 #include "boost/program_options.hpp"
@@ -58,6 +59,7 @@ bool CommandLine::Parse(int argc, const char* argv[])
 
 
 		if (vm.count("help") || vm.size()==0) {
+			cout << "fdbex " << STRFILEVER  <<"\n";
 			cout << "Usage: [options] filename fdb_file\n\n";
 			cout << generic_options << "\n";
 			return false;
