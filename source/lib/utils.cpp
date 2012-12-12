@@ -3,6 +3,16 @@
 #include "utils.h"
 #include <sstream>
 
+#if _MSC_VER < 1400
+int fopen_s(FILE** f, const char*na, const char* at)
+{
+    *f = fopen(na,at);
+    if (*f==NULL) return 1;
+    return 0;
+}
+#endif
+
+
 namespace std
 {
 

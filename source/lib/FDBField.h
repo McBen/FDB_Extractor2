@@ -34,7 +34,7 @@ class FDB_DBField
 		void SetCommentConst(const std::string&);
 		void SetComment(const std::string&);
 
-		bool operator<(const FDB_DBField& j);
+		bool operator<(const FDB_DBField& j) const;
 };
 
 typedef std::vector<FDB_DBField> field_list;

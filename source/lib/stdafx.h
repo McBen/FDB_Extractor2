@@ -9,6 +9,11 @@
 #include <iostream>
 #include <iomanip>
 
+
+#if _MSC_VER < 1400
+int fopen_s(FILE** f, const char*na, const char* at);
+#endif
+
 // our
 #include "FDB_LIB.h"
 

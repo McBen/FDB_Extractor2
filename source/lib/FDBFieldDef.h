@@ -13,7 +13,7 @@ class FDBFieldDef
 	FDB_DBField* GetFieldAt(DWORD pos);
 	bool	IsUndefined(DWORD pos, size_t size);
 
-	bool operator<(const FDBFieldDef& j) { return (filename < j.filename);}
+	bool operator<(const FDBFieldDef& j) const { return (filename < j.filename);}
 
 };
 

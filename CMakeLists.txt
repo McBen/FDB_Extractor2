@@ -14,7 +14,6 @@ if(BUILDING_IN_SOURCE)
   )
 endif()
 
-
 # Remove /STACK:10000000 set by CMake. This value for stack size
 # is very high, limiting the number of threads we can spawn.
 # Default value used by Windows is 1MB which is good enough.
@@ -25,6 +24,8 @@ STRING(REGEX REPLACE "/STACK:[0-9]+" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARE
 #set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "")
 SET(BUILD_SHARED_LIBS FALSE)
 SET(CMAKE_DEBUG_POSTFIX "d")
+
+#set(CMAKE_LEGACY_CYGWIN_WIN32 1)
 
 ######################################
 # Set up the basic build environment
@@ -63,7 +64,7 @@ find_package( wxWidgets COMPONENTS core base)
 set(Boost_USE_STATIC_LIBS       ON) # "lib..."
 set(Boost_USE_MULTITHREADED     ON) # "-mt"
 #set(Boost_USE_STATIC_RUNTIME    ON) # "-s"
-find_package( Boost 1.47.0 REQUIRED COMPONENTS program_options regex filesystem)
+find_package( Boost 1.47.0 REQUIRED COMPONENTS program_options regex filesystem system)
 
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "ERROR: boost not found.\nmake sure you build with: 'b2 link=static threading=multi runtime-link=static'")
@@ -80,6 +81,7 @@ set(redux2_dll  ${FDB_ex2_SOURCE_DIR}/dep/RoM/redux_nvtt.dll)
 IF (NOT EXISTS "${redux_dll}")
     find_path(FDB_ROM_Path NAMES "redux_runtime.dll"
         PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Frogster Interactive Pictures\\Runes of Magic;RootDir]"
+             "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Frogster Interactive Pictures\\Runes of Magic;RootDir]"
              "$ENV{ProgramFiles}/Runes of Magic"
         DOC "Runes of Magic directory"
         )
@@ -88,13 +90,13 @@ IF (NOT EXISTS "${redux_dll}")
         configure_file("${FDB_ROM_Path}/redux_runtime.dll"  "${redux1_dll}" COPYONLY)
         configure_file("${FDB_ROM_Path}/redux_nvtt.dll"  "${redux2_dll}" COPYONLY)
     else()
-        message(FATAL_ERROR "redux_runtime.dll not found (copyright issue)\n-manually copy it to /dep/RoM\n-or set-up RoM-Directory")
+        message(WARNING "redux_runtime.dll not found (copyright issue)\n-manually copy it or set-up RoM-Directory")
     endif()
 endif()
 
 
-configure_file(${FDB_ex2_SOURCE_DIR}/dep/RoM/redux_runtime.dll ${EXECUTABLE_OUTPUT_PATH}/redux_runtime.dll COPYONLY)
-configure_file(${FDB_ex2_SOURCE_DIR}/dep/RoM/redux_nvtt.dll ${EXECUTABLE_OUTPUT_PATH}/redux_nvtt.dll COPYONLY)
+#configure_file(${FDB_ex2_SOURCE_DIR}/dep/RoM/redux_runtime.dll ${EXECUTABLE_OUTPUT_PATH}/redux_runtime.dll COPYONLY)
+#configure_file(${FDB_ex2_SOURCE_DIR}/dep/RoM/redux_nvtt.dll ${EXECUTABLE_OUTPUT_PATH}/redux_nvtt.dll COPYONLY)
 
 configure_file(${FDB_ex2_SOURCE_DIR}/field_def/db_crc.csv ${EXECUTABLE_OUTPUT_PATH}/db_crc.csv COPYONLY)
 configure_file(${FDB_ex2_SOURCE_DIR}/field_def/fields.csv ${EXECUTABLE_OUTPUT_PATH}/fields.csv COPYONLY)

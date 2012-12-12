@@ -134,7 +134,7 @@ bool FDBPackage::Open(const char* filename)
 
     UINT32 data_size;
     fread(&data_size,sizeof(UINT32),1,file);
-    file_names_data = new const char[data_size];
+    file_names_data = new char[data_size];
     fread((void*)file_names_data,data_size,1,file);
 
     return true;
@@ -345,7 +345,7 @@ FDBFile* FDBPackage::CreateFileObject(const file_info& s_info, BYTE* data)
     boost::filesystem::path filepath(s_info.name);
     
     string file_ext = filepath.extension().generic_string();
-    transform(file_ext.begin(), file_ext.end(), file_ext.begin(), tolower);
+    transform(file_ext.begin(), file_ext.end(), file_ext.begin(), ::tolower);
 
     if (s_info.ftype == 2)
     {
@@ -376,7 +376,7 @@ FDBFile* FDBPackage::CreateFileObject(const file_info& s_info, BYTE* data)
     if (file_ext==".db")
     {
         string filename = filepath.filename().generic_string();
-        transform(filename.begin(), filename.end(), filename.begin(), tolower);
+        transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
 
         // specials
         if (filename=="zonechannel.db" || filename=="thumbs.db") 

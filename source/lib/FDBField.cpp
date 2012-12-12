@@ -60,7 +60,7 @@ void FDB_DBField::SetComment(const string& _comment)
 	comment = _comment;
 }
 
-bool FDB_DBField::operator<(const FDB_DBField& j)
+bool FDB_DBField::operator<(const FDB_DBField& j) const
 {
 	return (position < j.position);
 }

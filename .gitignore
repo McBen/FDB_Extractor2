@@ -1,5 +1,5 @@
 /_wiki
-/build/
+/build*/
 /bin/
 dep/RoM/redux_runtime.dll
 dep/RoM/redux_nvtt.dll

@@ -185,7 +185,7 @@ void DBExport_Sqlite3::EntryField(FDB_DBField::field_type type, void*data)
 			fprintf(outf,"'%s'", EscapeSQLITE3_String((char*)data).c_str());
 			break;
 		case FDB_DBField::F_ARRAY:
-			fprintf(outf,"'???'");
+			fprintf(outf,"'-?-'");
 			break; 
 
 		default:
