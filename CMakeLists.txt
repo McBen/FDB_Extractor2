@@ -67,7 +67,11 @@ set(Boost_USE_MULTITHREADED     ON) # "-mt"
 find_package( Boost 1.47.0 REQUIRED COMPONENTS program_options regex filesystem system)
 
 if(NOT Boost_FOUND)
-    message(FATAL_ERROR "ERROR: boost not found.\nmake sure you build with: 'b2 link=static threading=multi runtime-link=static'")
+    if(UNIX)
+      message(FATAL_ERROR "ERROR: boost not found.\nuse: 'apt-get install libboost-all-dev'")
+    else()
+      message(FATAL_ERROR "ERROR: boost not found.\nmake sure you build with: 'b2 link=static threading=multi runtime-link=static'")
+    endif()
 endif()
 
 # LZO
