@@ -61,7 +61,8 @@ size_t  calculate_image_size(signed int mipmap_count, int format, signed int wid
 HMODULE redux_dll=NULL;
 bool   loading_error=false;
 typedef int (__cdecl *t_reduxHandleDecompress)(void* data, int src_size, void* dst);
-typedef int (*t_reduxCallbackSet)(unsigned nr, void* __stdcall fct(int a1, a1_struct* a2, int a3, int a4, redux_status* a5));
+//typedef int (*t_reduxCallbackSet)(unsigned nr, void* __stdcall fct(int a1, a1_struct* a2, int a3, int a4, redux_status* a5));
+typedef int (*t_reduxCallbackSet)(unsigned nr, void* fct);
 typedef int (*t_reduxHandleGetOutputDesc)(int a1, int a2, void* a3);
 t_reduxHandleDecompress reduxHandleDecompress;
 t_reduxCallbackSet reduxCallbackSet;
@@ -72,7 +73,7 @@ CRITICAL_SECTION CriticalSection;
 
 
 
-void* __stdcall redux_callback1(int a1, a1_struct* a2, int a3, int a4, redux_status* a5);
+void __stdcall redux_callback1(int a1, a1_struct* a2, int a3);
 void* __stdcall redux_callback2(int a1, a1_struct* a2, int a3, int a4, redux_status* a5);
 void sub_41A220(void* a1);
 
@@ -177,7 +178,7 @@ int Uncompress_Mode4(BYTE *src, unsigned int src_size, BYTE *dest, unsigned int 
     return 0;
 }
 
-void* __stdcall redux_callback1(int a1, a1_struct* a2, int a3, int a4, redux_status* a5)
+void __stdcall redux_callback1(int a1, a1_struct* a2, int a3)
 {
     uncompress_data* v4 = a2->p_data;
     void* v3 = v4->d1;
@@ -190,7 +191,6 @@ void* __stdcall redux_callback1(int a1, a1_struct* a2, int a3, int a4, redux_sta
         LeaveCriticalSection(&CriticalSection);
         v4->d1 = 0;
     }
-	return 0;
 }
 
 void sub_41A220(void* a1)
