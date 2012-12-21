@@ -75,6 +75,9 @@ void DBExport_CSV::EntryField(FDB_DBField::field_type type, void*data)
 		case FDB_DBField::F_BYTE:
 			fprintf(outf,"%i",*(BYTE*)data);
 			break; 
+		case FDB_DBField::F_WORD:
+			fprintf(outf,"%i",*(WORD*)data);
+			break; 
 		case FDB_DBField::F_INT:
 			fprintf(outf,"%i",*(int*)data);
 			break;                       
@@ -140,6 +143,7 @@ void DBExport_Sqlite3::TableField(const std::string& name, DWORD position, FDB_D
 	{
 		case FDB_DBField::F_BOOL:   fprintf(outf,"BOOLEAN"); break;
 		case FDB_DBField::F_BYTE:   fprintf(outf,"TINYINT"); break; 
+		case FDB_DBField::F_WORD:   fprintf(outf,"INTEGER");break; 
 		case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
 		case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
 		case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
@@ -170,6 +174,9 @@ void DBExport_Sqlite3::EntryField(FDB_DBField::field_type type, void*data)
 	{
 		case FDB_DBField::F_BYTE:
 			fprintf(outf,"%i",*(BYTE*)data);
+			break; 
+		case FDB_DBField::F_WORD:
+			fprintf(outf,"%i",*(WORD*)data);
 			break; 
 		case FDB_DBField::F_INT:
 			fprintf(outf,"%i",*(int*)data);

@@ -100,12 +100,13 @@ bool FDBFileDB_LearnMagic::WriteSubArray(DBExport& exporter, field_list* fields,
 		exporter.TableStart(name.c_str());
 		exporter.TableField((*fields)[0].name, (*fields)[0].position, (*fields)[0].type, (*fields)[0].size);
 		exporter.TableField("id",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i1",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i2",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i3",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i4",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i5",4,FDB_DBField::F_DWORD,4);
-		exporter.TableField("i6",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("skill",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("min_level",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("req_flag",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("req_skill",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("u1",4,FDB_DBField::F_DWORD,4);
+		exporter.TableField("req_skill_lvl",2,FDB_DBField::F_WORD,2);
+		exporter.TableField("u3",2,FDB_DBField::F_WORD,2);
 		exporter.TableEnd();
 
 		for (DWORD idx=0;idx<head->entry_count;++idx)
@@ -120,9 +121,14 @@ bool FDBFileDB_LearnMagic::WriteSubArray(DBExport& exporter, field_list* fields,
 				exporter.EntryField((*fields)[0].type, line+ (*fields)[0].position);
 				DWORD temp = i+1;
 				exporter.EntryField(FDB_DBField::F_DWORD,&temp);
+				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+0*4 + i*6*4);
+				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+1*4 + i*6*4);
+				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+2*4 + i*6*4);
+				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+3*4 + i*6*4);
+				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+4*4 + i*6*4);
+				exporter.EntryField(FDB_DBField::F_WORD,line + normalmagicinfo->position+5*4 + i*6*4);
+				exporter.EntryField(FDB_DBField::F_WORD,line + normalmagicinfo->position+5*4+2 + i*6*4);
 
-				for (DWORD t=0;t<6;++t)
-					exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+t*4 + i*6*4);
 				exporter.EntryEnd();
 			}
 		}

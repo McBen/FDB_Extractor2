@@ -13,6 +13,7 @@ class FDB_DBField
 			F_BYTE,
 			F_STRING,
 			F_ARRAY,
+			F_WORD,
 
 			NOF_FIELD_TYPE
 		};
