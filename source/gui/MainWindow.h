@@ -30,6 +30,7 @@ class MainWindow : public BASE_DLG::MainWindow
 		void OnExtractFocusFile(wxCommandEvent& WXUNUSED(event));
 		void OnExtractFiles(wxCommandEvent& WXUNUSED(event));
 		void OnExtractFolder(wxCommandEvent& WXUNUSED(event));
+		void OnCopyPath(wxCommandEvent& WXUNUSED(event));
 		void OnOpenWebPage(wxCommandEvent& WXUNUSED(event));
 		
 		void m_extract_folderOnUpdateUI( wxUpdateUIEvent& event );

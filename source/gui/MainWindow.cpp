@@ -5,6 +5,7 @@
 #include "resource.h"
 #include "../../resources/images/wxresource.h"
 #include "../VersionNo.h"
+#include <wx/clipbrd.h>
 
 using namespace std;
 
@@ -12,6 +13,7 @@ enum {
 	FDBex_ExtractFocusFile = 8000,
 	FDBex_ExtractFiles,
 	FDBex_ExtractFolder,
+	FDBex_CopyPath,
 };
 
 
@@ -19,6 +21,7 @@ BEGIN_EVENT_TABLE(MainWindow, BASE_DLG::MainWindow)
   EVT_MENU    (FDBex_ExtractFocusFile,   MainWindow::OnExtractFocusFile)
   EVT_MENU    (FDBex_ExtractFiles,   MainWindow::OnExtractFiles)
   EVT_MENU    (FDBex_ExtractFolder, MainWindow::OnExtractFolder)
+  EVT_MENU    (FDBex_CopyPath, MainWindow::OnCopyPath)
 END_EVENT_TABLE()
 
 
@@ -196,6 +199,9 @@ void MainWindow::file_ctrlOnContextMenu( wxContextMenuEvent& event )
 	if (file_ctrl->GetSelectedItemCount()>1)  menu.Append(FDBex_ExtractFiles, _("Extract files to..."));
     menu.Append(FDBex_ExtractFolder, _("Extract folder to..."));
 
+	menu.AppendSeparator();
+	menu.Append(FDBex_CopyPath, _("Copy pathname"));
+
     PopupMenu(&menu, point);
 }
 
@@ -241,6 +247,21 @@ void MainWindow::OnExtractFocusFile(wxCommandEvent& WXUNUSED(event))
 
 	fdb_pack.ExtractFile(curname, dlg.GetPath());
 }
+
+void MainWindow::OnCopyPath(wxCommandEvent& WXUNUSED(event))
+{
+	long item = file_ctrl->GetNextItem(-1,wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+	if (item==-1) return;
+
+	wxString curname = directory_ctrl->GetCurrentDir()+file_ctrl->GetItemText(item);
+
+	if (wxTheClipboard->Open())
+	{
+		wxTheClipboard->SetData( new wxTextDataObject(curname) );
+		wxTheClipboard->Close();
+	}
+}
+
 
 void MainWindow::OnExtractFiles(wxCommandEvent& WXUNUSED(event))
 {
