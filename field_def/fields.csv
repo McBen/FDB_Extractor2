@@ -2188,7 +2188,7 @@ data\learnmagic.db;shortnote;0024;04;2;=0
 data\learnmagic.db;spmagiccount;0090;04;2;
 data\learnmagic.db;spmagicinfo;0094;12c0;6;array, each entry contains 6DWords
 data\learnmagic.db;normalmagiccount;1354;04;2;
-data\learnmagic.db;normalmagicinfo;1358;1C20;6;array, each entry contains 6DWords
+data\learnmagic.db;normalmagicinfo;1358;1c20;6;array, each entry contains 6DWords
 data\lifeskillrareex.db;;0000;04;2;
 data\lifeskillrareex.db;;0004;04;2;
 data\lifeskillrareex.db;;0008;04;2;
@@ -3054,9 +3054,9 @@ data\magiccollectobject.db;magiccheckfunctype3;01ac;04;2;
 data\magiccollectobject.db;magicbaseid3;01b0;04;2;
 data\magiccollectobject.db;magiccheckarg13;01b4;04;2;
 data\magiccollectobject.db;magiccheckarg23;01b8;04;2;
-data\magiccollectobject.db;magiccheckfunctype4;01c0;04;2;=0
+data\magiccollectobject.db;magiccheckfunctype4;01c0;04;0;
 data\magiccollectobject.db;magicbaseid4;01c4;04;2;
-data\magiccollectobject.db;magiccheckarg14;01c8;04;2;=0
+data\magiccollectobject.db;magiccheckarg14;01c8;04;2;
 data\magiccollectobject.db;magiccheckarg24;01cc;04;2;=0
 data\magiccollectobject.db;magiccheckfunctype5;01d4;04;2;
 data\magiccollectobject.db;magicbaseid5;01d8;04;2;
@@ -3092,7 +3092,7 @@ data\magiccollectobject.db;magiccheckarg112;0268;04;2;=0
 data\magiccollectobject.db;magiccheckarg212;026c;04;2;=0
 data\magiccollectobject.db;magicspellgrouptype;0274;04;2;
 data\magiccollectobject.db;checkusescript;0278;80;5;
-data\magiccollectobject.db;maxskilllv;02f8;04;3;
+data\magiccollectobject.db;maxskilllv;02f8;04;2;
 data\magiccollectobject.db;exptablerate;02fc;04;3;
 data\magiccollectobject.db;ismagicattackdelay_targetdist;0300;04;0;
 data\magiccollectobject.db;;0304;04;1;
@@ -3963,7 +3963,7 @@ data\questdetailobject.db;szscript_oncomplete;0430;40;5;
 data\questdetailobject.db;szscript_onclickobjbegin;0470;40;5;
 data\questdetailobject.db;szscript_onclickobjend;04b0;40;5;
 data\questdetailobject.db;iquestgroup;04f0;04;2;
-data\questdetailobject.db;icontroltype;04f4;04;0;
+data\questdetailobject.db;icontroltype;04f4;04;1;
 data\questdetailobject.db;irequest_itemstr1;04f8;04;2;Quest-Goal prefix (Q_REQUEST_ITEMSTR_01)
 data\questdetailobject.db;irequest_itemstr2;04fc;04;2;Quest-Goal prefix (Q_REQUEST_ITEMSTR_01)
 data\questdetailobject.db;irequest_itemstr3;0500;04;2;Quest-Goal prefix (Q_REQUEST_ITEMSTR_01)
@@ -4262,7 +4262,7 @@ data\runeobject.db;;0028;04;2;=2560
 data\runeobject.db;pricestype;002c;04;2;=0
 data\runeobject.db;cost;0034;04;2;
 data\runeobject.db;;0038;04;0;
-data\runeobject.db;rare;0040;04;2;=0
+data\runeobject.db;rare;0040;04;2;
 data\runeobject.db;;004c;04;1;
 data\runeobject.db;;0050;04;1;
 data\runeobject.db;;0054;04;1;
@@ -4303,7 +4303,7 @@ data\runeobject.db;addonpos_weapontype;015c;04;2;
 data\runeobject.db;addonpos_weaponpos;0160;04;2;=0
 data\runeobject.db;addonpos_other;0168;04;2;
 data\runeobject.db;type;016c;04;2;
-data\runeobject.db;runegroup;0170;04;2;
+data\runeobject.db;runegroup;0170;04;1;
 data\runeobject.db;level;0178;04;2;
 data\runeobject.db;volume;017c;04;0;
 data\runeobject.db;;0354;01;4;
@@ -4325,6 +4325,9 @@ data\runeobject.db;standardability_arg4;039c;04;2;=0
 data\runeobject.db;standardability_arg5;03a0;04;2;=0
 data\runeobject.db;starvalue;04a8;04;2;=0
 data\runeobject.db;drawoutcost;06b0;04;2;
+data\runesystem.db;;0000;04;2;
+data\runesystem.db;;0004;04;2;
+data\runesystem.db;;0010;04;2;
 data\servantevent.db;;0000;04;2;
 data\servantevent.db;;0004;04;2;
 data\servantevent.db;;0008;04;2;
@@ -4451,10 +4454,10 @@ data\shopobject.db;sellitemmax23;016c;04;2;
 data\shopobject.db;sellitemmax24;0170;04;2;
 data\shopobject.db;sellitemmax25;0174;04;2;
 data\shopobject.db;sellitemmax26;0178;04;2;
-data\shopobject.db;sellitemmax27;017c;04;2;=9999999
-data\shopobject.db;sellitemmax28;0180;04;2;=9999999
-data\shopobject.db;sellitemmax29;0184;04;2;=9999999
-data\shopobject.db;sellitemmax30;0188;04;2;=9999999
+data\shopobject.db;sellitemmax27;017c;04;2;
+data\shopobject.db;sellitemmax28;0180;04;2;
+data\shopobject.db;sellitemmax29;0184;04;2;
+data\shopobject.db;sellitemmax30;0188;04;2;
 data\shopobject.db;sellitemporduce1;018c;04;2;
 data\shopobject.db;sellitemporduce2;0190;04;2;
 data\shopobject.db;sellitemporduce3;0194;04;2;
@@ -4481,10 +4484,10 @@ data\shopobject.db;sellitemporduce23;01e4;04;2;
 data\shopobject.db;sellitemporduce24;01e8;04;2;
 data\shopobject.db;sellitemporduce25;01ec;04;2;
 data\shopobject.db;sellitemporduce26;01f0;04;2;
-data\shopobject.db;sellitemporduce27;01f4;04;2;=9999999
-data\shopobject.db;sellitemporduce28;01f8;04;2;=9999999
-data\shopobject.db;sellitemporduce29;01fc;04;2;=9999999
-data\shopobject.db;sellitemporduce30;0200;04;2;=9999999
+data\shopobject.db;sellitemporduce27;01f4;04;2;
+data\shopobject.db;sellitemporduce28;01f8;04;2;
+data\shopobject.db;sellitemporduce29;01fc;04;2;
+data\shopobject.db;sellitemporduce30;0200;04;2;
 data\shopobject.db;sellcost1_1;0204;04;2;
 data\shopobject.db;sellcost2_1;0208;04;2;
 data\shopobject.db;sellcost1_2;020c;04;2;
