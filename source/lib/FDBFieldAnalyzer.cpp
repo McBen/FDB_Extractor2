@@ -5,7 +5,6 @@
 #include <ctype.h>
 using namespace std;
 
-
 FDBFieldAnalyzer::FDBFieldAnalyzer(const FDBPackage::file_info& s_info, BYTE* _data)
 {
 	data = _data;

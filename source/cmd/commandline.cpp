@@ -23,6 +23,7 @@ bool CommandLine::Parse(int argc, const char* argv[])
         ("overwrite,y", "always overwrite files")
         ("list,l", "list files only (no extraction)")
         ("list_crc,x", "list files with checksum (no extraction)")
+        ("list_full,u", "list files with details (no extraction)")
         ("regex,r", "use regex filter instead of filename")
         ("output,o", value<string>(&output_directory)->default_value(""), "output directory")
         ("fdb_file,i", value< vector<string> >(&fbd_files),"FDB file")
@@ -90,6 +91,7 @@ void CommandLine::ParseArguments(variables_map vm)
     neveroverwrite = false;
     list_only = vm.count("list")>0;
 	list_only_with_crc = vm.count("list_crc")>0;
+	list_only_full = vm.count("list_full")>0;
     raw_data = vm.count("raw")>0;
     db_sql_out = vm.count("sql")>0;
     lua_out = vm.count("lua")>0;

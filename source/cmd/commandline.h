@@ -12,6 +12,7 @@ class CommandLine
         bool neveroverwrite;
         bool list_only;
         bool list_only_with_crc;
+		bool list_only_full;
         bool raw_data; 
         bool db_sql_out; 
         bool lua_out; 

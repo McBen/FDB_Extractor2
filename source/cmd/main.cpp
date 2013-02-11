@@ -19,7 +19,7 @@ CommandLine cmdline;
 using namespace std;
 
 bool Process();
-bool List(bool include_crc);
+bool List(bool include_crc, bool full_info);
 
 int main( int argc, const char* argv[] )
 {
@@ -31,12 +31,11 @@ int main( int argc, const char* argv[] )
     {
         return -1;
     }    
-
     
     bool okay = false;
 
-	if (cmdline.list_only || cmdline.list_only_with_crc) 
-	    okay = List(cmdline.list_only_with_crc);
+	if (cmdline.list_only || cmdline.list_only_with_crc|| cmdline.list_only_full) 
+	    okay = List(cmdline.list_only_with_crc, cmdline.list_only_full);
 	else
 		okay = Process();
 
@@ -150,20 +149,20 @@ bool ProcessFile(boost::filesystem::path filename, const boost::regex& filter)
 }
 
 /////////////////////////////////////
-bool ListDir(string filename,  const boost::regex& filter, bool include_crc);
-bool ListFile(boost::filesystem::path filename,  const boost::regex& filter, bool include_crc);
+bool ListDir(string filename,  const boost::regex& filter, bool include_crc, bool full_info);
+bool ListFile(boost::filesystem::path filename,  const boost::regex& filter, bool include_crc, bool full_info);
 
-bool List(bool include_crc)
+bool List(bool include_crc, bool full_info)
 {
     bool had_error = false;
 
     for (vector<string>::iterator f = cmdline.fbd_files.begin(); f!=cmdline.fbd_files.end();++f )
-        had_error |= !ListDir(*f, cmdline.filter, include_crc);
+        had_error |= !ListDir(*f, cmdline.filter, include_crc,full_info);
 
 	return !had_error;
 }
 
-bool ListDir(string filename, const boost::regex& filter, bool include_crc)
+bool ListDir(string filename, const boost::regex& filter, bool include_crc, bool full_info)
 {
     boost::filesystem::path basepath(filename);
     basepath.remove_filename();
@@ -178,7 +177,7 @@ bool ListDir(string filename, const boost::regex& filter, bool include_crc)
     bool something_extracted=false;
     do 
     {
-        something_extracted |= ListFile(basepath / FindFileData.cFileName, filter, include_crc);
+        something_extracted |= ListFile(basepath / FindFileData.cFileName, filter, include_crc,full_info);
     } while (FindNextFile(hFind,&FindFileData));
 
     FindClose(hFind);
@@ -186,10 +185,11 @@ bool ListDir(string filename, const boost::regex& filter, bool include_crc)
     return something_extracted;
 }
 
-bool ListFile(boost::filesystem::path filename, const boost::regex& filter, bool include_crc)
+bool ListFile(boost::filesystem::path filename, const boost::regex& filter, bool include_crc, bool full_info)
 {
     bool extracted = false;
     FDBPackage fdb( filename.generic_string().c_str() );
+	FDBPackage::file_info s_info;
 
     for (size_t id=0;id<fdb.GetFileCount();++id)
     {
@@ -201,15 +201,22 @@ bool ListFile(boost::filesystem::path filename, const boost::regex& filter, bool
             output /= fname; // TODO: get real name (in case of DB it may differ)
 
 
+			cout << output.generic_string();
+
+			if (full_info)
+			{
+				fdb.GetFileInfo(id,s_info);
+				cout <<"\t"<< s_info.size_uncomp;
+				if (s_info.ftype==2) cout <<"\t"<<s_info.width<<"\t"<<s_info.height<<"\t"<< (unsigned)s_info.mipmapcount;
+			}
+
 			if (include_crc)
 			{
 				DWORD crc32 = fdb.CalcCRC32(id);
-				cout << output.generic_string() <<"\t"<< setw(8) << setfill('0') << hex << crc32 <<"\n";
+				cout <<"\t"<< setw(8) << setfill('0') << hex << crc32;
 			}
-			else
-			{
-				cout << output <<"\n";
-			}
+				
+			cout <<"\n";
             extracted = true;
         }
     }
