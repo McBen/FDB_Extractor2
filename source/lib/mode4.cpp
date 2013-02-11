@@ -25,11 +25,11 @@ struct uncompress_data // size = 0x30
     BYTE* cur_data; // 0x10
     DWORD u12;
     void* d1;
-    size_t  cur_size; 
+    size_t  cur_size;
     size_t  page_size;  //0x020
     size_t  total_size;
-    char* filename;
-    DWORD has_data; 
+    const char* filename;
+    DWORD has_data;
 };
 
 struct a1_struct
@@ -61,22 +61,18 @@ size_t  calculate_image_size(signed int mipmap_count, int format, signed int wid
 HMODULE redux_dll=NULL;
 bool   loading_error=false;
 typedef int (__cdecl *t_reduxHandleDecompress)(void* data, int src_size, void* dst);
-//typedef int (*t_reduxCallbackSet)(unsigned nr, void* __stdcall fct(int a1, a1_struct* a2, int a3, int a4, redux_status* a5));
 typedef int (*t_reduxCallbackSet)(unsigned nr, void* fct);
 typedef int (*t_reduxHandleGetOutputDesc)(int a1, int a2, void* a3);
 t_reduxHandleDecompress reduxHandleDecompress;
 t_reduxCallbackSet reduxCallbackSet;
 t_reduxHandleGetOutputDesc reduxHandleGetOutputDesc;
 
-CRITICAL_SECTION CriticalSection; 
 
+CRITICAL_SECTION CriticalSection;
 
-
-
-void __stdcall redux_callback1(int a1, a1_struct* a2, int a3);
+void* __stdcall redux_callback1(int a1, a1_struct* a2, int a3);
 void* __stdcall redux_callback2(int a1, a1_struct* a2, int a3, int a4, redux_status* a5);
 void sub_41A220(void* a1);
-
 
 HMODULE LoadLib()
 {
@@ -109,8 +105,8 @@ bool InitRedux()
     reduxHandleDecompress = (t_reduxHandleDecompress)GetProcAddress( redux_dll, "reduxHandleDecompress" );
     reduxCallbackSet = (t_reduxCallbackSet)GetProcAddress( redux_dll, "reduxCallbackSet" );
     reduxHandleGetOutputDesc = (t_reduxHandleGetOutputDesc)GetProcAddress( redux_dll, "reduxHandleGetOutputDesc" );
-    
-    if (!reduxHandleDecompress || 
+
+    if (!reduxHandleDecompress ||
         !reduxCallbackSet ||
         !reduxHandleGetOutputDesc)
     {
@@ -119,7 +115,7 @@ bool InitRedux()
     }
 
 
-    //     int __stdcall sub_55EBB0(int a1) // a2_struct 
+    //     int __stdcall sub_55EBB0(int a1) // a2_struct
     //     {
     //         *(_DWORD *)a1 = &off_96B22C;
     //         sub_560360(a1 + 264);
@@ -134,8 +130,8 @@ bool InitRedux()
     //         memset((void *)(a1 + 4), 0, 0x104u);
     //         return a1;
     //     }
-    reduxCallbackSet(6,redux_callback2);
-    reduxCallbackSet(7,redux_callback1);
+    reduxCallbackSet(6,&redux_callback2);
+    reduxCallbackSet(7,&redux_callback1);
 
 
     InitializeCriticalSection(&CriticalSection);
@@ -164,7 +160,7 @@ int Uncompress_Mode4(BYTE *src, unsigned int src_size, BYTE *dest, unsigned int 
 	}
 
     uncompress_data data;
-    ZeroMemory(&data,sizeof(uncompress_data)); 
+    ZeroMemory(&data,sizeof(uncompress_data));
 	// TODO: test if  "data.cur_data = dest" will work also
 
     // v3 = this -> FileHeader
@@ -173,12 +169,12 @@ int Uncompress_Mode4(BYTE *src, unsigned int src_size, BYTE *dest, unsigned int 
     if (res || data.cur_data==0) return -1;
     memcpy(dest,data.cur_data,data.cur_size);
 
-	free(data.cur_data); 
+	free(data.cur_data);
 
     return 0;
 }
 
-void __stdcall redux_callback1(int a1, a1_struct* a2, int a3)
+void* __stdcall redux_callback1(int a1, a1_struct* a2, int a3)
 {
     uncompress_data* v4 = a2->p_data;
     void* v3 = v4->d1;
@@ -191,13 +187,14 @@ void __stdcall redux_callback1(int a1, a1_struct* a2, int a3)
         LeaveCriticalSection(&CriticalSection);
         v4->d1 = 0;
     }
+	return 0;
 }
 
 void sub_41A220(void* a1)
 {
     // just guest:
     if ( a1 ) free(a1);
-    
+
     // ori. code looks like a release with aligment
 
     /*
@@ -273,12 +270,12 @@ void* __stdcall redux_callback2(int a1, a1_struct* a2, int a3, int a4, redux_sta
         {
             uncompress_data* new_data; // v16
             DWORD unk;   // v17
-            union 
+            union
             {
                 DWORD img_size;
                 struct { WORD width; WORD height;};
             };
-            union 
+            union
             {
                 DWORD unk2;  // v19
                 struct { BYTE mipmaps; BYTE format;  WORD uuu; };
