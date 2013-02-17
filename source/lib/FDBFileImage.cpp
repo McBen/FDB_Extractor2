@@ -135,7 +135,7 @@ bool FDBFileImageBMP::WriteRAW(const char* filename)
     BITMAPINFOHEADER bminfo;
     bminfo.biSize = sizeof(BITMAPINFOHEADER); 
     bminfo.biWidth = width; 
-    bminfo.biHeight = -height; 
+    bminfo.biHeight = -(LONG)height; 
     bminfo.biPlanes = 1; 
     bminfo.biBitCount = byte_count*8; 
     bminfo.biCompression = BI_RGB; 
