@@ -351,7 +351,6 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 						float f = fabs(*(float*)run);
 					    if (f>0.00001 && f<1e10) cur_byte->IncType(FDB_DBField::F_FLOAT);
 					}
-
 			    }
 
 			    if (cur_byte->IsValidType(FDB_DBField::F_INT) &&   (*(int32_t*)run)  <0x08000000) cur_byte->IncType(FDB_DBField::F_INT);
