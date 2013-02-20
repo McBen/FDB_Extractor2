@@ -254,7 +254,7 @@ int   FDBPackage::GetFileData(size_t index, uint8_t* &uncomp_data, size_t& out_s
             free (rawdata);
             return 0;
 
-        case nvTT:
+        case Redux:
             assert(pinfo->size_comp==pinfo->rest_size); 
 
             uncomp_data = new uint8_t[ pinfo->size_uncomp ];

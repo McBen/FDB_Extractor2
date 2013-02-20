@@ -24,7 +24,7 @@ class FDBPackage
             RLE      = 1,
             LZO      = 2,
             Inflate  = 3,
-            nvTT     = 4
+            Redux    = 4 // SUBSTANCE REDUX
         };
 
 #pragma pack(1)
