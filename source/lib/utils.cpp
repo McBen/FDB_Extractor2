@@ -12,6 +12,10 @@ int fopen_s(FILE** f, const char*na, const char* at)
 }
 #endif
 
+#if WIN32
+	#include <windows.h>
+#endif
+	
 
 namespace std
 {

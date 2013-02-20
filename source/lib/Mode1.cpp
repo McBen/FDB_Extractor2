@@ -2,7 +2,7 @@
 
 
 // RLE
-int Uncompress_Mode1(BYTE *src, unsigned int src_size, BYTE *dest)
+int Uncompress_Mode1(uint8_t *src, uint32_t src_size, uint8_t *dest)
 {
   int v3; // ebx@1
   unsigned int v4; // esi@1

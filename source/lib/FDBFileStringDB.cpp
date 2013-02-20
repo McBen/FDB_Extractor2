@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-FDBFileStringDB::FDBFileStringDB(const FDBPackage::file_info& s_info, BYTE* data )
+FDBFileStringDB::FDBFileStringDB(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFile(s_info,data)
 {
 }

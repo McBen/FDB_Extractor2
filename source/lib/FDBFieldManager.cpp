@@ -27,7 +27,7 @@ FDBFieldManager::~FDBFieldManager()
 	if (state == E_CHANGED) WriteCSV();
 }
 
-field_list* FDBFieldManager::GetFieldDefinition(const FDBPackage::file_info& s_info, BYTE* data )
+field_list* FDBFieldManager::GetFieldDefinition(const FDBPackage::file_info& s_info, uint8_t* data )
 {
 	if (state == E_NOT_INIT) Load();
 
@@ -58,7 +58,7 @@ field_list* FDBFieldManager::GetFieldDefinition(const FDBPackage::file_info& s_i
 }
 
 
-FDBFieldDef FDBFieldManager::AnalyseFile(const FDBPackage::file_info& s_info, BYTE* data)
+FDBFieldDef FDBFieldManager::AnalyseFile(const FDBPackage::file_info& s_info, uint8_t* data)
 {
 	FDBFieldDef new_entry;
 	new_entry.filename =s_info.name;
@@ -116,9 +116,9 @@ void FDBFieldManager::Load()
 	state = E_LOADED;
 }
 
-DWORD Hex2Dec(const char* r)
+uint32_t Hex2Dec(const char* r)
 {
-	DWORD res =0;
+	uint32_t res =0;
 	while (*r)
 	{
 		int v=*r-'0';

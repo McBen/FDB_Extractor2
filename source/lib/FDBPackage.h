@@ -30,28 +30,28 @@ class FDBPackage
 #pragma pack(1)
         struct file_info
         {
-            UINT32 total_size;
-            UINT32 ftype;
-            UINT32 compression;
-            UINT32 size_uncomp;
-            UINT32 size_comp;
-            UINT64 mtime;
-            UINT32 name_length;
+            uint32_t total_size;
+            uint32_t ftype;
+            uint32_t compression;
+            uint32_t size_uncomp;
+            uint32_t size_comp;
+            uint64_t mtime;
+            uint32_t name_length;
 
             const char* name; 
 
             // for ftype==2:
-            UINT32 comp_type; 
-            UINT32 width;
-            UINT32 height;
-            UINT8  mipmapcount;
-            UINT8  unknown[3]; //garbage
+            uint32_t comp_type;
+            uint32_t width;
+            uint32_t height;
+            uint8_t  mipmapcount;
+            uint8_t  unknown[3]; //garbage
 
             // calculated
-            UINT32 rest_size;
+            uint32_t rest_size;
         };
-        static const size_t file_info_size_base = 6*sizeof(UINT32)+sizeof(UINT64);
-        static const size_t file_info_size_image = 4*sizeof(UINT32);
+        static const size_t file_info_size_base = 6*sizeof(uint32_t)+sizeof(uint64_t);
+        static const size_t file_info_size_image = 4*sizeof(uint32_t);
 #pragma pack()
 
 
@@ -67,16 +67,16 @@ class FDBPackage
         size_t  GetFileCount();
         const char* GetFileName(size_t index);
         void  GetFileInfo(size_t index, file_info&);
-		BYTE* GetFileRawData(size_t index, file_info& pinfo);
-        int   GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size, file_info* pinfo = NULL);
+		uint8_t* GetFileRawData(size_t index, file_info& pinfo);
+        int   GetFileData(size_t index, uint8_t* &uncomp_data, size_t& out_size, file_info* pinfo = NULL);
 
         size_t      FindFile(const char* fname);
         FDBFile*    GetFile(size_t index);
         bool        ExtractFile(size_t index, const char* filename, e_export_format format);
-        DWORD       CalcCRC32(size_t index);
+        uint32_t    CalcCRC32(size_t index);
 
     protected:
-        FDBFile* CreateFileObject(const file_info&, BYTE*);
+        FDBFile* CreateFileObject(const file_info&, uint8_t*);
 
     private:
         e_export_format TestFormat(FDBFile*, e_export_format);
@@ -84,17 +84,17 @@ class FDBPackage
 #pragma pack(1)
         struct file_head_data
         {
-            UINT32 ftype;
-            UINT64 mtime;
-            UINT32 offset;
+            uint32_t ftype;
+            uint64_t mtime;
+            uint32_t offset;
         };
 #pragma pack()
 
         FILE*   file;
 
-        UINT32  file_count;
+        uint32_t  file_count;
         file_head_data* file_positions;
-        UINT32 *        file_name_pos;
+        uint32_t *      file_name_pos;
         const char*     file_names_data;
 
 

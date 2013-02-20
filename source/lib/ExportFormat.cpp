@@ -44,7 +44,7 @@ void DBExport_CSV::TableStart(const char* _table_name)
 	DBExport::TableStart(_table_name);
 }
 
-void DBExport_CSV::TableField(const std::string& name, DWORD position, FDB_DBField::field_type type, size_t size ) 
+void DBExport_CSV::TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size )
 {
 	if (not_first_value) fprintf(outf,";");
 	else not_first_value = true;
@@ -73,17 +73,17 @@ void DBExport_CSV::EntryField(FDB_DBField::field_type type, void*data)
 	switch (type)
 	{
 		case FDB_DBField::F_BYTE:
-			fprintf(outf,"%i",*(BYTE*)data);
+			fprintf(outf,"%i",*(uint8_t*)data);
 			break; 
 		case FDB_DBField::F_WORD:
-			fprintf(outf,"%i",*(WORD*)data);
+			fprintf(outf,"%i",*(uint16_t*)data);
 			break; 
 		case FDB_DBField::F_INT:
-			fprintf(outf,"%i",*(int*)data);
+			fprintf(outf,"%i",*(int32_t*)data);
 			break;                       
 		case FDB_DBField::F_BOOL:
 		case FDB_DBField::F_DWORD:
-			fprintf(outf,"%u",*(unsigned int*)data);
+			fprintf(outf,"%u",*(uint32_t*)data);
 			break;                       
 		case FDB_DBField::F_FLOAT:
 			fprintf(outf,"%g",*(float*)data);
@@ -99,6 +99,7 @@ void DBExport_CSV::EntryField(FDB_DBField::field_type type, void*data)
 
 		default:
 			assert(false);
+			break;
 	}
 }
 
@@ -129,7 +130,7 @@ void DBExport_Sqlite3::TableStart(const char* _table_name)
 	fprintf(outf, "CREATE TABLE `%s` (\n", table_name);
 }
 
-void DBExport_Sqlite3::TableField(const std::string& name, DWORD position, FDB_DBField::field_type type, size_t size) 
+void DBExport_Sqlite3::TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size)
 {
 	if (not_first_value) fprintf(outf,",\n");
 	else not_first_value = true;
@@ -147,10 +148,11 @@ void DBExport_Sqlite3::TableField(const std::string& name, DWORD position, FDB_D
 		case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
 		case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
 		case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
-		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%i)",size); break;
-		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%i)",size); break; // TODO: make BLOB
+		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%li)",size); break;
+		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%li)",size); break; // TODO: make BLOB
 		default:
 			assert(false);
+			break;
 	}
 }
 
@@ -173,17 +175,17 @@ void DBExport_Sqlite3::EntryField(FDB_DBField::field_type type, void*data)
 	switch (type)
 	{
 		case FDB_DBField::F_BYTE:
-			fprintf(outf,"%i",*(BYTE*)data);
+			fprintf(outf,"%i",*(uint8_t*)data);
 			break; 
 		case FDB_DBField::F_WORD:
-			fprintf(outf,"%i",*(WORD*)data);
+			fprintf(outf,"%i",*(uint16_t*)data);
 			break; 
 		case FDB_DBField::F_INT:
-			fprintf(outf,"%i",*(int*)data);
+			fprintf(outf,"%i",*(int32_t*)data);
 			break;                       
 		case FDB_DBField::F_BOOL:
 		case FDB_DBField::F_DWORD:
-			fprintf(outf,"%u",*(unsigned int*)data);
+			fprintf(outf,"%u",*(uint32_t*)data);
 			break;                       
 		case FDB_DBField::F_FLOAT:
 			fprintf(outf,"%g",*(float*)data);
@@ -197,6 +199,7 @@ void DBExport_Sqlite3::EntryField(FDB_DBField::field_type type, void*data)
 
 		default:
 			assert(false);
+			break;
 	}
 }
 

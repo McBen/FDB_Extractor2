@@ -7,11 +7,11 @@ class FDBFieldDef
 {
 	public:
 		std::string filename;
-		DWORD head_crc;
+		uint32_t   head_crc;
 		field_list fields;
 
-	FDB_DBField* GetFieldAt(DWORD pos);
-	bool	IsUndefined(DWORD pos, size_t size);
+	FDB_DBField* GetFieldAt(uint32_t pos);
+	bool	IsUndefined(uint32_t pos, size_t size);
 
 	bool operator<(const FDBFieldDef& j) const { return (filename < j.filename);}
 

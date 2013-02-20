@@ -13,7 +13,6 @@ set (HEADER_FILES
     FDBFieldAnalyzer.h
     FDBFileImage.h
     FDBPackage.h
-    mode4.h
     stdafx.h
   )
 
@@ -35,6 +34,7 @@ set (SOURCE_FILES
     mode4.cpp
     utils.cpp
   )
+
 
 INCLUDE_DIRECTORIES(
     ${ZLIB_INCLUDE}

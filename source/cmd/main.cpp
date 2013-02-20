@@ -1,4 +1,4 @@
-#include <windows.h>
+//#include <windows.h>
 
 #include "commandline.h"
 
@@ -11,6 +11,11 @@
 #include <vector>
 
 #include "FDB_LIB.h"
+
+#if WIN32
+// FIXME
+	#include <windows.h>
+#endif
 
 
 CommandLine cmdline;
@@ -212,7 +217,7 @@ bool ListFile(boost::filesystem::path filename, const boost::regex& filter, bool
 
 			if (include_crc)
 			{
-				DWORD crc32 = fdb.CalcCRC32(id);
+				uint32_t crc32 = fdb.CalcCRC32(id);
 				cout <<"\t"<< setw(8) << setfill('0') << hex << crc32;
 			}
 				

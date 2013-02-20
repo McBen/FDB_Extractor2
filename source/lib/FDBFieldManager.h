@@ -10,10 +10,10 @@ class FDBFieldManager
 		struct s_file_header
 		{
 			const char description[128];
-			DWORD unknown; // == 0x00006396
+			uint32_t unknown; // == 0x00006396
 
-			DWORD entry_count;
-			DWORD entry_size;
+			uint32_t entry_count;
+			uint32_t entry_size;
 		};
 #pragma pack()
 
@@ -23,7 +23,7 @@ class FDBFieldManager
 		FDBFieldManager();
 		~FDBFieldManager();
 
-		field_list* GetFieldDefinition(const FDBPackage::file_info& s_info, BYTE* data );
+		field_list* GetFieldDefinition(const FDBPackage::file_info& s_info, uint8_t* data );
 
 	private:
 
@@ -34,7 +34,7 @@ class FDBFieldManager
 		field_def_list cache;
 
 		field_def_list::iterator FindEntry(const std::string& name);
-		FDBFieldDef AnalyseFile(const FDBPackage::file_info& s_info, BYTE* data);
+		FDBFieldDef AnalyseFile(const FDBPackage::file_info& s_info, uint8_t* data);
 		void Merge(FDBFieldDef& current, const FDBFieldDef& old_def);
 };
 

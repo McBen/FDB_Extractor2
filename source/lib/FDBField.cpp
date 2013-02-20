@@ -16,7 +16,7 @@ FDB_DBField::FDB_DBField()
 {
 }
 
-FDB_DBField::FDB_DBField(const string& _name, field_type _type, DWORD _pos, DWORD _size)
+FDB_DBField::FDB_DBField(const string& _name, field_type _type, uint32_t _pos, uint32_t _size)
 {
 	name = _name;
 	type = _type;

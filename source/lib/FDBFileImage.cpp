@@ -5,7 +5,7 @@
 
 
 
-FDBFileImage::FDBFileImage(const FDBPackage::file_info& s_info, BYTE* data ) 
+FDBFileImage::FDBFileImage(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFile(s_info,data)
 {
     width = s_info.width;
@@ -15,7 +15,7 @@ FDBFileImage::FDBFileImage(const FDBPackage::file_info& s_info, BYTE* data )
 
 
 
-FDBFileImageTGA::FDBFileImageTGA(const FDBPackage::file_info& s_info, BYTE* data )
+FDBFileImageTGA::FDBFileImageTGA(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFileImage(s_info,data)
 {
 }
@@ -25,21 +25,21 @@ bool FDBFileImageTGA::WriteRAW(const char* filename)
     #pragma pack(1)
     struct
     {
-        BYTE  identsize;         // size of ID field that follows 18 byte header (0 usually)
-        BYTE  colourmaptype;     // type of colour map 0=none, 1=has palette
-        BYTE  imagetype;         // type of image 0=none,1=indexed,2=rgb,3=grey,+8=rle packed
+	uint8_t  identsize;         // size of ID field that follows 18 byte header (0 usually)
+	uint8_t  colourmaptype;     // type of colour map 0=none, 1=has palette
+	uint8_t  imagetype;         // type of image 0=none,1=indexed,2=rgb,3=grey,+8=rle packed
 
-        WORD colourmapstart;     // first colour map entry in palette
-        WORD colourmaplength;    // number of colours in palette
-        BYTE  colourmapbits;     // number of bits per palette entry 15,16,24,32
+	uint16_t colourmapstart;     // first colour map entry in palette
+	uint16_t colourmaplength;    // number of colours in palette
+        uint8_t  colourmapbits;     // number of bits per palette entry 15,16,24,32
 
-        WORD xstart;             // image x origin
-        WORD ystart;             // image y origin
+        uint16_t xstart;             // image x origin
+        uint16_t ystart;             // image y origin
 
-        WORD width;              // image width in pixels
-        WORD height;             // image height in pixels
-        BYTE  bits;              // image bits per pixel 8,16,24,32
-        BYTE  descriptor;        // image descriptor bits (vh flip bits)
+        uint16_t width;              // image width in pixels
+        uint16_t height;             // image height in pixels
+        uint8_t  bits;              // image bits per pixel 8,16,24,32
+        uint8_t  descriptor;        // image descriptor bits (vh flip bits)
     } TGA_HEADER = 
     {
         0,0,2, 0,0,0, 0,0,
@@ -59,7 +59,7 @@ bool FDBFileImageTGA::WriteRAW(const char* filename)
     return res==1;
 }
 
-FDBFileImageDDS::FDBFileImageDDS(const FDBPackage::file_info& s_info, BYTE* data )
+FDBFileImageDDS::FDBFileImageDDS(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFileImage(s_info,data)
 {
     mipmapcount = s_info.mipmapcount;
@@ -70,7 +70,7 @@ FDBFileImageDDS::FDBFileImageDDS(const FDBPackage::file_info& s_info, BYTE* data
 bool FDBFileImageDDS::WriteRAW(const char* filename)
 {
     DDS_HEADER head;
-    ZeroMemory(&head,sizeof(DDS_HEADER));
+    memset(&head,0,sizeof(DDS_HEADER));
 
     head.dwSize = sizeof(DDS_HEADER);
     head.dwHeight = height;
@@ -106,8 +106,8 @@ bool FDBFileImageDDS::WriteRAW(const char* filename)
     if (fopen_s(&outf,filename,"wb")) return false;
 	if (!outf) return false;
 
-    DWORD magic = 0x20534444;
-    fwrite(&magic,sizeof(DWORD),1,outf);
+	uint32_t magic = 0x20534444;
+    fwrite(&magic,sizeof(uint32_t),1,outf);
     fwrite(&head,sizeof(head),1,outf);
     size_t res = fwrite(data,data_size,1,outf);
     fclose(outf);
@@ -116,7 +116,7 @@ bool FDBFileImageDDS::WriteRAW(const char* filename)
 }
 
 
-FDBFileImageBMP::FDBFileImageBMP(const FDBPackage::file_info& s_info, BYTE* data )
+FDBFileImageBMP::FDBFileImageBMP(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFileImage(s_info,data)
 {
     byte_count = s_info.comp_type;
@@ -126,19 +126,44 @@ FDBFileImageBMP::FDBFileImageBMP(const FDBPackage::file_info& s_info, BYTE* data
 bool FDBFileImageBMP::WriteRAW(const char* filename)
 {
     // write bitmap
-    BITMAPFILEHEADER bmfh;
+#pragma pack(1)
+    struct BITMAPFILEHEADER
+    {
+		uint16_t bfType;
+		uint32_t bfSize;
+		uint16_t bfReserved1;
+		uint16_t bfReserved2;
+		uint32_t bfOffBits;
+    } bmfh;
+
+    struct BITMAPINFOHEADER
+    {
+		uint32_t biSize;
+		int32_t biWidth;
+		int32_t biHeight;
+		uint16_t biPlanes;
+		uint16_t biBitCount;
+		uint32_t biCompression;
+		uint32_t biSizeImage;
+		int32_t biXPelsPerMeter;
+		int32_t biYPelsPerMeter;
+		uint32_t biClrUsed;
+		uint32_t biClrImportant;
+    } bminfo;
+#pragma pack(1)
+
     bmfh.bfType = 'MB'; 
     bmfh.bfSize = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+width*height*byte_count;
     bmfh.bfReserved1 = 0;
     bmfh.bfReserved2 = 0;
     bmfh.bfOffBits = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER);
-    BITMAPINFOHEADER bminfo;
+
     bminfo.biSize = sizeof(BITMAPINFOHEADER); 
     bminfo.biWidth = width; 
-    bminfo.biHeight = -(LONG)height; 
+    bminfo.biHeight = -(int32_t)height; 
     bminfo.biPlanes = 1; 
     bminfo.biBitCount = byte_count*8; 
-    bminfo.biCompression = BI_RGB; 
+    bminfo.biCompression = 0;//BI_RGB;
     bminfo.biSizeImage = 0; 
     bminfo.biXPelsPerMeter = width; 
     bminfo.biYPelsPerMeter = height; 
@@ -159,7 +184,7 @@ bool FDBFileImageBMP::WriteRAW(const char* filename)
 }
 
 
-FDBFileImagePNG::FDBFileImagePNG(const FDBPackage::file_info& s_info, BYTE* data )
+FDBFileImagePNG::FDBFileImagePNG(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFileImage(s_info,data)
 {
 }

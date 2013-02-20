@@ -4,7 +4,7 @@
 class FDBFileImage : public FDBFile
 {
     public:
-        FDBFileImage(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFileImage(const FDBPackage::file_info& s_info, uint8_t* data );
 
     protected:
         unsigned width;
@@ -15,7 +15,7 @@ class FDBFileImage : public FDBFile
 class FDBFileImageTGA : public FDBFileImage
 {
     public:
-        FDBFileImageTGA(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFileImageTGA(const FDBPackage::file_info& s_info, uint8_t* data );
 
         bool WriteRAW(const char*);
 };
@@ -23,7 +23,7 @@ class FDBFileImageTGA : public FDBFileImage
 class FDBFileImageDDS : public FDBFileImage
 {
     public:
-        FDBFileImageDDS(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFileImageDDS(const FDBPackage::file_info& s_info, uint8_t* data );
 
         bool WriteRAW(const char*);
 
@@ -35,7 +35,7 @@ class FDBFileImageDDS : public FDBFileImage
 class FDBFileImageBMP : public FDBFileImage
 {
     public:
-        FDBFileImageBMP(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFileImageBMP(const FDBPackage::file_info& s_info, uint8_t* data );
 
         bool WriteRAW(const char*);
     protected:
@@ -45,7 +45,7 @@ class FDBFileImageBMP : public FDBFileImage
 class FDBFileImagePNG : public FDBFileImage
 {
     public:
-        FDBFileImagePNG(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFileImagePNG(const FDBPackage::file_info& s_info, uint8_t* data );
 
         bool WriteRAW(const char*);
 };

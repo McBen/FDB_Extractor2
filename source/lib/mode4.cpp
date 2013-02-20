@@ -1,15 +1,17 @@
 #include "stdafx.h"
-#include "mode4.h"
 
+#ifdef WIN32
+
+#include <windows.h>
 
 struct internal_struct1
 {
     internal_struct1* u1;    // 0
-    DWORD u2a;   // 4
-    DWORD u2b;   // 8
-    DWORD u2c;   // 12
-    BYTE* u3;    // 16 = 0x10
-    DWORD u4;    // 20
+    uint32_t u2a;   // 4
+    uint32_t u2b;   // 8
+    uint32_t u2c;   // 12
+    uint8_t* u3;    // 16 = 0x10
+    uint32_t u4;    // 20
     void* d1;    // 24  <-
     size_t  cur_size;    // 28
     size_t  page_size;    // 32 = 0x020
@@ -19,11 +21,11 @@ struct internal_struct1
 struct uncompress_data // size = 0x30
 {
     uncompress_data* u1;  // (result of reduxHandleGetOutputDesc - )
-    DWORD u2a; // (result of reduxHandleGetOutputDesc)
-    DWORD u2b; // (result of reduxHandleGetOutputDesc)
-    DWORD u2c; // (result of reduxHandleGetOutputDesc)
-    BYTE* cur_data; // 0x10
-    DWORD u12;
+    uint32_t u2a; // (result of reduxHandleGetOutputDesc)
+    uint32_t u2b; // (result of reduxHandleGetOutputDesc)
+    uint32_t u2c; // (result of reduxHandleGetOutputDesc)
+    uint8_t* cur_data; // 0x10
+    uint32_t u12;
     void* d1;
     size_t  cur_size;
     size_t  page_size;  //0x020
@@ -35,24 +37,24 @@ struct uncompress_data // size = 0x30
 struct a1_struct
 {
     uncompress_data* p_data; //0  <- == uncompress_data ??
-    DWORD u1[3]; // 4
-    DWORD u2[4]; // 16
-    DWORD u3[3]; // 32
-    DWORD flag1; // 44  BYTE <-
+    uint32_t u1[3]; // 4
+    uint32_t u2[4]; // 16
+    uint32_t u3[3]; // 32
+    uint32_t flag1; // 44  BYTE <-
     void* dat1;  // 48       <-
-    DWORD u4[3]; // 52
+    uint32_t u4[3]; // 52
 };
 
 
 struct redux_status
 {
-    DWORD k1;
-    DWORD k2;
-    DWORD k3;
+	uint32_t k1;
+	uint32_t k2;
+	uint32_t k3;
     size_t k4;
 };
 
-DWORD sub_55D0E0(BYTE a1);
+uint32_t sub_55D0E0(uint8_t a1);
 size_t  calculate_image_size(signed int mipmap_count, int format, signed int width,signed int height);
 
 
@@ -97,6 +99,15 @@ HMODULE LoadLib()
 	return redux_dll;
 }
 
+
+void ReleaseRedux()
+{
+    LeaveCriticalSection(&CriticalSection);
+
+    if (redux_dll) FreeLibrary(redux_dll);
+    redux_dll = NULL;
+}
+
 bool InitRedux()
 {
     redux_dll=LoadLib();
@@ -137,14 +148,6 @@ bool InitRedux()
     InitializeCriticalSection(&CriticalSection);
 
     return true;
-}
-
-void ReleaseRedux()
-{
-    LeaveCriticalSection(&CriticalSection);
-
-    if (redux_dll) FreeLibrary(redux_dll);
-    redux_dll = NULL;
 }
 
 int Uncompress_Mode4(BYTE *src, unsigned int src_size, BYTE *dest, unsigned int dest_size)
@@ -245,7 +248,7 @@ void sub_41A220(void* a1)
     }*/
 }
 
-inline WORD TopBit(WORD a)
+inline WORD TopBit(uint16_t a)
 {
     WORD b= (a>0)?1:0;
     while (b<a) b*=2;
@@ -253,7 +256,7 @@ inline WORD TopBit(WORD a)
 }
 
 
-DWORD sub_55D0E0(BYTE a1);
+uint32_t sub_55D0E0(uint8_t a1);
 size_t  calculate_image_size(signed int mipmap_count, int format, signed int width,signed int height);
 
 
@@ -293,7 +296,7 @@ void* __stdcall redux_callback2(int a1, a1_struct* a2, int a3, int a4, redux_sta
         v5->u2c = v16.unk2;
 
         BYTE v8 = v16.format;
-        DWORD edx = sub_55D0E0(v8);
+        uint32_t edx = sub_55D0E0(v8);
         v5->cur_size = calculate_image_size(v16.mipmaps, edx, v16.width , v16.height);
         v5->cur_data = NULL;
         v5->d1 = NULL;
@@ -325,7 +328,7 @@ void* __stdcall redux_callback2(int a1, a1_struct* a2, int a3, int a4, redux_sta
 }
 
 
-DWORD sub_55D0E0(BYTE a1)
+uint32_t sub_55D0E0(uint8_t a1)
 {
   switch ( a1 )
   {
@@ -406,3 +409,18 @@ size_t  calculate_image_size(signed int mipmap_count, int format, signed int wid
 }
 
 
+#else
+
+  bool InitRedux()
+  {
+      return false;
+  }
+
+  void ReleaseRedux()
+  {}
+
+  int Uncompress_Mode4(uint8_t *src, uint32_t src_size, uint8_t *dest, uint32_t dest_size)
+  {
+    return -1;
+  }
+#endif

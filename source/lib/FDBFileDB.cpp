@@ -11,7 +11,7 @@ using namespace std;
 
 
 
-FDBFileDB::FDBFileDB(const FDBPackage::file_info& s_info, BYTE* data )
+FDBFileDB::FDBFileDB(const FDBPackage::file_info& s_info, uint8_t* data )
     : FDBFile(s_info,data)
 {
 	f_info = s_info;
@@ -52,11 +52,11 @@ bool FDBFileDB::ExportTable(DBExport& exporter, const char* table_name, field_li
 	exporter.TableEnd();
 
 
-	for (DWORD idx=0;idx<head->entry_count;++idx)
+	for (uint32_t idx=0;idx<head->entry_count;++idx)
 	{
         exporter.EntryStart();
 
-		BYTE* line = entries+idx*head->entry_size;
+        uint8_t* line = entries+idx*head->entry_size;
 
 		for (field_list::iterator field=fields->begin();field!=fields->end();++field)
 		{
@@ -109,17 +109,17 @@ bool FDBFileDB_LearnMagic::WriteSubArray(DBExport& exporter, field_list* fields,
 		exporter.TableField("u3",2,FDB_DBField::F_WORD,2);
 		exporter.TableEnd();
 
-		for (DWORD idx=0;idx<head->entry_count;++idx)
+		for (uint32_t idx=0;idx<head->entry_count;++idx)
 		{
-			BYTE* line = entries+idx*head->entry_size;
-			DWORD count = *(DWORD*)(line+normalmagiccount->position);
+			uint8_t* line = entries+idx*head->entry_size;
+			uint32_t count = *(uint32_t*)(line+normalmagiccount->position);
 			assert(count < normalmagicinfo->size/(6*4));
 
-			for (DWORD i=0;i<count;++i)
+			for (uint32_t i=0;i<count;++i)
 			{
 				exporter.EntryStart();
 				exporter.EntryField((*fields)[0].type, line+ (*fields)[0].position);
-				DWORD temp = i+1;
+				uint32_t temp = i+1;
 				exporter.EntryField(FDB_DBField::F_DWORD,&temp);
 				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+0*4 + i*6*4);
 				exporter.EntryField(FDB_DBField::F_DWORD,line + normalmagicinfo->position+1*4 + i*6*4);

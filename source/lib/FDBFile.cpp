@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "FDBFile.h"
 
-FDBFile::FDBFile(const FDBPackage::file_info& s_info, BYTE* _data )
+FDBFile::FDBFile(const FDBPackage::file_info& s_info, uint8_t* _data )
 {
     data_size = s_info.size_uncomp;
     data = _data;

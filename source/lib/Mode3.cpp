@@ -6,7 +6,7 @@ extern "C"
 };
 
 
-int Uncompress_Mode3(BYTE *src, unsigned int src_size, BYTE *dest,unsigned int* dest_size)
+int Uncompress_Mode3(uint8_t *src, uint32_t src_size, uint8_t *dest,uint32_t* dest_size)
 {
 
     z_stream strm;

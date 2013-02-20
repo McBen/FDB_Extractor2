@@ -5,7 +5,7 @@
 #include <ctype.h>
 using namespace std;
 
-FDBFieldAnalyzer::FDBFieldAnalyzer(const FDBPackage::file_info& s_info, BYTE* _data)
+FDBFieldAnalyzer::FDBFieldAnalyzer(const FDBPackage::file_info& s_info, uint8_t* _data)
 {
 	data = _data;
 	head = (FDBFieldManager::s_file_header*)data;
@@ -35,14 +35,14 @@ void FDBFieldAnalyzer::LoadFieldDef( field_list& fields )
 	struct s_field_desc
 	{
 		int name_len;
-		WORD position;
-		WORD flag;
+		uint16_t position;
+		uint16_t flag;
 		const char name[];
 	};
 #pragma pack()
 #pragma warning( default: 4200 )
 
-	BYTE* run = entries  + head->entry_count * head->entry_size;
+	uint8_t* run = entries  + head->entry_count * head->entry_size;
 
 	FDB_DBField field;
 
@@ -185,7 +185,7 @@ REDO:
 			if (IsDwordConst(finfo,field->position))
 			{
 				char temp[64]="";
-				DWORD val = GetConstDWORD(finfo, field->position);
+				uint32_t val = GetConstDWORD(finfo, field->position);
 				if (field->type==FDB_DBField::F_DWORD) sprintf(temp,"=%u",val);
 				if (field->type==FDB_DBField::F_INT)   sprintf(temp,"=%i",val);
 
@@ -195,7 +195,7 @@ REDO:
 	}
 }
 
-FDB_DBField::field_type FDBFieldAnalyzer::Best4ByteMatch(ani_list& finfo, DWORD pos, int string_rate)
+FDB_DBField::field_type FDBFieldAnalyzer::Best4ByteMatch(ani_list& finfo, uint32_t pos, int string_rate)
 {
 
     if (finfo[pos].IsValidType(FDB_DBField::F_BOOL))
@@ -220,12 +220,12 @@ FDB_DBField::field_type FDBFieldAnalyzer::Best4ByteMatch(ani_list& finfo, DWORD 
     return res;
 }
 
-bool FDBFieldAnalyzer::IsDwordConstNull(ani_list& finfo, DWORD pos )
+bool FDBFieldAnalyzer::IsDwordConstNull(ani_list& finfo, uint32_t pos )
 {
     return  IsDwordConst(finfo, pos) && GetConstDWORD(finfo, pos)==0;
 }
 
-bool FDBFieldAnalyzer::IsDwordConst(ani_list& finfo, DWORD pos )
+bool FDBFieldAnalyzer::IsDwordConst(ani_list& finfo, uint32_t pos )
 {
     return  finfo[pos].IsConst() &&
             finfo[pos+1].IsConst() &&
@@ -233,18 +233,18 @@ bool FDBFieldAnalyzer::IsDwordConst(ani_list& finfo, DWORD pos )
             finfo[pos+3].IsConst();
 }
 
-DWORD FDBFieldAnalyzer::GetConstDWORD(ani_list& finfo, DWORD pos )
+uint32_t FDBFieldAnalyzer::GetConstDWORD(ani_list& finfo, uint32_t pos )
 {
-	DWORD val = 
-			((DWORD)(finfo[pos].GetConstValue())) |
-            ((DWORD)(finfo[pos+1].GetConstValue())<<8) |
-            ((DWORD)(finfo[pos+2].GetConstValue())<<16) |
-            (DWORD)(finfo[pos+3].GetConstValue())<<24;
+	uint32_t val =
+			((uint32_t)(finfo[pos].GetConstValue())) |
+            ((uint32_t)(finfo[pos+1].GetConstValue())<<8) |
+            ((uint32_t)(finfo[pos+2].GetConstValue())<<16) |
+            (uint32_t)(finfo[pos+3].GetConstValue())<<24;
 
 	return val;
 }
 
-int FDBFieldAnalyzer::StringChance(ani_list& finfo, DWORD pos, size_t s)
+int FDBFieldAnalyzer::StringChance(ani_list& finfo, uint32_t pos, size_t s)
 {
     if (s==0) return 1;
 
@@ -259,7 +259,7 @@ int FDBFieldAnalyzer::StringChance(ani_list& finfo, DWORD pos, size_t s)
     return res/s;
 }
 
-bool IsValidUTF8(BYTE* run,int max_chars)
+bool IsValidUTF8(uint8_t* run,int max_chars)
 {
     // U+0000..U+007F     00..7F
     if (*run < 0x20 && *run!=10 && *run!=0 && *run!=13) return false;
@@ -297,7 +297,7 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 	std::vector<aninfo> binfo;
 	binfo.resize(head->entry_size);
 
-	for (DWORD t=0;t<head->entry_size;++t)
+	for (uint32_t t=0;t<head->entry_size;++t)
 	{
 		binfo[t].SetConst(entries[t]);
 	}
@@ -311,8 +311,8 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 	}
 
 
-	BYTE* end = entries  + head->entry_count * head->entry_size;
-	BYTE* run = entries;
+	uint8_t* end = entries  + head->entry_count * head->entry_size;
+	uint8_t* run = entries;
 	while (run<end)
 	{
         std::vector<aninfo>::iterator cur_byte = binfo.begin();
@@ -342,24 +342,24 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
             {
 			    if (cur_byte->IsValidType(FDB_DBField::F_FLOAT))
 			    {
-				    if ((*(FLOAT*)run) != (*(FLOAT*)run))
+				    if ((*(float*)run) != (*(float*)run))
 				    {
 					    cur_byte->InvalidType(FDB_DBField::F_FLOAT);
 				    }
 				    else
-					    if (fabs(*(FLOAT*)run)<1e10) cur_byte->IncType(FDB_DBField::F_FLOAT);
+					    if (fabs(*(float*)run)<1e10) cur_byte->IncType(FDB_DBField::F_FLOAT);
 
 			    }
 
-			    if (cur_byte->IsValidType(FDB_DBField::F_INT) &&   (*(int*)run)  <0x08000000) cur_byte->IncType(FDB_DBField::F_INT);
-			    if (cur_byte->IsValidType(FDB_DBField::F_DWORD) && (*(DWORD*)run)<0x0fffffff) cur_byte->IncType(FDB_DBField::F_DWORD);
+			    if (cur_byte->IsValidType(FDB_DBField::F_INT) &&   (*(int32_t*)run)  <0x08000000) cur_byte->IncType(FDB_DBField::F_INT);
+			    if (cur_byte->IsValidType(FDB_DBField::F_DWORD) && (*(uint32_t*)run)<0x0fffffff) cur_byte->IncType(FDB_DBField::F_DWORD);
             }
 		}
 	}
 
 
 	// 
-	for (DWORD t=0;t<head->entry_size;++t)
+	for (uint32_t t=0;t<head->entry_size;++t)
 	{
         binfo[t].ConvertToPercent(head->entry_count);
 	}
@@ -372,22 +372,22 @@ FDBFieldAnalyzer::aninfo::aninfo()
 {
 	is_const=true;
 	const_value=0;
-	ZeroMemory(&count, FDB_DBField::NOF_FIELD_TYPE*sizeof(DWORD) );
+	memset(&count,0, FDB_DBField::NOF_FIELD_TYPE*sizeof(uint32_t) );
 }
 
-void FDBFieldAnalyzer::aninfo::SetConst(BYTE v)
+void FDBFieldAnalyzer::aninfo::SetConst(uint8_t v)
 {
 	is_const=true;
 	const_value=v;
 }
 
-BYTE FDBFieldAnalyzer::aninfo::GetConstValue()
+uint8_t FDBFieldAnalyzer::aninfo::GetConstValue()
 {
 	assert(is_const);
 	return const_value;
 }
 
-bool FDBFieldAnalyzer::aninfo::IsConstValue(BYTE v)
+bool FDBFieldAnalyzer::aninfo::IsConstValue(uint8_t v)
 {
 	return is_const && const_value==v;
 }
@@ -397,7 +397,7 @@ bool FDBFieldAnalyzer::aninfo::IsConst()
 	return is_const;
 }
 
-void FDBFieldAnalyzer::aninfo::TestConstValue(BYTE v)
+void FDBFieldAnalyzer::aninfo::TestConstValue(uint8_t v)
 {
 	if  (const_value!=v) is_const=false;
 }

@@ -1,5 +1,0 @@
-
-
-bool InitRedux();
-void ReleaseRedux();
-

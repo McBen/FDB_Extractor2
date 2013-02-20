@@ -1,4 +1,6 @@
-#include <Windows.h>
+
+#include <stdint.h>
+
 
 // 3rd party
 #define BOOST_FILESYSTEM_NO_DEPRECATED

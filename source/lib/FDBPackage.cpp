@@ -16,7 +16,7 @@ class MemoryBlock
 {
     private:
         size_t  alloc_size;
-        BYTE*   data;
+        uint8_t*   data;
         bool    is_used;
 
     public:
@@ -24,7 +24,7 @@ class MemoryBlock
         {
             is_used= false;
             alloc_size=min_size;
-            data = (BYTE*)malloc(min_size);
+            data = (uint8_t*)malloc(min_size);
         }
 
         ~MemoryBlock()
@@ -39,7 +39,7 @@ class MemoryBlock
             is_used= false;
         }
 
-        BYTE* GetData(size_t size)
+        uint8_t* GetData(size_t size)
         {
             assert(!is_used);
 
@@ -47,7 +47,7 @@ class MemoryBlock
             {
                 free(data);
                 alloc_size=size;
-                data = (BYTE*)malloc(size);
+                data = (uint8_t*)malloc(size);
             }
             is_used = true;
             return data;
@@ -107,9 +107,9 @@ bool FDBPackage::Open(const char* filename)
     }
 
     // intro
-    UINT32  magic;
-    fread(&magic,sizeof(UINT32),1,file);
-    fread(&file_count,sizeof(UINT32),1,file);
+    uint32_t magic;
+    fread(&magic,sizeof(uint32_t),1,file);
+    fread(&file_count,sizeof(uint32_t),1,file);
 
     if (magic != 0x46444201) 
     {
@@ -122,18 +122,18 @@ bool FDBPackage::Open(const char* filename)
     fread(file_positions,sizeof(file_head_data),file_count,file);
 
     // names
-    file_name_pos = new UINT32 [file_count];
-    fread(file_name_pos,sizeof(UINT32),file_count,file);
+    file_name_pos = new uint32_t [file_count];
+    fread(file_name_pos,sizeof(uint32_t),file_count,file);
     int pos=0;
-    for (UINT32 t=0;t<file_count;++t) 
+    for (uint32_t t=0;t<file_count;++t)
     {
         int len = file_name_pos[t];
         file_name_pos[t] = pos;
         pos +=len+1;
     }
 
-    UINT32 data_size;
-    fread(&data_size,sizeof(UINT32),1,file);
+    uint32_t data_size;
+    fread(&data_size,sizeof(uint32_t),1,file);
     file_names_data = new char[data_size];
     fread((void*)file_names_data,data_size,1,file);
 
@@ -189,29 +189,29 @@ void    FDBPackage::GetFileInfo(size_t index, file_info& s_info)
     }
 }
 
-BYTE*   FDBPackage::GetFileRawData(size_t index, file_info& sinfo)
+uint8_t*   FDBPackage::GetFileRawData(size_t index, file_info& sinfo)
 {
     assert(index < file_count);
     assert(IsOk());
 
     GetFileInfo(index, sinfo);
 
-    BYTE* rawdata = (BYTE*)malloc(sinfo.rest_size);
+    uint8_t* rawdata = (uint8_t*)malloc(sinfo.rest_size);
 	if (!rawdata) return NULL;
     fread(rawdata, sinfo.rest_size,1,file);
 
 	return rawdata;
 }
 
-int   FDBPackage::GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size, file_info* pinfo /*=NULL*/)
+int   FDBPackage::GetFileData(size_t index, uint8_t* &uncomp_data, size_t& out_size, file_info* pinfo /*=NULL*/)
 {
     file_info s_info;
     if (!pinfo) pinfo=&s_info;
 
-    BYTE* rawdata = GetFileRawData(index, *pinfo);
+    uint8_t* rawdata = GetFileRawData(index, *pinfo);
 
     out_size = pinfo->size_uncomp;
-    UINT32 result_size;
+    uint32_t result_size;
     int res;
 
     switch (pinfo->compression)
@@ -225,7 +225,7 @@ int   FDBPackage::GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size
         case RLE:
             assert(pinfo->size_comp==pinfo->rest_size); 
 
-            uncomp_data = new UINT8[ pinfo->size_uncomp ];
+            uncomp_data = new uint8_t[ pinfo->size_uncomp ];
             result_size = Uncompress_Mode1(rawdata, pinfo->size_comp, uncomp_data);
 
             assert( result_size == pinfo->size_uncomp ); 
@@ -235,7 +235,7 @@ int   FDBPackage::GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size
         case LZO:
             assert(pinfo->size_comp==pinfo->rest_size); 
 
-            uncomp_data = new UINT8[ pinfo->size_uncomp ];
+            uncomp_data = new uint8_t[ pinfo->size_uncomp ];
 			result_size=pinfo->size_uncomp;
             Uncompress_Mode2(rawdata, pinfo->size_comp, uncomp_data, result_size);
 
@@ -246,7 +246,7 @@ int   FDBPackage::GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size
         case Inflate:
             assert(pinfo->size_comp==pinfo->rest_size); 
 
-            uncomp_data = new UINT8[ pinfo->size_uncomp ];
+            uncomp_data = new uint8_t[ pinfo->size_uncomp ];
             result_size = pinfo->size_uncomp;
             res = Uncompress_Mode3(rawdata, pinfo->size_comp, uncomp_data, &result_size);
 
@@ -257,7 +257,7 @@ int   FDBPackage::GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size
         case nvTT:
             assert(pinfo->size_comp==pinfo->rest_size); 
 
-            uncomp_data = new UINT8[ pinfo->size_uncomp ];
+            uncomp_data = new uint8_t[ pinfo->size_uncomp ];
             res = Uncompress_Mode4(rawdata, pinfo->size_comp, uncomp_data, pinfo->size_uncomp);
 
             assert(res==0);
@@ -266,6 +266,7 @@ int   FDBPackage::GetFileData(size_t index, BYTE* &uncomp_data, size_t& out_size
 
         default:
             assert(false);
+            break;
     }
 
     free (rawdata);
@@ -276,7 +277,7 @@ size_t      FDBPackage::FindFile(const char* fname)
 {
     assert(IsOk());
 
-    UINT32* name_pos = file_name_pos;
+    uint32_t* name_pos = file_name_pos;
     for (size_t t=0;t<file_count;++t,++name_pos)
         if (strcmp(file_names_data+(*name_pos), fname) ==0) return t;
 
@@ -314,11 +315,11 @@ bool    FDBPackage::ExtractFile(size_t index, const char* filename, e_export_for
     return e;
  }
 
-DWORD  FDBPackage::CalcCRC32(size_t index)
+ uint32_t  FDBPackage::CalcCRC32(size_t index)
 {
     file_info s_info;
 
-	BYTE* data=GetFileRawData(index, s_info);
+    uint8_t* data=GetFileRawData(index, s_info);
 
 	boost::crc_32_type  crc;
 	crc.process_bytes( data, s_info.rest_size );
@@ -330,7 +331,7 @@ DWORD  FDBPackage::CalcCRC32(size_t index)
 FDBFile*    FDBPackage::GetFile(size_t index)
 {
     file_info s_info;
-    BYTE* data;
+    uint8_t* data;
     size_t data_size;
 
     if (GetFileData(index, data, data_size, &s_info))
@@ -340,7 +341,7 @@ FDBFile*    FDBPackage::GetFile(size_t index)
     return file;
 }
 
-FDBFile* FDBPackage::CreateFileObject(const file_info& s_info, BYTE* data)
+FDBFile* FDBPackage::CreateFileObject(const file_info& s_info, uint8_t* data)
 {
     boost::filesystem::path filepath(s_info.name);
     

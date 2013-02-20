@@ -6,7 +6,7 @@
 using namespace std;
 
 
-FDB_DBField* FDBFieldDef::GetFieldAt(DWORD pos)
+FDB_DBField* FDBFieldDef::GetFieldAt(uint32_t pos)
 {
 	for (field_list::iterator i= fields.begin(); i!=fields.end();++i)
 	{
@@ -17,7 +17,7 @@ FDB_DBField* FDBFieldDef::GetFieldAt(DWORD pos)
 }
 
 
-bool	FDBFieldDef::IsUndefined(DWORD pos, size_t size)
+bool	FDBFieldDef::IsUndefined(uint32_t pos, size_t size)
 {
 	for (field_list::const_iterator i= fields.begin(); i!=fields.end();++i)
 	{

@@ -20,14 +20,14 @@ class FDB_DBField
 
 		std::string name;
 		field_type type;
-		DWORD position;
-		DWORD size;
+		uint32_t position;
+		uint32_t size;
 		std::string comment;
 
 	public:
 
 		FDB_DBField();
-		FDB_DBField(const std::string& _name, field_type _type, DWORD _pos, DWORD _size);
+		FDB_DBField(const std::string& _name, field_type _type, uint32_t _pos, uint32_t _size);
 
 		bool HasComment() const;
 		bool HasCustomComment() const;

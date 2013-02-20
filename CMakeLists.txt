@@ -14,6 +14,10 @@ if(BUILDING_IN_SOURCE)
   )
 endif()
 
+if(MINGW)
+  message(WARNING "alias windres=i686-w64-mingw32-windres")
+endif()
+
 # Remove /STACK:10000000 set by CMake. This value for stack size
 # is very high, limiting the number of threads we can spawn.
 # Default value used by Windows is 1MB which is good enough.

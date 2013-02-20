@@ -5,7 +5,7 @@
 class FDBFile
 {
     public:
-        FDBFile(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFile(const FDBPackage::file_info& s_info, uint8_t* data );
         virtual ~FDBFile();
 
 		std::string GetTargetName(const char* filename, FDBPackage::e_export_format e=FDBPackage::EX_NONE);
@@ -21,6 +21,6 @@ class FDBFile
 
     protected:
         size_t  data_size;
-        BYTE*   data;
+        uint8_t*   data;
 };
 

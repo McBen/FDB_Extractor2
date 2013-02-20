@@ -11,13 +11,13 @@ class FDBFileStringDB : public  FDBFile
 		struct s_entry
 		{
 			const char key[64];
-			DWORD v_len;
+			uint32_t  v_len;
 			const char value[];
 		};
 		#pragma warning( default: 4200 )
 
     public:
-        FDBFileStringDB(const FDBPackage::file_info& s_info, BYTE* data );
+        FDBFileStringDB(const FDBPackage::file_info& s_info, uint8_t* data );
 
         bool WriteINI(const char*);
         bool WriteSQLITE3(const char*);

@@ -7,20 +7,28 @@
 // (compatible) constants and structures so that one can use DDS files 
 // without needing to include ddraw.h.
 
+// Modified: changed to c99 datatypes
+
 #ifndef _DDS_H_
 #define _DDS_H_
 
 struct DDS_PIXELFORMAT
 {
-    DWORD dwSize;
-    DWORD dwFlags;
-    DWORD dwFourCC;
-    DWORD dwRGBBitCount;
-    DWORD dwRBitMask;
-    DWORD dwGBitMask;
-    DWORD dwBBitMask;
-    DWORD dwABitMask;
+    uint32_t dwSize;
+    uint32_t dwFlags;
+    uint32_t dwFourCC;
+    uint32_t dwRGBBitCount;
+    uint32_t dwRBitMask;
+    uint32_t dwGBitMask;
+    uint32_t dwBBitMask;
+    uint32_t dwABitMask;
 };
+
+#ifndef MAKEFOURCC
+  #define MAKEFOURCC(ch0, ch1, ch2, ch3) \
+    ((uint32_t)(uint8_t)(ch0) | ( (uint32_t)(uint8_t)(ch1) <8) | \
+    ((uint32_t)(uint8_t)(ch2) <16) | ( (uint32_t)(uint8_t)(ch3) <24))
+#endif //defined(MAKEFOURCC)
 
 #define DDS_FOURCC 0x00000004  // DDPF_FOURCC
 #define DDS_RGB    0x00000040  // DDPF_RGB
@@ -81,20 +89,20 @@ const DDS_PIXELFORMAT DDSPF_R5G6B5 =
 
 
 typedef struct  {
-    DWORD dwSize;
-    DWORD dwFlags;
-    DWORD dwHeight;
-    DWORD dwWidth;
-    DWORD dwLinearSize;
-    DWORD dwDepth;
-    DWORD dwMipMapCount;
-    DWORD dwReserved1[11];
+	uint32_t dwSize;
+	uint32_t dwFlags;
+	uint32_t dwHeight;
+	uint32_t dwWidth;
+	uint32_t dwLinearSize;
+	uint32_t dwDepth;
+	uint32_t dwMipMapCount;
+	uint32_t dwReserved1[11];
     DDS_PIXELFORMAT ddpf;
-    DWORD dwCaps;
-    DWORD dwCaps2;
-    DWORD dwCaps3;
-    DWORD dwCaps4;
-    DWORD dwReserved2;
+    uint32_t dwCaps;
+    uint32_t dwCaps2;
+    uint32_t dwCaps3;
+    uint32_t dwCaps4;
+    uint32_t dwReserved2;
 } DDS_HEADER;
 
 #endif
