@@ -1,5 +1,3 @@
-//#include <windows.h>
-
 #include "commandline.h"
 
 #define BOOST_FILESYSTEM_NO_DEPRECATED
@@ -16,7 +14,6 @@
 // FIXME
 	#include <windows.h>
 #endif
-
 
 CommandLine cmdline;
 
@@ -73,24 +70,26 @@ bool Process()
 
 bool ProcessDir(string filename, const boost::regex& filter)
 {
-    boost::filesystem::path basepath(filename);
+    namespace fs = boost::filesystem;
+  
+    fs::path basepath(filename);
     basepath.remove_filename();
-
-
-    WIN32_FIND_DATA FindFileData;
-    HANDLE hFind;
-
-    hFind = FindFirstFile(filename.c_str(), &FindFileData);
-    if (hFind == INVALID_HANDLE_VALUE)  return false;
-
+    
     bool something_extracted=false;
-    do 
+    
+    if (fs::is_regular_file(filename))
     {
-        printf("processing %s\n",FindFileData.cFileName);
-        something_extracted |= ProcessFile(basepath / FindFileData.cFileName, filter);
-    } while (FindNextFile(hFind,&FindFileData));
-
-    FindClose(hFind);
+        printf("processing %s\n",filename.c_str());
+        something_extracted |= ProcessFile(filename, filter);
+    }
+    else
+    {
+      for( fs::directory_iterator dir_iter(filename) ; dir_iter != fs::directory_iterator() ; ++dir_iter)
+      {
+        printf("processing %s\n",dir_iter->path().c_str());
+        something_extracted |= ProcessFile(dir_iter->path(), filter);
+      }
+    }
 
     return something_extracted;
 }
@@ -169,23 +168,26 @@ bool List(bool include_crc, bool full_info)
 
 bool ListDir(string filename, const boost::regex& filter, bool include_crc, bool full_info)
 {
-    boost::filesystem::path basepath(filename);
+    namespace fs = boost::filesystem;
+  
+    fs::path basepath(filename);
     basepath.remove_filename();
-
-
-    WIN32_FIND_DATA FindFileData;
-    HANDLE hFind;
-
-    hFind = FindFirstFile(filename.c_str(), &FindFileData);
-    if (hFind == INVALID_HANDLE_VALUE)  return false;
-
+    
     bool something_extracted=false;
-    do 
+    
+    if (fs::is_regular_file(filename))
     {
-        something_extracted |= ListFile(basepath / FindFileData.cFileName, filter, include_crc,full_info);
-    } while (FindNextFile(hFind,&FindFileData));
-
-    FindClose(hFind);
+        printf("processing %s\n",filename.c_str());
+        something_extracted |= ListFile(filename, filter, include_crc,full_info);
+    }
+    else
+    {
+      for( fs::directory_iterator dir_iter(filename) ; dir_iter != fs::directory_iterator() ; ++dir_iter)
+      {
+        printf("processing %s\n",dir_iter->path().c_str());
+        something_extracted |= ListFile(dir_iter->path(), filter, include_crc,full_info);
+      }
+    }
 
     return something_extracted;
 }
