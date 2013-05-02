@@ -141,8 +141,8 @@ bool InitRedux()
     //         memset((void *)(a1 + 4), 0, 0x104u);
     //         return a1;
     //     }
-    reduxCallbackSet(6,&redux_callback2);
-    reduxCallbackSet(7,&redux_callback1);
+    reduxCallbackSet(6,(void*)redux_callback2);
+    reduxCallbackSet(7,(void*)redux_callback1);
 
 
     InitializeCriticalSection(&CriticalSection);
@@ -255,9 +255,6 @@ inline WORD TopBit(uint16_t a)
     return b;
 }
 
-
-uint32_t sub_55D0E0(uint8_t a1);
-size_t  calculate_image_size(signed int mipmap_count, int format, signed int width,signed int height);
 
 
 // called on incoming data?

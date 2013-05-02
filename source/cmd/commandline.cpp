@@ -1,5 +1,3 @@
-#include <Windows.h>
-
 #include "utils.h"
 #include "commandline.h"
 #include "../VersionNo.h"

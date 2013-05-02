@@ -3,6 +3,8 @@
 #include "utils.h"
 #include <sstream>
 
+#include <windows.h>
+
 #if _MSC_VER < 1400
 int fopen_s(FILE** f, const char*na, const char* at)
 {
