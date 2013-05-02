@@ -3,9 +3,13 @@
 #include "utils.h"
 #include <sstream>
 
+<<<<<<< HEAD
 #if WIN32
   #include <windows.h>
 #endif
+=======
+#include <windows.h>
+>>>>>>> some mingw compatibilies
 
 #if _MSC_VER < 1400
 int fopen_s(FILE** f, const char*na, const char* at)
