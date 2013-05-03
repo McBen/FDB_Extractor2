@@ -43,14 +43,21 @@ MainWindow::MainWindow() : BASE_DLG::MainWindow(NULL)
 	m_toolBar1->Realize(); 
 
 
+#ifdef WIN32
 	SetIcon(wxICON(IDI_ICON1)); // TODO: BUG: Idk why this isn't working
-
+#endif
+	
 	directory_ctrl->SetDataSource(&fdb_pack);
 	
 	if (fdb_pack.OpenDefault())
 	{
-		string path = GetROMInstallDir();
-		ShowBasePath(path+"fdb");
+	    
+	    #if wxCHECK_VERSION(2, 9, 0)
+		wxString path=GetROMInstallDir();
+	    #else
+		wxString path = wxString(GetROMInstallDir().c_str(), wxConvUTF8);
+	    #endif
+	    ShowBasePath(path+wxT("fdb"));
 	}
 
 	RebuildView();
@@ -67,7 +74,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::ShowBasePath(const wxString& path)
 {
-	this->SetTitle("FDB Extractor " STRFILEVER " - "+ path);
+	this->SetTitle(_("FDB Extractor " STRFILEVER " - ")+ path);
 }
 
 void MainWindow::RebuildView()
@@ -81,22 +88,22 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 {
 	wxBusyCursor wait;
 
-	const char* comp_modes[]=
+	const wxChar* comp_modes[]=
 	{
-		"none","RLE","LZO","ZIP","Redux","!UNK!"
+		_("none"),_("RLE"),_("LZO"),_("ZIP"),_("Redux"),_("!UNK!")
 	};
 
 	wxString cur_dir = directory_ctrl->GetFullName(event.GetItem());
 
 	vector<FDBPackage::file_info> infos;
-	fdb_pack.GetFileInfos(cur_dir.c_str(), infos);
+	fdb_pack.GetFileInfos(cur_dir.mb_str(), infos);
 
 	file_ctrl->Freeze();
 
 	file_ctrl->DeleteAllItems();
 	for (vector<FDBPackage::file_info>::iterator i=infos.begin();i!=infos.end();++i)
 	{
-		wxFileName fname(i->name);
+		wxFileName fname( wxString(i->name, wxConvUTF8) );
 
 		int icon = (int) GetFileTypeIcon(*i);
 
@@ -108,11 +115,14 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 		if (comp<0||comp>4) comp=5;
 		file_ctrl->SetItem(item,3, comp_modes[comp]);
 		
+	  #ifdef WIN32
+		// TODO: linux alternative required
 		SYSTEMTIME SystemTime;
 		FileTimeToSystemTime((FILETIME*)&i->mtime, &SystemTime);
 
 		wxDateTime datetime(SystemTime);
 		file_ctrl->SetItem(item,4, datetime.FormatDate());
+	  #endif
 	}
 
 	file_ctrl->Thaw();
@@ -120,9 +130,9 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 
 wxString MainWindow::FormatNumber(size_t num)
 {
-	wxString str =  wxString::Format("%i",num);
+	wxString str =  wxString::Format(wxT("%i"),num);
 	int l=str.Len()-3;
-	while (l>0) { str.insert(l,'.'); l-=3; };
+	while (l>0) { str.insert(l,wxT('.')); l-=3; };
 
 	return str;
 }
@@ -131,14 +141,14 @@ MainWindow::FT_ICONS MainWindow::GetFileTypeIcon(const FDBPackage::file_info& in
 {
 	if (info.ftype == 2) return FT_PICTURE;
 
-	wxFileName fname(info.name);
+	wxFileName fname(wxString(info.name, wxConvUTF8) );
 	wxString ext = fname.GetExt().Lower();
-	if (ext=="lua" || ext=="ini") return FT_SCRIPT;
-	if (ext=="mp3" || ext=="wav") return FT_MUSIC;
-	if (ext=="txt" || ext=="toc") return FT_TEXT;
-	if (ext=="db" ) return FT_TABLE;
-	if (ext=="ros") return FT_MESH;
-	if (ext=="xml") return FT_XML;
+	if (ext==wxT("lua") || ext==wxT("ini")) return FT_SCRIPT;
+	if (ext==wxT("mp3") || ext==wxT("wav")) return FT_MUSIC;
+	if (ext==wxT("txt") || ext==wxT("toc")) return FT_TEXT;
+	if (ext==wxT("db") ) return FT_TABLE;
+	if (ext==wxT("ros")) return FT_MESH;
+	if (ext==wxT("xml")) return FT_XML;
 	//if (ext=="wav")  return FT_NODES;
 
 	return FT_EMPTY;
@@ -146,10 +156,10 @@ MainWindow::FT_ICONS MainWindow::GetFileTypeIcon(const FDBPackage::file_info& in
 
 void MainWindow::OnLoadFDB( wxCommandEvent& event )
 {
-	if (last_open_path.IsEmpty()) last_open_path = GetROMInstallDir();
+	if (last_open_path.IsEmpty()) last_open_path = wxString(GetROMInstallDir().c_str(), wxConvUTF8);
 
 	wxFileDialog dlg(this, _("Open FDB Files"), last_open_path, wxEmptyString,
-                           "FDB files (*.fdb)|*.fdb", wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_MULTIPLE);
+			       _("FDB files (*.fdb)|*.fdb"), wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_MULTIPLE);
 	
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_open_path = dlg.GetDirectory();
@@ -161,7 +171,7 @@ void MainWindow::OnLoadFDB( wxCommandEvent& event )
 	dlg.GetPaths(filenames);
 
 	for (size_t t=0;t<filenames.size();++t)
-		fdb_pack.Open(filenames[t]);
+		fdb_pack.Open(filenames[t].mb_str());
 
 
 	RebuildView();
@@ -214,13 +224,22 @@ void MainWindow::file_ctrlOnLeftDClick( wxMouseEvent& event )
 	wxString src = directory_ctrl->GetCurrentDir() + file_ctrl->GetItemText(idx);
 	wxString dest =  wxFileName::GetTempDir() + wxT("\\")+ file_ctrl->GetItemText(idx);
 
-	wxString res_name = fdb_pack.ExtractFile(src,dest);
+	std::string res1_name = fdb_pack.ExtractFile(src.mb_str(),dest.mb_str());
+	wxString res_name(res1_name.c_str(),wxConvUTF8);
 	wxASSERT(!res_name.IsEmpty());
 	if (res_name.IsEmpty()) return;
 
 	files_to_delete.Add(res_name);
 
-	wxLaunchDefaultApplication(res_name);
+	#if wxCHECK_VERSION(2, 9, 0)
+	    wxLaunchDefaultApplication(res_name);
+	#else
+	    #ifdef WIN32
+	      wxShell(res_name);
+	    #else
+	      wxExecute(res_name);
+	    #endif
+	#endif	
 }
 
 void MainWindow::DeleteTempFiles()
@@ -241,11 +260,11 @@ void MainWindow::OnExtractFocusFile(wxCommandEvent& WXUNUSED(event))
 
 	wxString curname = directory_ctrl->GetCurrentDir()+file_ctrl->GetItemText(item);
 
-	wxFileDialog dlg(this, _("Save file"),last_export_path,file_ctrl->GetItemText(item),"", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+	wxFileDialog dlg(this, _("Save file"),last_export_path,file_ctrl->GetItemText(item),wxEmptyString, wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 	if (dlg.ShowModal()==wxID_CANCEL) return;
 	last_export_path = dlg.GetDirectory();
 
-	fdb_pack.ExtractFile(curname, dlg.GetPath());
+	fdb_pack.ExtractFile(curname.mb_str(), dlg.GetPath().mb_str());
 }
 
 void MainWindow::OnCopyPath(wxCommandEvent& WXUNUSED(event))
@@ -281,7 +300,7 @@ void MainWindow::OnExtractFiles(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_export_path = dlg.GetPath();
 
-	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir(),dlg.GetPath(), cur_files);
+	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath().mb_str(), cur_files);
 
 }
 
@@ -292,7 +311,7 @@ void MainWindow::OnExtractFolder(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_export_path = dlg.GetPath();
 
-	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir(),dlg.GetPath(),wxArrayString());
+	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath().mb_str(),wxArrayString());
 }
 
 void MainWindow::m_extract_folderOnUpdateUI( wxUpdateUIEvent& event )
@@ -307,5 +326,5 @@ void MainWindow::m_extract_fileOnUpdateUI( wxUpdateUIEvent& event )
 
 void MainWindow::OnOpenWebPage(wxCommandEvent& WXUNUSED(event))
 {
-	wxLaunchDefaultBrowser("http://github.com/McBen/FDB_Extractor2/wiki");
+	wxLaunchDefaultBrowser(wxT("http://github.com/McBen/FDB_Extractor2/wiki"));
 };
