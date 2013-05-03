@@ -90,7 +90,11 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 
 	const wxChar* comp_modes[]=
 	{
+<<<<<<< HEAD
 		_("none"),_("RLE"),_("LZO"),_("ZIP"),_("Redux"),_("!UNK!")
+=======
+		_("none"),_("RLE"),_("LZO"),_("ZIP"),_("Nvidia"),_("!UNK!")
+>>>>>>> more linux stuff
 	};
 
 	wxString cur_dir = directory_ctrl->GetFullName(event.GetItem());
