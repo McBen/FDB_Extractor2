@@ -152,7 +152,7 @@ bool FDBFileImageBMP::WriteRAW(const char* filename)
     } bminfo;
 #pragma pack(1)
 
-    bmfh.bfType = 'MB'; 
+    bmfh.bfType = 0x424d; // 'MB'
     bmfh.bfSize = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+width*height*byte_count;
     bmfh.bfReserved1 = 0;
     bmfh.bfReserved2 = 0;

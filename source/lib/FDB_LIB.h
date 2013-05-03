@@ -4,6 +4,7 @@
 #include <string>
 
 #include "utils.h"
+#include <stdint.h>
 
 bool InitRedux();
 void ReleaseRedux();

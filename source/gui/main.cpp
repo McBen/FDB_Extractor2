@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "main.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 bool MyApp::OnInit()
 {

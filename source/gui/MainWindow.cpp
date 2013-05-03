@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "DirectoryListCtrl.h"
 #include "FileListCtrl.h"
 #include "resource.h"
