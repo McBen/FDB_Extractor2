@@ -184,26 +184,21 @@ bool FDBFileImageBMP::WriteRAW(const char* filename)
 }
 
 
-FDBFileImagePNG::FDBFileImagePNG(const FDBPackage::file_info& s_info, uint8_t* data )
-    : FDBFileImage(s_info,data)
+FDBFileImageUnknown::FDBFileImageUnknown(const FDBPackage::file_info& s_info, uint8_t* data )
+    : FDBFileImageBMP(s_info,data)
 {
 }
 
-bool FDBFileImagePNG::WriteRAW(const char* filename)
+std::string FDBFileImageUnknown::GetTargetName(const char* filename, FDBPackage::e_export_format e)
 {
-    return FDBFileImage::WriteRAW(filename);
-    /*
-    BYTE magic[8] = {137,80,78,71,13,10,26,10};
-
-    FILE* outf;
-    if (fopen_s(&outf,filename,"wb")) return false;
-
-    fwrite(magic,8,1,outf);
-
-    // TODO: write chunks
-    size_t res = fwrite(data,data_size,1,outf);
-    fclose(outf);
-
-    return res==1;
-    */
+	boost::filesystem::path name(filename);
+	name.replace_extension(".bmp");
+	return name.generic_string();
 }
+
+bool FDBFileImageUnknown::WriteRAW(const char* filename)
+{
+	std::string name = GetTargetName(filename);
+    return FDBFileImageBMP::WriteRAW(name.c_str());
+}
+

@@ -42,10 +42,13 @@ class FDBFileImageBMP : public FDBFileImage
         unsigned byte_count;
 };
 
-class FDBFileImagePNG : public FDBFileImage
+class FDBFileImageUnknown : public FDBFileImageBMP
 {
     public:
-        FDBFileImagePNG(const FDBPackage::file_info& s_info, uint8_t* data );
+        FDBFileImageUnknown(const FDBPackage::file_info& s_info, uint8_t* data );
+		
+		std::string GetTargetName(const char* filename, FDBPackage::e_export_format e=FDBPackage::EX_NONE);
 
         bool WriteRAW(const char*);
 };
+

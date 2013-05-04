@@ -363,14 +363,8 @@ FDBFile* FDBPackage::CreateFileObject(const file_info& s_info, uint8_t* data)
             return new FDBFileImageBMP(s_info,data);
         }
 
-        if (file_ext == ".png")
-        {
-            return new FDBFileImagePNG(s_info,data);
-        }
-
-        assert(false);
-        delete (data);
-        return NULL;
+		assert(file_ext == ".png" || file_ext == ".jpg");
+        return new FDBFileImageUnknown(s_info,data);
     }
 
 
