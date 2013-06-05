@@ -147,6 +147,8 @@ void FDBFieldManager::LoadCSV()
 	csv.open("fields.csv");
 	while (csvparse(csv,row)) {
 
+        if (row.size()<5) continue;
+
 		field_def_list::iterator fields = FindEntry(row[0]);
 		if (fields==cache.end())
 		{
