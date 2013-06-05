@@ -74,7 +74,7 @@ bool ProcessDir(string filename, const boost::regex& filter)
   
     fs::path basepath(filename);
     basepath.remove_filename();
-    
+
     bool something_extracted=false;
     
     if (fs::is_regular_file(filename))
@@ -84,11 +84,11 @@ bool ProcessDir(string filename, const boost::regex& filter)
     }
     else
     {
-      for( fs::directory_iterator dir_iter(filename) ; dir_iter != fs::directory_iterator() ; ++dir_iter)
-      {
-        printf("processing %s\n",dir_iter->path().c_str());
-        something_extracted |= ProcessFile(dir_iter->path(), filter);
-      }
+        for( fs::directory_iterator dir_iter(basepath) ; dir_iter != fs::directory_iterator(); ++dir_iter)
+        {
+            printf("processing %s\n",dir_iter->path().c_str());
+            something_extracted |= ProcessFile(dir_iter->path(), filter);
+        }
     }
 
     return something_extracted;
@@ -182,7 +182,7 @@ bool ListDir(string filename, const boost::regex& filter, bool include_crc, bool
     }
     else
     {
-      for( fs::directory_iterator dir_iter(filename) ; dir_iter != fs::directory_iterator() ; ++dir_iter)
+      for( fs::directory_iterator dir_iter(basepath) ; dir_iter != fs::directory_iterator() ; ++dir_iter)
       {
         printf("processing %s\n",dir_iter->path().c_str());
         something_extracted |= ListFile(dir_iter->path(), filter, include_crc,full_info);
