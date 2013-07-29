@@ -2132,6 +2132,7 @@ data\itemobject.db;exbagtypesub;06a8;04;2;=0
 data\itemobject.db;bodymaxcount;06ac;04;2;
 data\itemobject.db;titlesysfamous;06b4;04;2;
 data\itemobject.db;titlesysexp;06b8;04;2;
+data\itemobject.db;collectionnpc;06c4;04;2;
 data\jobeqskilltable.db;;0000;04;2;
 data\jobeqskilltable.db;;0004;04;2;
 data\jobeqskilltable.db;;0008;04;2;
@@ -3057,7 +3058,7 @@ data\magiccollectobject.db;magiccheckarg23;01b8;04;2;
 data\magiccollectobject.db;magiccheckfunctype4;01c0;04;2;
 data\magiccollectobject.db;magicbaseid4;01c4;04;2;
 data\magiccollectobject.db;magiccheckarg14;01c8;04;2;
-data\magiccollectobject.db;magiccheckarg24;01cc;04;2;=0
+data\magiccollectobject.db;magiccheckarg24;01cc;04;2;
 data\magiccollectobject.db;magiccheckfunctype5;01d4;04;2;
 data\magiccollectobject.db;magicbaseid5;01d8;04;2;
 data\magiccollectobject.db;magiccheckarg15;01dc;04;2;
@@ -3082,14 +3083,14 @@ data\magiccollectobject.db;magiccheckfunctype10;0238;04;2;
 data\magiccollectobject.db;magicbaseid10;023c;04;2;
 data\magiccollectobject.db;magiccheckarg110;0240;04;2;
 data\magiccollectobject.db;magiccheckarg210;0244;04;2;
-data\magiccollectobject.db;magiccheckfunctype11;024c;04;2;=0
+data\magiccollectobject.db;magiccheckfunctype11;024c;04;2;
 data\magiccollectobject.db;magicbaseid11;0250;04;2;
 data\magiccollectobject.db;magiccheckarg111;0254;04;2;
-data\magiccollectobject.db;magiccheckarg211;0258;04;2;=0
-data\magiccollectobject.db;magiccheckfunctype12;0260;04;2;=0
-data\magiccollectobject.db;magicbaseid12;0264;04;2;=0
-data\magiccollectobject.db;magiccheckarg112;0268;04;2;=0
-data\magiccollectobject.db;magiccheckarg212;026c;04;2;=0
+data\magiccollectobject.db;magiccheckarg211;0258;04;2;
+data\magiccollectobject.db;magiccheckfunctype12;0260;04;2;
+data\magiccollectobject.db;magicbaseid12;0264;04;2;
+data\magiccollectobject.db;magiccheckarg112;0268;04;2;
+data\magiccollectobject.db;magiccheckarg212;026c;04;2;
 data\magiccollectobject.db;magicspellgrouptype;0274;04;2;
 data\magiccollectobject.db;checkusescript;0278;80;5;
 data\magiccollectobject.db;maxskilllv;02f8;04;2;
@@ -3250,7 +3251,7 @@ data\magicobject.db;motionchangeid1;03ac;04;2;
 data\magicobject.db;motionchangeid2;03b0;04;2;
 data\magicobject.db;motionchangeid3;03b4;04;2;
 data\magicobject.db;motionchangeid4;03b8;04;2;
-data\magicobject.db;settingflagex;03bc;04;0;
+data\magicobject.db;settingflagex;03bc;04;2;
 data\mappoint.db;;0000;04;2;
 data\mappoint.db;;0004;8c;5;
 data\mineobject.db;guid;0000;04;2;
@@ -4010,6 +4011,10 @@ data\questdetailobject.db;icheck_objstatus4;05e8;04;2;=0
 data\questdetailobject.db;icheck_objstatus5;05ec;04;2;=0
 data\questdetailobject.db;bdisableteam;05f0;01;4;
 data\questdetailobject.db;szscript_requeststring;05f1;43;5;
+data\questdetailobject.db;ireward_cointype;0634;04;2;
+data\questdetailobject.db;ireward_specialcoin;0638;04;2;
+data\questdetailobject.db;irequest_cointype;063c;04;2;
+data\questdetailobject.db;irequest_specialcoin;0640;04;2;
 data\questnpcobject.db;guid;0000;04;2;
 data\questnpcobject.db;;0004;04;2;=14
 data\questnpcobject.db;outputlanguage;0008;04;1;
@@ -4645,13 +4650,13 @@ data\suitobject.db;basetypevalue1_3;00a8;04;2;Stat bonus value with 2 items 3
 data\suitobject.db;basetype2_1;00ac;04;2;Additional Stat bonus ID with 3 items  1
 data\suitobject.db;basetype2_2;00b0;04;2;Additional Stat bonus ID with 3 items  2
 data\suitobject.db;basetype2_3;00b4;04;2;Additional Stat bonus ID with 3 items  3
-data\suitobject.db;basetypevalue2_1;00b8;04;2;Stat bonus value with 3 items 1
+data\suitobject.db;basetypevalue2_1;00b8;04;1;Stat bonus value with 3 items 1
 data\suitobject.db;basetypevalue2_2;00bc;04;1;Stat bonus value with 3 items 2
 data\suitobject.db;basetypevalue2_3;00c0;04;2;Stat bonus value with 3 items 3
 data\suitobject.db;basetype3_1;00c4;04;2;Additional Stat bonus ID with 4 items  1
 data\suitobject.db;basetype3_2;00c8;04;2;Additional Stat bonus ID with 4 items  2
 data\suitobject.db;basetype3_3;00cc;04;2;Additional Stat bonus ID with 4 items  3
-data\suitobject.db;basetypevalue3_1;00d0;04;2;Stat bonus value with 4 items 1
+data\suitobject.db;basetypevalue3_1;00d0;04;1;Stat bonus value with 4 items 1
 data\suitobject.db;basetypevalue3_2;00d4;04;2;Stat bonus value with 4 items 2
 data\suitobject.db;basetypevalue3_3;00d8;04;1;Stat bonus value with 4 items 3
 data\suitobject.db;basetype4_1;00dc;04;2;Additional Stat bonus ID with 5 items  1
@@ -5575,22 +5580,22 @@ data\zoneobject.db;zoneinikey13;131d;40;5;
 data\zoneobject.db;zoneinivalue13;135d;40;5;
 data\zoneobject.db;zoneinikey14;139d;40;5;
 data\zoneobject.db;zoneinivalue14;13dd;40;5;
-data\zoneobject.db;zoneinikey15;141d;04;2;=0
-data\zoneobject.db;zoneinivalue15;145d;04;2;=0
-data\zoneobject.db;zoneinikey16;149d;04;2;=0
-data\zoneobject.db;zoneinivalue16;14dd;04;2;=0
-data\zoneobject.db;zoneinikey17;151d;04;2;=0
-data\zoneobject.db;zoneinivalue17;155d;04;2;=0
-data\zoneobject.db;zoneinikey18;159d;04;2;=0
-data\zoneobject.db;zoneinivalue18;15dd;04;2;=0
-data\zoneobject.db;zoneinikey19;161d;04;2;=0
-data\zoneobject.db;zoneinivalue19;165d;04;2;=0
-data\zoneobject.db;zoneinikey20;169d;04;2;=0
-data\zoneobject.db;zoneinivalue20;16dd;04;2;=0
-data\zoneobject.db;zoneinikey21;171d;04;2;=0
-data\zoneobject.db;zoneinivalue21;175d;04;2;=0
-data\zoneobject.db;zoneinikey22;179d;04;2;=0
-data\zoneobject.db;zoneinivalue22;17dd;04;2;=0
+data\zoneobject.db;zoneinikey15;141d;40;5;
+data\zoneobject.db;zoneinivalue15;145d;40;5;
+data\zoneobject.db;zoneinikey16;149d;40;5;
+data\zoneobject.db;zoneinivalue16;14dd;40;5;
+data\zoneobject.db;zoneinikey17;151d;40;5;
+data\zoneobject.db;zoneinivalue17;155d;40;5;
+data\zoneobject.db;zoneinikey18;159d;40;5;
+data\zoneobject.db;zoneinivalue18;15dd;40;5;
+data\zoneobject.db;zoneinikey19;161d;40;5;
+data\zoneobject.db;zoneinivalue19;165d;40;5;
+data\zoneobject.db;zoneinikey20;169d;40;5;
+data\zoneobject.db;zoneinivalue20;16dd;40;5;
+data\zoneobject.db;zoneinikey21;171d;40;5;
+data\zoneobject.db;zoneinivalue21;175d;40;5;
+data\zoneobject.db;zoneinikey22;179d;40;5;
+data\zoneobject.db;zoneinivalue22;17dd;40;5;
 data\zoneobject.db;zoneinikey23;181d;04;2;=0
 data\zoneobject.db;zoneinivalue23;185d;04;2;=0
 data\zoneobject.db;zoneinikey24;189d;04;2;=0
