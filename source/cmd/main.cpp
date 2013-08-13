@@ -10,11 +10,6 @@
 
 #include "FDB_LIB.h"
 
-#if WIN32
-// FIXME
-	#include <windows.h>
-#endif
-
 CommandLine cmdline;
 
 

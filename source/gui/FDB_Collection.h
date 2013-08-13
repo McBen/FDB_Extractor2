@@ -8,7 +8,7 @@ class FDB_Collection
 		FDB_Collection();
 		virtual ~FDB_Collection();
 
-		bool Open(const char* filename_pattern);
+		bool Open(const wxString& filename_pattern);
 		bool OpenDefault();
 		void Close();
 
@@ -16,7 +16,7 @@ class FDB_Collection
 		void GetFileInfos(const char* base_path, std::vector<FDBPackage::file_info>& infos);
 
 		std::string ExtractFile(const char* fname, const char* destname);
-		bool ExtractMultipleFiles(const char* src_dir, const char* dest_dir, const wxArrayString&);
+		bool ExtractMultipleFiles(const char* src_dir, const wxString& dest_dir, const wxArrayString&);
 
 	private:
 		int  CalcFileCount(const char* src_dir, const wxArrayString& files);

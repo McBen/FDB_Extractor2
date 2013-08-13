@@ -1,10 +1,9 @@
 #include "Export_DLG.h"
 #include "main.h"
-#include <Windows.h>
-
 
 Export_DLG::Export_DLG( wxWindow* parent ) : BASE_DLG::Export_DLG( parent )
 {
+	pos=0;
 	IsCanceled = false;
 	next_update_tick = 0;
 }
@@ -24,12 +23,11 @@ void Export_DLG::Step(const char* fname)
 {
 	++pos;
 
-#pragma warning(suppress: 28159)
-	if (next_update_tick < GetTickCount())
+	if (next_update_tick < wxGetLocalTimeMillis().GetLo())
 	{
 		m_gauge1->SetValue(pos);
-		m_textCtrl1->SetLabel(fname);
-		next_update_tick = GetTickCount()+100;
+		m_textCtrl1->SetLabel(wxString::FromAscii(fname));
+		next_update_tick = wxGetLocalTimeMillis().GetLo()+100;
 
 		wxGetApp().Yield();
 	}

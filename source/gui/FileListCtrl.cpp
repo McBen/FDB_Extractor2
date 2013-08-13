@@ -8,12 +8,12 @@ FileListCtrl::FileListCtrl(wxWindow *parent, wxWindowID id, const wxPoint &pos, 
 					long style, const wxValidator &validator, const wxString &name) : 
 		wxListCtrl(parent, id, pos, size, style, validator, name)
 {
-	AppendColumn("Name",wxLIST_FORMAT_LEFT,220);
-	AppendColumn("Size", wxLIST_FORMAT_RIGHT,60);
-	AppendColumn("Packed", wxLIST_FORMAT_RIGHT,60);
-	AppendColumn("Mode", wxLIST_FORMAT_CENTER,40);
-	AppendColumn("Time",70);
-	AppendColumn("Comment");
+	InsertColumn(0,wxT("Name"),wxLIST_FORMAT_LEFT,220);
+	InsertColumn(1,wxT("Size"), wxLIST_FORMAT_RIGHT,60);
+	InsertColumn(2,wxT("Packed"), wxLIST_FORMAT_RIGHT,60);
+	InsertColumn(3,wxT("Mode"), wxLIST_FORMAT_CENTER,40);
+	InsertColumn(4,wxT("Time"),70);
+	InsertColumn(5,wxT("Comment"));
 
 	wxBitmap images = wxResourceGetBitmap(wxRES_filetype_icons);
 	file_icons.Create(16,16);

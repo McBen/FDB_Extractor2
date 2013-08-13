@@ -19,13 +19,13 @@ FDB_Collection::~FDB_Collection()
 	Close();
 }
 
-bool FDB_Collection::Open(const char* filename_pattern)
+bool FDB_Collection::Open(const wxString& filename_pattern)
 {
 	bool res = false;
 	wxString f = wxFindFirstFile(filename_pattern);
 	while ( !f.empty() )
 	{
-		FDBPackage* new_fdb=new FDBPackage(f.c_str());
+		FDBPackage* new_fdb=new FDBPackage(f.mb_str());
 		if (new_fdb->GetFileCount()>0)
 		{
 			packages.push_back(new_fdb);
@@ -48,9 +48,9 @@ bool FDB_Collection::OpenDefault()
 {
 	Close();
 
-	string dir = GetROMInstallDir();
+	wxString dir = wxString::FromAscii(GetROMInstallDir().c_str());
 	if (wxDirExists(dir))
-		return Open((dir + "fdb/*.fdb").c_str());
+		return Open(dir + wxT("fdb/*.fdb"));
 	else
 		return false;
 }
@@ -185,7 +185,7 @@ int FDB_Collection::CalcFileCount(const char* src_dir, const wxArrayString& file
 	return count;
 }
 
-bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const char* dest_dir, const wxArrayString& files)
+bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const wxString& dest_dir, const wxArrayString& files)
 {
 	int total = CalcFileCount(src_dir, files);
 	int done=0;
@@ -207,13 +207,14 @@ bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const char* dest_
 			const char* name = pack->GetFileName(i);
 			if (strncmp(src_dir,name,len)==0)
 			{
-				if ( (files.size()==0) || (files.Index(name+len)!= wxNOT_FOUND) )
+				wxString fname=wxString::FromAscii(name+len);
+				if ( (files.size()==0) || (files.Index(fname)!= wxNOT_FOUND) )
 				{
-					wxFileName dest(string(dest_dir)+string("/")+string(name));
-					if (files.size()>0) dest = string(dest_dir)+string("/")+string(name+len);
+					wxFileName dest(dest_dir+wxT("/")+wxString::FromAscii(name));
+					if (files.size()>0) dest = dest_dir+wxT("/")+fname;
 
 					wxDir::Make(dest.GetPath(),511,wxPATH_MKDIR_FULL);
-					res |= pack->ExtractFile(i,dest.GetFullPath().c_str(), FDBPackage::EX_NONE);
+					res |= pack->ExtractFile(i,dest.GetFullPath().mb_str(), FDBPackage::EX_NONE);
 					dlg.Step(name);
 
 					if (dlg.IsCanceled) 

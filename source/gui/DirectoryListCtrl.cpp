@@ -26,7 +26,7 @@ void DirectoryListCtrl::SetDataSource(FDB_Collection* _fdb_pack)
 void DirectoryListCtrl::Reset()
 {
 	DeleteAllItems();
-	AddRoot("");
+	AddRoot(wxT(""));
 
 	FillDirTree(GetRootItem());
 }
@@ -52,7 +52,7 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 	vector<string> names;
 	vector<bool> has_childs;
 
-	p_fdb_pack->GetSubDirectories(cur_dir.c_str(), names, has_childs);
+	p_fdb_pack->GetSubDirectories(cur_dir.mb_str(wxConvUTF8), names, has_childs);
 
 	// clear all childs
 	wxTreeItemId n;
@@ -64,7 +64,7 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 	// fill
 	for (size_t i=0;i<names.size();++i)
 	{
-		wxTreeItemId n = InsertItem(node,0,names[i]);
+		wxTreeItemId n = InsertItem(node,0, wxString(names[i].c_str(), wxConvUTF8));
 		if (has_childs[i])
 			InsertItem(n,0,wxEmptyString);
 	}
@@ -74,10 +74,10 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 
 wxString DirectoryListCtrl::GetFullName(wxTreeItemId node)
 {
-	wxString dir="";
+wxString dir(wxT(""));
 	while (node.IsOk() && node != GetRootItem())
 	{
-		dir = GetItemText(node)+"\\"+dir;
+dir = GetItemText(node)+wxT("\\")+dir;
 		node = GetItemParent(node);
 	}
 	return dir;
