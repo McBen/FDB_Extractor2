@@ -14,8 +14,6 @@ FDBFileStringDB::FDBFileStringDB(const FDBPackage::file_info& s_info, uint8_t* d
 
 bool FDBFileStringDB::WriteINI(const char* filename)
 {
-    std::string name(filename);
-
     FILE* outf;
     if (fopen_s(&outf, filename, "wb")) return false;
 	if (!outf) return false;
@@ -25,7 +23,7 @@ bool FDBFileStringDB::WriteINI(const char* filename)
     while (run<end)
     {
 
-        s_entry* ent = (s_entry*)run;
+  	const s_entry* ent = (const s_entry*)run;
         run+= 64+4+ent->v_len;
 
         assert(strlen(ent->value)+1 == ent->v_len);
@@ -39,22 +37,9 @@ bool FDBFileStringDB::WriteINI(const char* filename)
     return true;
 }
 
-string FDBFileStringDB::GetLang(const string& filename)
-{
-	boost::filesystem::path filepath(filename);
-	string fname = filepath.stem().generic_string().c_str();
-	fname.erase(0,string("string_").size());
-
-	if (fname.empty()) fname="rw";
-
-	return fname;
-}
-
-
 bool FDBFileStringDB::WriteSQLITE3(const char* filename)
 {
 	FILE* outf;
-	string name(filename);
 	if (fopen_s(&outf, filename, "wt")) return false;
 	if (!outf) return false;
 

@@ -20,7 +20,6 @@ class FDB_Collection
 
 	private:
 		int  CalcFileCount(const char* src_dir, const wxArrayString& files);
-		void	UpdateDirectories();
 
 	private:
 		std::vector<FDBPackage*> packages;

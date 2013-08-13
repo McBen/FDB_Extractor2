@@ -20,7 +20,6 @@ void csvline_populate(vector<string> &record, const string& line)
 {
     int linepos=0;
     int inquotes=false;
-    char c;
     int linemax=line.length();
     string curstring;
     record.clear();
@@ -28,7 +27,7 @@ void csvline_populate(vector<string> &record, const string& line)
     while(line[linepos]!=0 && linepos < linemax)
     {
        
-        c = line[linepos];
+   	char c = line[linepos];
        
         if (!inquotes && curstring.length()==0 && c==TEXT_DELIMITER)
         {

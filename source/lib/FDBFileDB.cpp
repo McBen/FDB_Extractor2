@@ -12,9 +12,9 @@ using namespace std;
 
 
 FDBFileDB::FDBFileDB(const FDBPackage::file_info& s_info, uint8_t* data )
-    : FDBFile(s_info,data)
+    : FDBFile(s_info,data),
+    f_info(s_info)
 {
-	f_info = s_info;
     head = (FDBFieldManager::s_file_header*)data;
     entries = data + sizeof(FDBFieldManager::s_file_header);
 

@@ -17,7 +17,6 @@ std::string FDBFile::GetTargetName(const char* filename, FDBPackage::e_export_fo
     if (e==FDBPackage::EX_NONE) e = DefaultFormat();
     assert(ExportFormatIsValid(e));
 
-    bool res=false;
     switch (e)
     {
         case FDBPackage::EX_CSV:

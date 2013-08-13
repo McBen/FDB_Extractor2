@@ -12,7 +12,10 @@ using namespace std;
 field_list empty_field_list; 
 
 
-FDB_DBField::FDB_DBField()
+FDB_DBField::FDB_DBField() :
+	type(FDB_DBField::F_DWORD),
+	position(0),
+	size(0)
 {
 }
 

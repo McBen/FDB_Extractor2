@@ -62,20 +62,6 @@ void FDB_Collection::Close()
 	directories.clear();
 }
 
-void FDB_Collection::UpdateDirectories()
-{
-	for (vector<FDBPackage*>::iterator pack=packages.begin();pack!=packages.end();++pack)
-	{
-		size_t count = (*pack)->GetFileCount();
-		for (size_t i = 0;i<count;++i)
-		{
-			wxString path;
-			wxFileName::SplitPath((*pack)->GetFileName(i),NULL,&path,NULL,NULL);
-			directories.insert(path.ToStdString());
-		}
-	}
-}
-
 void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& names, vector<bool>& has_childs)
 {
 	int len = strlen(base_path);
@@ -188,7 +174,6 @@ int FDB_Collection::CalcFileCount(const char* src_dir, const wxArrayString& file
 bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const wxString& dest_dir, const wxArrayString& files)
 {
 	int total = CalcFileCount(src_dir, files);
-	int done=0;
 
 	Export_DLG dlg(NULL);
 	dlg.SetMax(total);

@@ -23,9 +23,5 @@ class FDBFileStringDB : public  FDBFile
         bool WriteSQLITE3(const char*);
         FDBPackage::e_export_format DefaultFormat()    { return FDBPackage::EX_INI; };
         bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_INI)||(e==FDBPackage::EX_SQLITE3)||(FDBFile::ExportFormatIsValid(e)); };
-
-	private:
-		std::string GetLang(const std::string& filename);
-
 };
 

@@ -8,7 +8,17 @@ using namespace std;
 using namespace boost::program_options;
 
 
-CommandLine::CommandLine()
+CommandLine::CommandLine() :
+	verbose(false),
+	overwrite(false),
+	neveroverwrite(false),
+	list_only(false),
+	list_only_with_crc(false),
+    list_only_full(false),
+	raw_data(false),
+	db_sql_out(false),
+	lua_out(false),
+	csv_out(false)
 {
 }
 

@@ -4,10 +4,11 @@
 #include "utils.h"
 using namespace std;
 
-DBExport::DBExport(const std::string& _filename)
+DBExport::DBExport(const std::string& _filename) :
+	filename (_filename),
+	outf (NULL),
+	not_first_value(false)
 {
-	filename=_filename;
-	outf=NULL;
 }
 
 DBExport::~DBExport()
@@ -27,9 +28,9 @@ void DBExport::TableStart(const char* table_name)
 	not_first_value = false;
 }
 
-DBExport_CSV::DBExport_CSV(const std::string& _filename) : DBExport(_filename)
+DBExport_CSV::DBExport_CSV(const std::string& _filename) : DBExport(_filename) ,
+	realfilename(filename)
 {
-	realfilename = _filename;
 }
 
 void DBExport_CSV::TableStart(const char* _table_name) 
@@ -52,12 +53,12 @@ void DBExport_CSV::TableField(const std::string& name, uint32_t position, FDB_DB
 	if (name.empty()) 
 		fprintf(outf,"unk%i",position);
 	else
-		fprintf(outf, name.c_str());
+		fputs(name.c_str(), outf);
 }
 
 void DBExport_CSV::TableEnd()
 {
-	fprintf(outf,"\n");
+	fputs("\n",outf);
 }
 
 void DBExport_CSV::EntryStart() 
@@ -67,7 +68,7 @@ void DBExport_CSV::EntryStart()
 
 void DBExport_CSV::EntryField(FDB_DBField::field_type type, void*data) 
 {
-	if (not_first_value) fprintf(outf,";");
+	if (not_first_value) fputs(";", outf);
 	else not_first_value = true;
 
 	switch (type)
@@ -109,13 +110,15 @@ void DBExport_CSV::EntryEnd()
 }
 
 
-DBExport_Sqlite3::DBExport_Sqlite3(const std::string& _filename) : DBExport(filename)
+DBExport_Sqlite3::DBExport_Sqlite3(const std::string& _filename) : DBExport(filename),
+		table_name(NULL)
 {
 	// Options
 	boost::filesystem::path filepath(filename);
 	fprintf(outf, "-- %s\n", filepath.filename().generic_string().c_str());
 	//fprintf(outf, "/*!40101 SET NAMES utf8 */;\n");
-	fprintf(outf, "\n");
+	fputs("\n",outf);
+
 }
 
 void DBExport_Sqlite3::TableStart(const char* _table_name)  
@@ -148,8 +151,8 @@ void DBExport_Sqlite3::TableField(const std::string& name, uint32_t position, FD
 		case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
 		case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
 		case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
-		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%li)",size); break;
-		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%li)",size); break; // TODO: make BLOB
+		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%lu)",size); break;
+		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%lu)",size); break; // TODO: make BLOB
 		default:
 			assert(false);
 			break;
