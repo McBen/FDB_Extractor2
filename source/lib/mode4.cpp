@@ -31,11 +31,7 @@ struct uncompress_data // size = 0x30
     size_t  page_size;  //0x020
     size_t  total_size;
     const char* filename;
-<<<<<<< HEAD
     DWORD has_data;
-=======
-    DWORD has_data; 
->>>>>>> some mingw compatibilies
 };
 
 struct a1_struct

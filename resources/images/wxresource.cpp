@@ -1,4 +1,5 @@
 #include "wxresource.h"
+#include "wx/image.h"
 
 const int resources_sizes[]={4380,4428,6596,1086,};
 const char* resources[]={
@@ -10,8 +11,8 @@ const char* resources[]={
 
 wxBitmap wxResourceGetBitmap(size_t id)
 {
- wxASSERT(id<4);
- if (id>=4) return wxNullBitmap;
- wxMemoryInputStream is(resources[id], resources_sizes[id]);
- return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1); 
+	 wxASSERT(id<4);
+	 if (id>=4) return wxNullBitmap;
+	 wxMemoryInputStream is(resources[id], resources_sizes[id]);
+	 return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
 }

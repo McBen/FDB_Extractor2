@@ -198,7 +198,7 @@ bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const wxString& d
 					wxFileName dest(dest_dir+wxT("/")+wxString::FromAscii(name));
 					if (files.size()>0) dest = dest_dir+wxT("/")+fname;
 
-					wxDir::Make(dest.GetPath(),511,wxPATH_MKDIR_FULL);
+					dest.Mkdir(511,wxPATH_MKDIR_FULL);
 					res |= pack->ExtractFile(i,dest.GetFullPath().mb_str(), FDBPackage::EX_NONE);
 					dlg.Step(name);
 

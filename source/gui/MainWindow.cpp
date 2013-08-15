@@ -90,11 +90,7 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 
 	const wxChar* comp_modes[]=
 	{
-<<<<<<< HEAD
 		_("none"),_("RLE"),_("LZO"),_("ZIP"),_("Redux"),_("!UNK!")
-=======
-		_("none"),_("RLE"),_("LZO"),_("ZIP"),_("Nvidia"),_("!UNK!")
->>>>>>> more linux stuff
 	};
 
 	wxString cur_dir = directory_ctrl->GetFullName(event.GetItem());
@@ -175,7 +171,7 @@ void MainWindow::OnLoadFDB( wxCommandEvent& event )
 	dlg.GetPaths(filenames);
 
 	for (size_t t=0;t<filenames.size();++t)
-		fdb_pack.Open(filenames[t].mb_str());
+		fdb_pack.Open(filenames[t]);
 
 
 	RebuildView();
@@ -209,8 +205,15 @@ void MainWindow::file_ctrlOnContextMenu( wxContextMenuEvent& event )
 	wxMenu menu(wxEmptyString);
 
 	long item = file_ctrl->GetNextItem(-1,wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-	if (item!=-1) menu.Append(FDBex_ExtractFocusFile, wxString::Format(_("Extract '%s' to..."), file_ctrl->GetItemText(item)));
-	if (file_ctrl->GetSelectedItemCount()>1)  menu.Append(FDBex_ExtractFiles, _("Extract files to..."));
+	if (item!=-1)
+	{
+		wxString text = wxString::Format(wxT("Extract '%s' to..."), file_ctrl->GetItemText(item).c_str());
+		menu.Append(FDBex_ExtractFocusFile, text);
+	}
+	if (file_ctrl->GetSelectedItemCount()>1)
+	{
+		menu.Append(FDBex_ExtractFiles, _("Extract files to..."));
+	}
     menu.Append(FDBex_ExtractFolder, _("Extract folder to..."));
 
 	menu.AppendSeparator();
@@ -304,7 +307,7 @@ void MainWindow::OnExtractFiles(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_export_path = dlg.GetPath();
 
-	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath().mb_str(), cur_files);
+	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath(), cur_files);
 
 }
 
@@ -315,7 +318,7 @@ void MainWindow::OnExtractFolder(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_export_path = dlg.GetPath();
 
-	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath().mb_str(),wxArrayString());
+	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath(),wxArrayString());
 }
 
 void MainWindow::m_extract_folderOnUpdateUI( wxUpdateUIEvent& event )
