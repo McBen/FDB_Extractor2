@@ -23,7 +23,7 @@ bool FDBFileStringDB::WriteINI(const char* filename)
     while (run<end)
     {
 
-  	const s_entry* ent = (const s_entry*)run;
+    	const s_entry* ent = (const s_entry*)run;
         run+= 64+4+ent->v_len;
 
         assert(strlen(ent->value)+1 == ent->v_len);

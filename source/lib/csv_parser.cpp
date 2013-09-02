@@ -1,5 +1,7 @@
 
 #include "csv_parser.hpp"
+#include <assert.h>
+
 using namespace std;
 
 #define DELIMITER ';'
@@ -24,10 +26,11 @@ void csvline_populate(vector<string> &record, const string& line)
     string curstring;
     record.clear();
        
-    while(line[linepos]!=0 && linepos < linemax)
+    while(linepos < linemax)
     {
+    	assert(line[linepos]!=0);
        
-   	char c = line[linepos];
+    	char c = line[linepos];
        
         if (!inquotes && curstring.length()==0 && c==TEXT_DELIMITER)
         {

@@ -96,8 +96,5 @@ class FDBPackage
         file_head_data* file_positions;
         uint32_t *      file_name_pos;
         const char*     file_names_data;
-
-
-
 };
 

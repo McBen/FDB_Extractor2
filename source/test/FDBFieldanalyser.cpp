@@ -268,6 +268,7 @@ TEST_F(FDBFieldAnalyzerTest, FDBFieldAnalyzerTest) {
 	Test_questdetailobject();
 	Test_questnpcobject();
 	Test_weaponobject();
+	Test_runeobject();
 }
 
 

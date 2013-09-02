@@ -74,10 +74,10 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 
 wxString DirectoryListCtrl::GetFullName(wxTreeItemId node)
 {
-wxString dir(wxT(""));
+	wxString dir(wxT(""));
 	while (node.IsOk() && node != GetRootItem())
 	{
-dir = GetItemText(node)+wxT("\\")+dir;
+		dir = GetItemText(node)+wxT("\\")+dir;
 		node = GetItemParent(node);
 	}
 	return dir;

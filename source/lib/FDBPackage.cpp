@@ -53,7 +53,10 @@ class MemoryBlock
             return data;
         }
 
-        
+    private:
+        // no copy
+        MemoryBlock(const MemoryBlock&) {};
+        void operator=(const MemoryBlock&) {};
 };
 
 MemoryBlock b1,b2;

@@ -19,6 +19,7 @@ void Export_DLG::SetMax(int max)
 	m_gauge1->SetRange(max);
 }
 
+
 void Export_DLG::Step(const char* fname)
 {
 	++pos;
