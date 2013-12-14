@@ -74,6 +74,7 @@ class FDBPackage
         FDBFile*    GetFile(size_t index);
         bool        ExtractFile(size_t index, const char* filename, e_export_format format);
         uint32_t    CalcCRC32(size_t index);
+        uint32_t    CalcCRC32Raw(size_t index);
 
     protected:
         FDBFile* CreateFileObject(const file_info&, uint8_t*);

@@ -122,6 +122,7 @@ bool FDBPackage::Open(const char* filename)
 
     // position
     file_positions = new file_head_data[file_count];
+    if (!file_positions) { Close(); return false;}
     fread(file_positions,sizeof(file_head_data),file_count,file);
 
     // names
@@ -318,7 +319,7 @@ bool    FDBPackage::ExtractFile(size_t index, const char* filename, e_export_for
     return e;
  }
 
- uint32_t  FDBPackage::CalcCRC32(size_t index)
+ uint32_t  FDBPackage::CalcCRC32Raw(size_t index)
 {
     file_info s_info;
 
@@ -326,6 +327,22 @@ bool    FDBPackage::ExtractFile(size_t index, const char* filename, e_export_for
 
 	boost::crc_32_type  crc;
 	crc.process_bytes( data, s_info.rest_size );
+	free(data);
+
+	return  crc.checksum();
+}
+
+uint32_t  FDBPackage::CalcCRC32(size_t index)
+{
+    file_info s_info;
+    uint8_t* data;
+    size_t data_size;
+
+    if (GetFileData(index, data, data_size, &s_info))
+        return 0;
+
+	boost::crc_32_type  crc;
+	crc.process_bytes( data, s_info.size_uncomp );
 	free(data);
 
 	return  crc.checksum();

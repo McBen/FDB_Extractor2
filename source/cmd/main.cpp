@@ -16,7 +16,7 @@ CommandLine cmdline;
 using namespace std;
 
 bool Process();
-bool List(bool include_crc, bool full_info);
+bool List(uint16_t options);
 
 int main( int argc, const char* argv[] )
 {
@@ -31,8 +31,8 @@ int main( int argc, const char* argv[] )
     
     bool okay = false;
 
-	if (cmdline.list_only || cmdline.list_only_with_crc|| cmdline.list_only_full) 
-	    okay = List(cmdline.list_only_with_crc, cmdline.list_only_full);
+	if (cmdline.options & CommandLine::OPT_ANY_LIST) 
+	    okay = List(cmdline.options);
 	else
 		okay = Process();
 
@@ -81,7 +81,7 @@ bool ProcessDir(string filename, const boost::regex& filter)
     {
         for( fs::directory_iterator dir_iter(basepath) ; dir_iter != fs::directory_iterator(); ++dir_iter)
         {
-            printf("processing %s\n",dir_iter->path().c_str());
+            printf("processing %s\n",dir_iter->path().generic_string().c_str());
             something_extracted |= ProcessFile(dir_iter->path(), filter);
         }
     }
@@ -95,10 +95,10 @@ bool ProcessFile(boost::filesystem::path filename, const boost::regex& filter)
     FDBPackage fdb( filename.generic_string().c_str() );
 
     FDBPackage::e_export_format ex_format=FDBPackage::EX_NONE;
-    if (cmdline.raw_data)   ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_RAW);
-    if (cmdline.db_sql_out) ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_SQLITE3);
-    if (cmdline.lua_out)    ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_LUA);
-    if (cmdline.csv_out)    ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_CSV);
+    if (cmdline.options & CommandLine::OPT_RAW_DATA)   ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_RAW);
+    if (cmdline.options & CommandLine::OPT_DB_SQL_OUT) ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_SQLITE3);
+    if (cmdline.options & CommandLine::OPT_LUA_OUT)    ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_LUA);
+    if (cmdline.options & CommandLine::OPT_CSV_OUT)    ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_CSV);
     
 
     for (size_t id=0;id<fdb.GetFileCount();++id)
@@ -113,11 +113,11 @@ bool ProcessFile(boost::filesystem::path filename, const boost::regex& filter)
             boost::filesystem::create_directories(output.parent_path());
 
 
-            if (!cmdline.overwrite)
+            if (! (cmdline.options & CommandLine::OPT_OVERWRITE))
             {
                 if (boost::filesystem::exists(output))
                 {
-                    if (cmdline.neveroverwrite) continue;
+                    if (cmdline.options & CommandLine::OPT_NEVEROVERWRITE) continue;
                     char command=0;
                     while (string("ynas").find(command)== string::npos)
                     {
@@ -127,15 +127,15 @@ bool ProcessFile(boost::filesystem::path filename, const boost::regex& filter)
 
                     cout <<command<<"\n";
                     if (command=='n') continue;
-                    if (command=='s') { cmdline.neveroverwrite=true; continue; }
-                    if (command=='a') cmdline.overwrite=true;
+                    if (command=='s') { cmdline.options |= CommandLine::OPT_NEVEROVERWRITE; continue; }
+                    if (command=='a') cmdline.options |= CommandLine::OPT_OVERWRITE;
                 }
             }
 
             bool res = fdb.ExtractFile(id, output.generic_string().c_str(), ex_format );
             extracted |= res;
 
-            if (cmdline.verbose)
+            if (cmdline.options & CommandLine::OPT_VERBOSE)
             {
                 if (!res) cout << fname << "-ERROR\n";
                 else      cout << fname <<"\n";
@@ -148,20 +148,20 @@ bool ProcessFile(boost::filesystem::path filename, const boost::regex& filter)
 }
 
 /////////////////////////////////////
-bool ListDir(string filename,  const boost::regex& filter, bool include_crc, bool full_info);
-bool ListFile(boost::filesystem::path filename,  const boost::regex& filter, bool include_crc, bool full_info);
+bool ListDir(string filename,  const boost::regex& filter, uint16_t options);
+bool ListFile(boost::filesystem::path filename,  const boost::regex& filter, uint16_t options);
 
-bool List(bool include_crc, bool full_info)
+bool List(uint16_t options)
 {
     bool had_error = false;
 
     for (vector<string>::iterator f = cmdline.fbd_files.begin(); f!=cmdline.fbd_files.end();++f )
-        had_error |= !ListDir(*f, cmdline.filter, include_crc,full_info);
+        had_error |= !ListDir(*f, cmdline.filter, options);
 
 	return !had_error;
 }
 
-bool ListDir(string filename, const boost::regex& filter, bool include_crc, bool full_info)
+bool ListDir(string filename, const boost::regex& filter, uint16_t options)
 {
     namespace fs = boost::filesystem;
   
@@ -173,21 +173,21 @@ bool ListDir(string filename, const boost::regex& filter, bool include_crc, bool
     if (fs::is_regular_file(filename))
     {
         printf("processing %s\n",filename.c_str());
-        something_extracted |= ListFile(filename, filter, include_crc,full_info);
+        something_extracted |= ListFile(filename, filter, options);
     }
     else
     {
       for( fs::directory_iterator dir_iter(basepath) ; dir_iter != fs::directory_iterator() ; ++dir_iter)
       {
         printf("processing %s\n",dir_iter->path().c_str());
-        something_extracted |= ListFile(dir_iter->path(), filter, include_crc,full_info);
+        something_extracted |= ListFile(dir_iter->path(), filter, options);
       }
     }
 
     return something_extracted;
 }
 
-bool ListFile(boost::filesystem::path filename, const boost::regex& filter, bool include_crc, bool full_info)
+bool ListFile(boost::filesystem::path filename, const boost::regex& filter, uint16_t options)
 {
     bool extracted = false;
     FDBPackage fdb( filename.generic_string().c_str() );
@@ -205,19 +205,25 @@ bool ListFile(boost::filesystem::path filename, const boost::regex& filter, bool
 
 			cout << output.generic_string();
 
-			if (full_info)
+			if (options & CommandLine::OPT_LIST_ONLY_FULL)
 			{
 				fdb.GetFileInfo(id,s_info);
 				cout <<"\t"<< s_info.size_uncomp;
 				if (s_info.ftype==2) cout <<"\t"<<s_info.width<<"\t"<<s_info.height<<"\t"<< (unsigned)s_info.mipmapcount;
 			}
 
-			if (include_crc)
+			if (options & CommandLine::OPT_LIST_ONLY_WITH_CRC)
 			{
 				uint32_t crc32 = fdb.CalcCRC32(id);
 				cout <<"\t"<< setw(8) << setfill('0') << hex << crc32;
 			}
-				
+
+			if (options & CommandLine::OPT_LIST_ONLY_WITH_CRCRAW)
+			{
+				uint32_t crc32 = fdb.CalcCRC32Raw(id);
+				cout <<"\t"<< setw(8) << setfill('0') << hex << crc32;
+			}
+
 			cout <<"\n";
             extracted = true;
         }

@@ -9,16 +9,7 @@ using namespace boost::program_options;
 
 
 CommandLine::CommandLine() :
-	verbose(false),
-	overwrite(false),
-	neveroverwrite(false),
-	list_only(false),
-	list_only_with_crc(false),
-    list_only_full(false),
-	raw_data(false),
-	db_sql_out(false),
-	lua_out(false),
-	csv_out(false)
+	options(0)
 {
 }
 
@@ -31,6 +22,7 @@ bool CommandLine::Parse(int argc, const char* argv[])
         ("overwrite,y", "always overwrite files")
         ("list,l", "list files only (no extraction)")
         ("list_crc,x", "list files with checksum (no extraction)")
+        ("list_crcraw,X", "list files with checksum (no extraction,no decompress=>quick)")
         ("list_full,u", "list files with details (no extraction)")
         ("regex,r", "use regex filter instead of filename")
         ("output,o", value<string>(&output_directory)->default_value(""), "output directory")
@@ -94,16 +86,19 @@ bool CommandLine::Parse(int argc, const char* argv[])
 
 void CommandLine::ParseArguments(variables_map vm)
 {
-    verbose = vm.count("verbose")>0;
-    overwrite = vm.count("overwrite")>0;
-    neveroverwrite = false;
-    list_only = vm.count("list")>0;
-	list_only_with_crc = vm.count("list_crc")>0;
-	list_only_full = vm.count("list_full")>0;
-    raw_data = vm.count("raw")>0;
-    db_sql_out = vm.count("sql")>0;
-    lua_out = vm.count("lua")>0;
-    csv_out = vm.count("csv")>0;
+    options = 
+        (vm.count("verbose")>0? OPT_VERBOSE : 0) | 
+        (vm.count("overwrite")>0? OPT_OVERWRITE : 0) | 
+
+        (vm.count("list")>0? OPT_LIST_ONLY : 0) | 
+        (vm.count("list_crc")>0? OPT_LIST_ONLY_WITH_CRC : 0) | 
+        (vm.count("list_crcraw")>0? OPT_LIST_ONLY_WITH_CRCRAW : 0) | 
+        (vm.count("list_full")>0? OPT_LIST_ONLY_FULL : 0) | 
+
+        (vm.count("raw")>0? OPT_RAW_DATA : 0) | 
+        (vm.count("sql")>0? OPT_DB_SQL_OUT : 0) | 
+        (vm.count("lua")>0? OPT_LUA_OUT : 0) | 
+        (vm.count("csv")>0? OPT_CSV_OUT : 0);
 
     if (fbd_files.size()==0)
     {
