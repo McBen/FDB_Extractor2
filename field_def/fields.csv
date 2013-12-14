@@ -233,11 +233,11 @@ data\armorobject.db;eqtypevalue1;00e0;04;2;value for attribute1
 data\armorobject.db;eqtypevalue2;00e4;04;2;value for attribute2
 data\armorobject.db;eqtypevalue3;00e8;04;2;value for attribute3
 data\armorobject.db;eqtypevalue4;00ec;04;1;value for attribute4
-data\armorobject.db;eqtypevalue5;00f0;04;1;value for attribute5
-data\armorobject.db;eqtypevalue6;00f4;04;1;value for attribute6
-data\armorobject.db;eqtypevalue7;00f8;04;1;value for attribute7
-data\armorobject.db;eqtypevalue8;00fc;04;1;value for attribute8
-data\armorobject.db;eqtypevalue9;0100;04;1;value for attribute9
+data\armorobject.db;eqtypevalue5;00f0;04;2;value for attribute5
+data\armorobject.db;eqtypevalue6;00f4;04;2;value for attribute6
+data\armorobject.db;eqtypevalue7;00f8;04;2;value for attribute7
+data\armorobject.db;eqtypevalue8;00fc;04;2;value for attribute8
+data\armorobject.db;eqtypevalue9;0100;04;2;value for attribute9
 data\armorobject.db;eqtypevalue10;0104;04;2;value for attribute10
 data\armorobject.db;eqtypeonattackmagicrate;0108;04;2;
 data\armorobject.db;eqtypeonattackmagicrank;010c;04;2;=0
@@ -2018,7 +2018,7 @@ data\itemobject.db;checkusescript;0298;80;5;
 data\itemobject.db;fixquality;0318;04;2;
 data\itemobject.db;eqrefinetype;031c;04;2;
 data\itemobject.db;eqrefinerate_base;0320;04;3;
-data\itemobject.db;eqrefinerate_fix;0324;04;2;
+data\itemobject.db;eqrefinerate_fix;0324;04;1;
 data\itemobject.db;eqrefinerate_per;0328;04;3;
 data\itemobject.db;eqrefineeqminlv;032c;04;2;
 data\itemobject.db;eqrefineeqmaxlv;0330;04;2;
@@ -2094,7 +2094,7 @@ data\itemobject.db;plant_manure_addwater;05c8;04;2;
 data\itemobject.db;plant_manure_addtopdress;05cc;04;2;
 data\itemobject.db;plant_manure_addhealth;05d0;04;1;
 data\itemobject.db;plant_manure_addgrow;05d4;04;2;
-data\itemobject.db;plant_manure_feedpoint;05d8;04;2;
+data\itemobject.db;plant_manure_feedpoint;05d8;04;1;
 data\itemobject.db;plant_level;05dc;04;2;
 data\itemobject.db;plant_decwater;05e0;04;2;
 data\itemobject.db;plant_dectopdress;05e4;04;2;
@@ -3214,7 +3214,7 @@ data\magicobject.db;mitargettype;0260;04;2;
 data\magicobject.db;mrplotname;0264;40;5;
 data\magicobject.db;magicshield_type;02a4;04;2;
 data\magicobject.db;magicshield_effect;02a8;04;2;
-data\magicobject.db;magicshield_point;02ac;04;2;
+data\magicobject.db;magicshield_point;02ac;04;1;
 data\magicobject.db;magicshield_skilllvarg;02b0;04;3;
 data\magicobject.db;atkcaltype;02b4;04;2;
 data\magicobject.db;magicgroupid;02b8;04;2;
@@ -3552,7 +3552,7 @@ data\npcobject.db;npcmode;0640;04;2;
 data\npcobject.db;;0644;04;2;
 data\npcobject.db;carrycount;0648;04;2;
 data\npcobject.db;carrytype;064c;04;2;
-data\npcobject.db;searchgroupid;0650;04;2;=0
+data\npcobject.db;searchgroupid;0650;04;0;
 data\npcobject.db;carryluascript;0654;40;5;
 data\npcobject.db;carryshootrange;0694;04;2;
 data\npcobject.db;carryshootangle;0698;04;2;
@@ -3797,16 +3797,16 @@ data\questdetailobject.db;iaccept_flagon3;011c;04;2;=0
 data\questdetailobject.db;iaccept_flagoff1;0120;04;2;=0
 data\questdetailobject.db;iaccept_flagoff2;0124;04;2;=0
 data\questdetailobject.db;iaccept_flagoff3;0128;04;2;=0
-data\questdetailobject.db;iaccept_itemid1;012c;04;2;
-data\questdetailobject.db;iaccept_itemid2;0130;04;2;
-data\questdetailobject.db;iaccept_itemid3;0134;04;2;
-data\questdetailobject.db;iaccept_itemid4;0138;04;2;
+data\questdetailobject.db;iaccept_itemid1;012c;04;2;Item you get when starting the quests
+data\questdetailobject.db;iaccept_itemid2;0130;04;2;Item you get when starting the quests
+data\questdetailobject.db;iaccept_itemid3;0134;04;2;Item you get when starting the quests
+data\questdetailobject.db;iaccept_itemid4;0138;04;2;Item you get when starting the quests
 data\questdetailobject.db;iaccept_itemid5;013c;04;2;=0
-data\questdetailobject.db;iaccept_itemval1;0140;04;2;
-data\questdetailobject.db;iaccept_itemval2;0144;04;2;
-data\questdetailobject.db;iaccept_itemval3;0148;04;2;
-data\questdetailobject.db;iaccept_itemval4;014c;04;0;
-data\questdetailobject.db;iaccept_itemval5;0150;04;0;
+data\questdetailobject.db;iaccept_itemval1;0140;04;2;Items count of iaccept_itemid1
+data\questdetailobject.db;iaccept_itemval2;0144;04;2;Items count of iaccept_itemid2
+data\questdetailobject.db;iaccept_itemval3;0148;04;2;Items count of iaccept_itemid3
+data\questdetailobject.db;iaccept_itemval4;014c;04;0;Items count of iaccept_itemid4
+data\questdetailobject.db;iaccept_itemval5;0150;04;0;Items count of iaccept_itemid5
 data\questdetailobject.db;irequest_itemid1;0154;04;2;Items (ID) which are required for quest 1
 data\questdetailobject.db;irequest_itemid2;0158;04;2;Items (ID) which are required for quest 2
 data\questdetailobject.db;irequest_itemid3;015c;04;2;Items (ID) which are required for quest 3
@@ -4709,7 +4709,7 @@ data\suitobject.db;;01d8;04;2;
 data\suitobject.db;;01dc;04;2;
 data\suitobject.db;;01f0;04;2;
 data\suitobject.db;;01f4;04;1;
-data\suitobject.db;;01f8;04;2;
+data\suitobject.db;;01f8;04;1;
 data\suitobject.db;;01fc;04;2;
 data\suitobject.db;;0200;04;2;
 data\suitobject.db;;0204;20;5;
@@ -4724,8 +4724,8 @@ data\suitobject.db;;0240;04;2;
 data\suitobject.db;;0244;04;2;
 data\suitobject.db;;024c;04;2;
 data\suitobject.db;;0250;04;1;
-data\suitobject.db;;0254;04;2;
-data\suitobject.db;;0258;04;2;
+data\suitobject.db;;0254;04;1;
+data\suitobject.db;;0258;04;1;
 data\suitobject.db;;025c;04;2;
 data\suitobject.db;;0260;04;5;
 data\suitobject.db;;0264;04;5;
@@ -5341,16 +5341,16 @@ data\weaponobject.db;eqtype10;00dc;04;2;Attribute to change 10
 data\weaponobject.db;eqtypevalue1;00e0;04;2;value for attribute1
 data\weaponobject.db;eqtypevalue2;00e4;04;2;value for attribute2
 data\weaponobject.db;eqtypevalue3;00e8;04;1;value for attribute3
-data\weaponobject.db;eqtypevalue4;00ec;04;1;value for attribute4
-data\weaponobject.db;eqtypevalue5;00f0;04;1;value for attribute5
-data\weaponobject.db;eqtypevalue6;00f4;04;2;value for attribute6
+data\weaponobject.db;eqtypevalue4;00ec;04;2;value for attribute4
+data\weaponobject.db;eqtypevalue5;00f0;04;2;value for attribute5
+data\weaponobject.db;eqtypevalue6;00f4;04;1;value for attribute6
 data\weaponobject.db;eqtypevalue7;00f8;04;2;value for attribute7
 data\weaponobject.db;eqtypevalue8;00fc;04;2;value for attribute8
 data\weaponobject.db;eqtypevalue9;0100;04;2;value for attribute9
 data\weaponobject.db;eqtypevalue10;0104;04;2;value for attribute10
 data\weaponobject.db;eqtypeonattackmagicrate;0108;04;2;
 data\weaponobject.db;eqtypeonattackmagicrank;010c;04;2;=0
-data\weaponobject.db;eqtypeonattackmagicid;0110;04;2;=0
+data\weaponobject.db;eqtypeonattackmagicid;0110;04;2;
 data\weaponobject.db;dropability1;0114;04;2;random stat on drop 1
 data\weaponobject.db;dropabilityrate1;0118;04;2;Percent chance for stat 1 (x/10)
 data\weaponobject.db;dropability2;011c;04;2;random stat on drop 2
