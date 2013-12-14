@@ -30,6 +30,7 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(
     ${FDB_LIB_INCLUDE}
+    ${wxWidgets_LIB_DIR}
     ${wxWidgets_INCLUDE_DIRS}
     )
 
@@ -37,7 +38,7 @@ IF(wxWidgets_FOUND)
     INCLUDE(${wxWidgets_USE_FILE})
 ENDIF()
 
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} ${wxWidgets_LIB_DIR})
 
 SOURCE_GROUP("" FILES "../VersionNo.h")
 
