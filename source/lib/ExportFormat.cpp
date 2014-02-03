@@ -110,20 +110,20 @@ void DBExport_CSV::EntryEnd()
 }
 
 
-DBExport_Sqlite3::DBExport_Sqlite3(const std::string& _filename) : DBExport(filename),
+DBExport_Sqlite3::DBExport_Sqlite3(const std::string& _filename) : DBExport(_filename),
 		table_name(NULL)
 {
-	// Options
-	boost::filesystem::path filepath(filename);
-	fprintf(outf, "-- %s\n", filepath.filename().generic_string().c_str());
-	//fprintf(outf, "/*!40101 SET NAMES utf8 */;\n");
-	fputs("\n",outf);
-
 }
 
 void DBExport_Sqlite3::TableStart(const char* _table_name)  
 {
 	DBExport::TableStart(_table_name);
+
+	// Options
+	boost::filesystem::path filepath(filename);
+	fprintf(outf, "-- %s\n", filepath.filename().generic_string().c_str());
+	//fprintf(outf, "/*!40101 SET NAMES utf8 */;\n");
+	fputs("\n",outf);
 
 	// TODO: fprintf(outf, "BEGIN TRANSACTION;\n");
 	//    fprintf(outf, "\nEND TRANSACTION;\n");
