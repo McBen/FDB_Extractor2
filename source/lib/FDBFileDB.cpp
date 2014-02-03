@@ -30,10 +30,10 @@ bool FDBFileDB::WriteCSV(const char* filename)
 bool FDBFileDB::WriteSQLITE3(const char* filename)
 {
 	boost::filesystem::path filepath(filename);
-	const char* table_name = filepath.stem().generic_string().c_str();
+	std::string table1 = filepath.stem().string();
 
-	DBExport_Sqlite3 out(filename);
-	return DoExport(out, table_name);
+    DBExport_Sqlite3 out(filename);
+	return DoExport(out, table1.c_str());
 }
 
 bool FDBFileDB::DoExport(DBExport& exporter, const char* table_name)

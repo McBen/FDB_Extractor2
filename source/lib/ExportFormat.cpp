@@ -6,6 +6,7 @@ using namespace std;
 
 DBExport::DBExport(const std::string& _filename) :
 	filename (_filename),
+    realfilename(_filename),
 	outf (NULL),
 	not_first_value(false)
 {
@@ -24,25 +25,26 @@ void DBExport::Close()
 
 void DBExport::TableStart(const char* table_name) 
 {
-	if (fopen_s(&outf, filename.c_str(), "wt"))	outf=NULL;
+	Close();
+	if (table_name && table_name[0])
+	{
+		boost::filesystem::path r(realfilename);
+        if (r.stem().string()!=string(table_name))
+        {
+            std::string base = (r.parent_path()/r.stem()).generic_string();
+		    filename = base+string("_")+string(table_name)+r.extension().generic_string();
+        }
+	}
+
+	if (fopen_s(&outf, filename.c_str(), "wt"))	{
+        printf("Error writing '%s': %d (%s)\n", filename.c_str(),errno, strerror(errno));
+        outf=NULL;
+    }
 	not_first_value = false;
 }
 
-DBExport_CSV::DBExport_CSV(const std::string& _filename) : DBExport(_filename) ,
-	realfilename(filename)
+DBExport_CSV::DBExport_CSV(const std::string& _filename) : DBExport(_filename) 
 {
-}
-
-void DBExport_CSV::TableStart(const char* _table_name) 
-{
-	Close();
-	if (_table_name && _table_name[0])
-	{
-		boost::filesystem::path r(realfilename);
-		filename = (r.parent_path()/r.stem()).generic_string()+string("_")+string(_table_name)+r.extension().generic_string();
-	}
-
-	DBExport::TableStart(_table_name);
 }
 
 void DBExport_CSV::TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size )
@@ -118,6 +120,7 @@ DBExport_Sqlite3::DBExport_Sqlite3(const std::string& _filename) : DBExport(_fil
 void DBExport_Sqlite3::TableStart(const char* _table_name)  
 {
 	DBExport::TableStart(_table_name);
+    if (!outf) return;
 
 	// Options
 	boost::filesystem::path filepath(filename);

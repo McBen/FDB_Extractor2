@@ -8,6 +8,7 @@ class DBExport
 	protected:
 		FILE* outf;
 		std::string filename;
+		std::string realfilename;
 		bool not_first_value;
 
 	public:
@@ -26,12 +27,8 @@ class DBExport
 
 class DBExport_CSV : public DBExport
 {
-	protected:
-		std::string realfilename;
-
 	public:
 		DBExport_CSV(const std::string& _filename);
-		void TableStart(const char* _table_name);
 		void TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size );
 		void TableEnd();
 		void EntryStart();
