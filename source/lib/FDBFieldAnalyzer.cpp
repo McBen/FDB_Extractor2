@@ -349,7 +349,7 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 				    else
 					{
 						float f = fabs(*(float*)run);
-					    if (f<1e-10 || (f>0.00001 && f<1e10)) cur_byte->IncType(FDB_DBField::F_FLOAT);
+					    if (f==0 || (f>0.00001 && f<1e10)) cur_byte->IncType(FDB_DBField::F_FLOAT);
 					}
 			    }
 
