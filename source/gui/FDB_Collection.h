@@ -15,7 +15,7 @@ class FDB_Collection
 		void GetSubDirectories(const char* base_path, std::vector<std::string>& names, std::vector<bool>& has_childs);
 		void GetFileInfos(const char* base_path, std::vector<FDBPackage::file_info>& infos);
 
-		std::string ExtractFile(const char* fname, const char* destname);
+		wxString ExtractFile(const char* fname, const char* destname);
 		bool ExtractMultipleFiles(const char* src_dir, const wxString& dest_dir, const wxArrayString&);
 
 	private:

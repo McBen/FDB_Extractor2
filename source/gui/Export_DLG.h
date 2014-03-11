@@ -12,7 +12,7 @@ class Export_DLG : public BASE_DLG::Export_DLG
 		Export_DLG( wxWindow* parent );
 
 		void SetMax(int max);
-		void Step(const char* fname);
+		void Step(const wxString& fname);
 
 		bool IsCanceled;
 

@@ -20,14 +20,14 @@ void Export_DLG::SetMax(int max)
 }
 
 
-void Export_DLG::Step(const char* fname)
+void Export_DLG::Step(const wxString& fname)
 {
 	++pos;
 
 	if (next_update_tick < wxGetLocalTimeMillis().GetLo())
 	{
 		m_gauge1->SetValue(pos);
-		m_textCtrl1->SetLabel(wxString::FromAscii(fname));
+		m_textCtrl1->SetLabel(fname);
 		next_update_tick = wxGetLocalTimeMillis().GetLo()+100;
 
 		wxGetApp().Yield();
