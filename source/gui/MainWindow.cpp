@@ -103,7 +103,8 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 	file_ctrl->DeleteAllItems();
 	for (vector<FDBPackage::file_info>::iterator i=infos.begin();i!=infos.end();++i)
 	{
-		wxFileName fname( wxString(i->name, wxConvUTF8) );
+                wxString  dosname = wxString(i->name, wxConvUTF8);
+		wxFileName fname( dosname, wxPATH_DOS);
 
 		int icon = (int) GetFileTypeIcon(*i);
 
@@ -229,7 +230,7 @@ void MainWindow::file_ctrlOnLeftDClick( wxMouseEvent& event )
 	if (idx==wxNOT_FOUND) return;
 	
 	wxString src = directory_ctrl->GetCurrentDir() + file_ctrl->GetItemText(idx);
-	wxString dest =  wxFileName::GetTempDir() + wxT("\\")+ file_ctrl->GetItemText(idx);
+	wxString dest =  wxFileName::GetTempDir() + wxFileName::GetPathSeparator()+ file_ctrl->GetItemText(idx);
 
 	std::string res1_name = fdb_pack.ExtractFile(src.mb_str(),dest.mb_str());
 	wxString res_name(res1_name.c_str(),wxConvUTF8);

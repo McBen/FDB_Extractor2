@@ -160,8 +160,13 @@ const char* FDBPackage::GetFileName(size_t index)
 {
     assert(index < file_count);
     assert(IsOk());
-
-    return file_names_data+file_name_pos[index];
+  #ifdef WIN32
+      return file_names_data+file_name_pos[index];
+  #else
+      std:string fname = file_names_data+file_name_pos[index];
+      std::replace( fname.begin(), fname.end(), '\\', '/');
+      return fname.c_str();
+  #endif
 }
 
 void    FDBPackage::GetFileInfo(size_t index, file_info& s_info)

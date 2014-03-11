@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DirectoryListCtrl.h"
 #include "FDB_Collection.h"
+#include <wx/filename.h>
 
 using namespace std;
 
@@ -77,7 +78,7 @@ wxString DirectoryListCtrl::GetFullName(wxTreeItemId node)
 	wxString dir(wxT(""));
 	while (node.IsOk() && node != GetRootItem())
 	{
-		dir = GetItemText(node)+wxT("\\")+dir;
+		dir = GetItemText(node)+wxFileName::GetPathSeparator()+dir;
 		node = GetItemParent(node);
 	}
 	return dir;

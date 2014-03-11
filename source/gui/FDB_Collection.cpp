@@ -64,6 +64,7 @@ void FDB_Collection::Close()
 
 void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& names, vector<bool>& has_childs)
 {
+        const char separator = wxFileName::GetPathSeparator();
 	int len = strlen(base_path);
 	names.clear();
 	has_childs.clear();
@@ -78,12 +79,12 @@ void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& na
 			const char* name = pack->GetFileName(i);
 			if (strncmp(base_path,name,len)==0)
 			{
-				const char* p1 = strchr(name+len,'\\');
+				const char* p1 = strchr(name+len, separator);
 				if (p1) 
 				{
 					string cur_dir(name+len, p1-(name+len));
 
-					const char* p2 = strchr(p1+1,'\\');
+					const char* p2 = strchr(p1+1, separator);
 					vector<string>::iterator pos = std::find(names.begin(), names.end(), cur_dir);
 					if (pos ==names.end())
 					{
@@ -102,6 +103,8 @@ void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& na
 
 void FDB_Collection::GetFileInfos(const char* base_path, std::vector<FDBPackage::file_info>& infos)
 {
+        const char separator = wxFileName::GetPathSeparator();
+
 	int len = strlen(base_path);
 	infos.clear();
 
@@ -115,7 +118,7 @@ void FDB_Collection::GetFileInfos(const char* base_path, std::vector<FDBPackage:
 			const char* name = pack->GetFileName(i);
 			if (strncmp(base_path,name,len)==0)
 			{
-				if ( strchr(name+len,'\\')==NULL) 
+				if ( strchr(name+len, separator)==NULL)
 				{
 					FDBPackage::file_info info;
 					pack->GetFileInfo(i,info);
