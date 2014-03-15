@@ -23,7 +23,7 @@ bool FDBFileStringDB::WriteINI(const char* filename)
     while (run<end)
     {
 
-    	const s_entry* ent = (const s_entry*)run;
+    	const s_entry* ent = reinterpret_cast<const s_entry*>(run);
         run+= 64+4+ent->v_len;
 
         assert(strlen(ent->value)+1 == ent->v_len);
@@ -61,7 +61,7 @@ bool FDBFileStringDB::WriteSQLITE3(const char* filename)
     const char* end = (const char*)data+data_size;
     while (run<end)
     {
-        s_entry* ent = (s_entry*)run;
+        const s_entry* ent = reinterpret_cast<const s_entry*>(run);
         run+= 64+4+ent->v_len;
         assert(strlen(ent->value)+1 == ent->v_len);
 
@@ -72,7 +72,7 @@ bool FDBFileStringDB::WriteSQLITE3(const char* filename)
 	run = (const char*)data;
     while (run<end)
     {
-        s_entry* ent = (s_entry*)run;
+        const s_entry* ent = reinterpret_cast<const s_entry*>(run);
         run+= 64+4+ent->v_len;
 
         std::string value = ReplaceString(std::string(ent->value),"\n","\\n");

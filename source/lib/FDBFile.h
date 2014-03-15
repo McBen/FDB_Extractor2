@@ -21,6 +21,6 @@ class FDBFile
 
     protected:
         size_t  data_size;
-        uint8_t*   data;
+        const uint8_t* data;
 };
 

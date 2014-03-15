@@ -23,7 +23,7 @@ class FDBFieldManager
 		FDBFieldManager();
 		~FDBFieldManager();
 
-		field_list* GetFieldDefinition(const FDBPackage::file_info& s_info, uint8_t* data );
+		field_list* GetFieldDefinition(const FDBPackage::file_info& s_info, const uint8_t* data );
 
 	private:
 
@@ -34,7 +34,7 @@ class FDBFieldManager
 		field_def_list cache;
 
 		field_def_list::iterator FindEntry(const std::string& name);
-		FDBFieldDef AnalyseFile(const FDBPackage::file_info& s_info, uint8_t* data);
+		FDBFieldDef AnalyseFile(const FDBPackage::file_info& s_info,const uint8_t* data);
 		void Merge(FDBFieldDef& current, const FDBFieldDef& old_def);
 };
 

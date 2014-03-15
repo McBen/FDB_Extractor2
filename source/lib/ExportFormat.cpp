@@ -154,8 +154,8 @@ void DBExport_Sqlite3::TableField(const std::string& name, uint32_t position, FD
 		case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
 		case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
 		case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
-		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%lu)",size); break;
-		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%lu)",size); break; // TODO: make BLOB
+		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%lu)",(unsigned long)size); break;
+		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%lu)",(unsigned long)size); break; // TODO: make BLOB
 		default:
 			assert(false);
 			break;

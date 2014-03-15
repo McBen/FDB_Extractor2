@@ -38,9 +38,9 @@ class FDBFieldAnalyzer
 
 		
 		FDBFieldManager::s_file_header* head;
-		uint8_t* entries;
-		uint8_t* data;
-		uint8_t* data_end;
+		const uint8_t* entries;
+		const uint8_t* data;
+		const uint8_t* data_end;
 
 		void LoadFieldDef( field_list& result );
 		void FillFieldDef( field_list& result );
@@ -55,7 +55,7 @@ class FDBFieldAnalyzer
 		ani_list  FieldAnalysis();
 
 	public:
-		FDBFieldAnalyzer(const FDBPackage::file_info& s_info, uint8_t* data);
+		FDBFieldAnalyzer(const FDBPackage::file_info& s_info, const uint8_t* data);
 
 		void Do(field_list& result );
 

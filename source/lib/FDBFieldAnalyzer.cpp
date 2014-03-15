@@ -5,7 +5,7 @@
 #include <ctype.h>
 using namespace std;
 
-FDBFieldAnalyzer::FDBFieldAnalyzer(const FDBPackage::file_info& s_info, uint8_t* _data)
+FDBFieldAnalyzer::FDBFieldAnalyzer(const FDBPackage::file_info& s_info, const uint8_t* _data)
 {
 	data = _data;
 	head = (FDBFieldManager::s_file_header*)data;
@@ -42,13 +42,13 @@ void FDBFieldAnalyzer::LoadFieldDef( field_list& fields )
 #pragma pack()
 #pragma warning( default: 4200 )
 
-	uint8_t* run = entries  + head->entry_count * head->entry_size;
+	const uint8_t* run = entries  + head->entry_count * head->entry_size;
 
 	FDB_DBField field;
 
 	while (run < data_end)
 	{
-		s_field_desc* f = (s_field_desc*)run;
+        const s_field_desc* f = reinterpret_cast<const s_field_desc*>(run);
 		run += 8 + f->name_len;
 		if (f->name_len==0) break;
 
@@ -259,7 +259,7 @@ int FDBFieldAnalyzer::StringChance(ani_list& finfo, uint32_t pos, size_t s)
     return res/s;
 }
 
-bool IsValidUTF8(uint8_t* run,int max_chars)
+bool IsValidUTF8(const uint8_t* run,int max_chars)
 {
     // U+0000..U+007F     00..7F
     if (*run < 0x20 && *run!=10 && *run!=0 && *run!=13) return false;
@@ -311,8 +311,8 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 	}
 
 
-	uint8_t* end = entries  + head->entry_count * head->entry_size;
-	uint8_t* run = entries;
+	const uint8_t* end = entries  + head->entry_count * head->entry_size;
+	const uint8_t* run = entries;
 	while (run<end)
 	{
         std::vector<aninfo>::iterator cur_byte = binfo.begin();

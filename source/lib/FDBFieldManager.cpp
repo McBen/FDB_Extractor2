@@ -27,7 +27,7 @@ FDBFieldManager::~FDBFieldManager()
 	if (state == E_CHANGED) WriteCSV();
 }
 
-field_list* FDBFieldManager::GetFieldDefinition(const FDBPackage::file_info& s_info, uint8_t* data )
+field_list* FDBFieldManager::GetFieldDefinition(const FDBPackage::file_info& s_info, const uint8_t* data )
 {
 	if (state == E_NOT_INIT) Load();
 
@@ -58,7 +58,7 @@ field_list* FDBFieldManager::GetFieldDefinition(const FDBPackage::file_info& s_i
 }
 
 
-FDBFieldDef FDBFieldManager::AnalyseFile(const FDBPackage::file_info& s_info, uint8_t* data)
+FDBFieldDef FDBFieldManager::AnalyseFile(const FDBPackage::file_info& s_info, const uint8_t* data)
 {
 	FDBFieldDef new_entry;
 	new_entry.filename =s_info.name;
