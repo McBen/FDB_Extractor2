@@ -144,8 +144,8 @@ void FDBFieldManager::LoadCSV()
 	}
 	csv.close();
 
-	csv.open("fields.csv");
-	while (csvparse(csv,row)) {
+	ifstream csv2("fields.csv");
+	while (csvparse(csv2,row)) {
 
         if (row.size()<5) continue;
 
@@ -169,6 +169,7 @@ void FDBFieldManager::LoadCSV()
 
 		fields->fields.push_back(new_field);
 	}
+	csv2.close();
 
 	for (field_def_list::iterator i=cache.begin();i!=cache.end();++i)
 	{
