@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "commandline.h"
 
 #define BOOST_FILESYSTEM_NO_DEPRECATED

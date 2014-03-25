@@ -54,6 +54,11 @@ endmacro()
 ######################################
 # Dependecies
 ######################################
+INCLUDE(CheckIncludeFiles)
+CHECK_INCLUDE_FILES(stdint.h HAVE_STDINT_H)
+if (NOT HAVE_STDINT_H)
+    message(FATAL_ERROR "ERROR: stdint.h required\nif you use on old MS-VS2010 try: http://msinttypes.googlecode.com/svn/trunk/stdint.h")
+endif()
 
 # ZLIB
 set(SKIP_INSTALL_ALL)
@@ -74,8 +79,12 @@ if(NOT Boost_FOUND)
     if(UNIX)
       message(FATAL_ERROR "ERROR: boost not found.\nuse: 'apt-get install libboost-all-dev'")
     else()
-      message(FATAL_ERROR "ERROR: boost not found.\nmake sure you build with: 'b2 link=static threading=multi runtime-link=static'")
+      message(FATAL_ERROR "ERROR: boost not found.")
     endif()
+endif()
+
+if(NOT wxWidgets_FOUND)
+    message(WARNING "wxWidget not found: GUI-Project disabled")
 endif()
 
 # LZO
