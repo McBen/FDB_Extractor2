@@ -14,7 +14,8 @@ class FDBPackage
             EX_INI = 2,
             EX_LUA = 4,
             EX_CSV = 8,
-            EX_SQLITE3 = 16,
+            EX_SQLITE = 16,
+            EX_MYSQL = 32,
         };
 
     public:

@@ -50,3 +50,18 @@ class DBExport_Sqlite3 : public DBExport
 		void EntryField(FDB_DBField::field_type type, void*data);
 		void EntryEnd();
 };
+
+class DBExport_MySQL: public DBExport
+{
+	private:
+		const char* table_name;
+
+	public:
+		DBExport_MySQL(const std::string& _filename);
+		void TableStart(const char* _table_name);
+		void TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size );
+		void TableEnd();
+		void EntryStart();
+		void EntryField(FDB_DBField::field_type type, void*data);
+		void EntryEnd();
+};

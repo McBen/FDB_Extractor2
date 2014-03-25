@@ -305,7 +305,8 @@ bool    FDBPackage::ExtractFile(size_t index, const char* filename, e_export_for
     if ( format & EX_CSV) res|= file->WriteToFile(filename,EX_CSV);
     if ( format & EX_INI) res|= file->WriteToFile(filename,EX_INI);
     if ( format & EX_LUA) res|= file->WriteToFile(filename,EX_LUA);
-    if ( format & EX_SQLITE3) res|= file->WriteToFile(filename,EX_SQLITE3);
+    if ( format & EX_SQLITE) res|= file->WriteToFile(filename,EX_SQLITE);
+    if ( format & EX_MYSQL) res|= file->WriteToFile(filename,EX_MYSQL);
 
     delete(file);
     return res;
@@ -317,7 +318,8 @@ bool    FDBPackage::ExtractFile(size_t index, const char* filename, e_export_for
     if ( e & EX_CSV) if (!f->ExportFormatIsValid(EX_CSV)) e= (e_export_format) (e & ~EX_CSV);
     if ( e & EX_INI) if (!f->ExportFormatIsValid(EX_INI)) e= (e_export_format) (e & ~EX_INI);
     if ( e & EX_LUA) if (!f->ExportFormatIsValid(EX_LUA)) e= (e_export_format) (e & ~EX_LUA);
-    if ( e & EX_SQLITE3) if (!f->ExportFormatIsValid(EX_SQLITE3)) e= (e_export_format) (e & ~EX_SQLITE3);
+    if ( e & EX_SQLITE) if (!f->ExportFormatIsValid(EX_SQLITE)) e= (e_export_format) (e & ~EX_SQLITE);
+    if ( e & EX_MYSQL)  if (!f->ExportFormatIsValid(EX_MYSQL)) e= (e_export_format) (e & ~EX_MYSQL);
 
     if (e == EX_NONE) e= f->DefaultFormat();
 

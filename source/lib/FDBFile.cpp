@@ -22,7 +22,8 @@ std::string FDBFile::GetTargetName(const char* filename, FDBPackage::e_export_fo
         case FDBPackage::EX_CSV:
             return std::string(filename)+".csv";
 
-        case FDBPackage::EX_SQLITE3:
+        case FDBPackage::EX_SQLITE:
+        case FDBPackage::EX_MYSQL:
             return std::string(filename)+".sql";
     }
 
@@ -54,8 +55,12 @@ bool FDBFile::WriteToFile(const char* filename, FDBPackage::e_export_format e)
             res = WriteCSV( GetTargetName( filename, e).c_str());
             break;
 
-        case FDBPackage::EX_SQLITE3:
-            res = WriteSQLITE3(GetTargetName( filename, e).c_str());
+        case FDBPackage::EX_SQLITE:
+            res = WriteSQLITE(GetTargetName( filename, e).c_str());
+            break;
+
+        case FDBPackage::EX_MYSQL:
+            res = WriteMySQL(GetTargetName( filename, e).c_str());
             break;
     }
 
@@ -90,7 +95,12 @@ bool FDBFile::WriteCSV(const char* filename)
     return WriteRAW(filename);
 }
 
-bool FDBFile::WriteSQLITE3(const char* filename) 
+bool FDBFile::WriteSQLITE(const char* filename) 
+{ 
+    return WriteRAW(filename);
+}
+
+bool FDBFile::WriteMySQL(const char* filename) 
 { 
     return WriteRAW(filename);
 }

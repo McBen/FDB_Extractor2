@@ -16,10 +16,11 @@ class FDBFileDB : public  FDBFile
         FDBFileDB(const FDBPackage::file_info& s_info, uint8_t* data );
 
         FDBPackage::e_export_format DefaultFormat()    { return FDBPackage::EX_CSV; };
-        bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_CSV)||(e==FDBPackage::EX_SQLITE3)||(FDBFile::ExportFormatIsValid(e)); };
+        bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_CSV)||(e==FDBPackage::EX_SQLITE)||(e==FDBPackage::EX_MYSQL)||(FDBFile::ExportFormatIsValid(e)); };
 
 		bool WriteCSV(const char*);
-		bool WriteSQLITE3(const char*);
+        bool WriteSQLITE(const char* filename);
+        bool WriteMySQL(const char* filename);
 
 	protected:
 		virtual bool DoExport(DBExport& exporter, const char* table_name);

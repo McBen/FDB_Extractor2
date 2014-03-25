@@ -27,12 +27,21 @@ bool FDBFileDB::WriteCSV(const char* filename)
 	return DoExport(out, NULL);
 }
 
-bool FDBFileDB::WriteSQLITE3(const char* filename)
+bool FDBFileDB::WriteSQLITE(const char* filename)
 {
 	boost::filesystem::path filepath(filename);
 	std::string table1 = filepath.stem().string();
 
     DBExport_Sqlite3 out(filename);
+	return DoExport(out, table1.c_str());
+}
+
+bool FDBFileDB::WriteMySQL(const char* filename)
+{
+	boost::filesystem::path filepath(filename);
+	std::string table1 = filepath.stem().string();
+
+    DBExport_MySQL out(filename);
 	return DoExport(out, table1.c_str());
 }
 

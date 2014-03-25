@@ -20,8 +20,9 @@ class FDBFileStringDB : public  FDBFile
         FDBFileStringDB(const FDBPackage::file_info& s_info, uint8_t* data );
 
         bool WriteINI(const char*);
-        bool WriteSQLITE3(const char*);
+        bool WriteSQLITE(const char* filename);
+        bool WriteMySQL(const char* filename);
         FDBPackage::e_export_format DefaultFormat()    { return FDBPackage::EX_INI; };
-        bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_INI)||(e==FDBPackage::EX_SQLITE3)||(FDBFile::ExportFormatIsValid(e)); };
+        bool ExportFormatIsValid(FDBPackage::e_export_format e)    { return (e==FDBPackage::EX_INI)||(e==FDBPackage::EX_SQLITE)||(e==FDBPackage::EX_MYSQL)||(FDBFile::ExportFormatIsValid(e)); };
 };
 

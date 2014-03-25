@@ -214,3 +214,106 @@ void DBExport_Sqlite3::EntryEnd()
 	fprintf(outf,");\n");
 }
 
+
+DBExport_MySQL::DBExport_MySQL(const std::string& _filename) : DBExport(_filename),
+		table_name(NULL)
+{
+}
+
+void DBExport_MySQL::TableStart(const char* _table_name)  
+{
+	DBExport::TableStart(_table_name);
+    if (!outf) return;
+
+	// Options
+	boost::filesystem::path filepath(filename);
+	fprintf(outf, "-- %s\n", filepath.filename().generic_string().c_str());
+	//fprintf(outf, "/*!40101 SET NAMES utf8 */;\n");
+	fputs("\n",outf);
+
+	// TODO: fprintf(outf, "BEGIN TRANSACTION;\n");
+	//    fprintf(outf, "\nEND TRANSACTION;\n");
+
+	table_name = _table_name;
+	fprintf(outf, "DROP TABLE IF EXISTS `%s`;\n", table_name);
+	fprintf(outf, "CREATE TABLE `%s` (\n", table_name);
+}
+
+void DBExport_MySQL::TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size)
+{
+	if (not_first_value) fprintf(outf,",\n");
+	else not_first_value = true;
+
+	if (name.empty()) 
+		fprintf(outf," `unk%i` ",position);
+	else
+		fprintf(outf," `%s` ",name.c_str());
+
+	switch (type)
+	{
+		case FDB_DBField::F_BOOL:   fprintf(outf,"BOOLEAN"); break;
+		case FDB_DBField::F_BYTE:   fprintf(outf,"TINYINT"); break; 
+		case FDB_DBField::F_WORD:   fprintf(outf,"INTEGER");break; 
+		case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
+		case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
+		case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
+		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%lu)",(unsigned long)size); break;
+		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%lu)",(unsigned long)size); break; // TODO: make BLOB
+		default:
+			assert(false);
+			break;
+	}
+}
+
+void DBExport_MySQL::TableEnd()
+{
+	fprintf(outf,"\n);\n\n");
+}
+
+void DBExport_MySQL::EntryStart() 
+{
+	not_first_value = false;
+	fprintf(outf,"INSERT INTO `%s` VALUES (",table_name);
+}
+
+void DBExport_MySQL::EntryField(FDB_DBField::field_type type, void*data) 
+{
+	if (not_first_value) fprintf(outf,",");
+	else not_first_value = true;
+
+	switch (type)
+	{
+		case FDB_DBField::F_BYTE:
+			fprintf(outf,"%i",*(uint8_t*)data);
+			break; 
+		case FDB_DBField::F_WORD:
+			fprintf(outf,"%i",*(uint16_t*)data);
+			break; 
+		case FDB_DBField::F_INT:
+			fprintf(outf,"%i",*(int32_t*)data);
+			break;                       
+		case FDB_DBField::F_BOOL:
+		case FDB_DBField::F_DWORD:
+			fprintf(outf,"%u",*(uint32_t*)data);
+			break;                       
+		case FDB_DBField::F_FLOAT:
+			fprintf(outf,"%g",*(float*)data);
+			break; 
+		case FDB_DBField::F_STRING: 
+			fprintf(outf,"'%s'", EscapeSQLITE3_String((char*)data).c_str());
+			break;
+		case FDB_DBField::F_ARRAY:
+			fprintf(outf,"'-?-'");
+			break; 
+
+		default:
+			assert(false);
+			break;
+	}
+}
+
+void DBExport_MySQL::EntryEnd() 
+{
+	fprintf(outf,");\n");
+}
+

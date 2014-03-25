@@ -37,7 +37,7 @@ bool FDBFileStringDB::WriteINI(const char* filename)
     return true;
 }
 
-bool FDBFileStringDB::WriteSQLITE3(const char* filename)
+bool FDBFileStringDB::WriteSQLITE(const char* filename)
 {
 	FILE* outf;
 	if (fopen_s(&outf, filename, "wt")) return false;
@@ -86,3 +86,8 @@ bool FDBFileStringDB::WriteSQLITE3(const char* filename)
 	return true;
 }
 
+
+bool FDBFileStringDB::WriteMySQL(const char* filename)
+{
+	return WriteSQLITE(filename);
+}

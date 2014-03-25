@@ -29,7 +29,8 @@ bool CommandLine::Parse(int argc, const char* argv[])
         ("output,o", value<string>(&output_directory)->default_value(""), "output directory")
         ("fdb_file,i", value< vector<string> >(&fbd_files),"FDB file")
         ("filename", value<string>()->required(), "file/filter to extract\nyou can use a dos-like filter or (if '-r') a regular expression")
-        ("sql,s", "generate SQL-Scripts for DB files")
+        ("sqlite,s", "generate SQLite-Scripts for DB files")
+        ("mysql,m", "generate MySQL-Scripts for DB files")
         ("csv,c", "generate CSV-Files for DB files")
 
         ("raw,p", "write unconverted raw-data (for developers)")
@@ -97,7 +98,8 @@ void CommandLine::ParseArguments(variables_map vm)
         (vm.count("list_full")>0? OPT_LIST_ONLY_FULL : 0) | 
 
         (vm.count("raw")>0? OPT_RAW_DATA : 0) | 
-        (vm.count("sql")>0? OPT_DB_SQL_OUT : 0) | 
+        (vm.count("sqlite")>0? OPT_DB_SQLITE_OUT : 0) | 
+        (vm.count("mysql")>0? OPT_DB_MYSQL_OUT : 0) | 
         (vm.count("lua")>0? OPT_LUA_OUT : 0) | 
         (vm.count("csv")>0? OPT_CSV_OUT : 0);
 

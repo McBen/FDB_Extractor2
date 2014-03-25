@@ -70,6 +70,11 @@ bool ProcessDir(string filename, const boost::regex& filter)
   
     fs::path basepath(filename);
     basepath.remove_filename();
+	if (basepath.empty())
+	{
+		printf("no FDB File\n");
+		return false;
+	}
 
     bool something_extracted=false;
     
@@ -96,10 +101,11 @@ bool ProcessFile(boost::filesystem::path filename, const boost::regex& filter)
     FDBPackage fdb( filename.generic_string().c_str() );
 
     FDBPackage::e_export_format ex_format=FDBPackage::EX_NONE;
-    if (cmdline.options & CommandLine::OPT_RAW_DATA)   ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_RAW);
-    if (cmdline.options & CommandLine::OPT_DB_SQL_OUT) ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_SQLITE3);
-    if (cmdline.options & CommandLine::OPT_LUA_OUT)    ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_LUA);
-    if (cmdline.options & CommandLine::OPT_CSV_OUT)    ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_CSV);
+    if (cmdline.options & CommandLine::OPT_RAW_DATA)      ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_RAW);
+    if (cmdline.options & CommandLine::OPT_DB_SQLITE_OUT) ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_SQLITE);
+    if (cmdline.options & CommandLine::OPT_DB_MYSQL_OUT)  ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_MYSQL);
+    if (cmdline.options & CommandLine::OPT_LUA_OUT)       ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_LUA);
+    if (cmdline.options & CommandLine::OPT_CSV_OUT)       ex_format = (FDBPackage::e_export_format)(ex_format + FDBPackage::EX_CSV);
     
 
     for (size_t id=0;id<fdb.GetFileCount();++id)

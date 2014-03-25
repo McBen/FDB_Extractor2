@@ -15,10 +15,11 @@ class CommandLine
             OPT_LIST_ONLY_WITH_CRC      = 0x0040,
             OPT_LIST_ONLY_WITH_CRCRAW   = 0x0080,
             OPT_ANY_LIST = OPT_LIST_ONLY | OPT_LIST_ONLY_FULL | OPT_LIST_ONLY_WITH_CRC | OPT_LIST_ONLY_WITH_CRCRAW,
-            OPT_RAW_DATA    = 0x0100,
-            OPT_DB_SQL_OUT  = 0x0200,
-            OPT_LUA_OUT     = 0x0400,
-            OPT_CSV_OUT     = 0x0800,
+            OPT_RAW_DATA     = 0x0100,
+            OPT_LUA_OUT      = 0x0200,
+            OPT_CSV_OUT      = 0x0400,
+            OPT_DB_SQLITE_OUT= 0x0800,
+            OPT_DB_MYSQL_OUT = 0x1000,
         };
 
     public:
