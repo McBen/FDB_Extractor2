@@ -31,13 +31,18 @@ SET(CMAKE_DEBUG_POSTFIX "d")
 
 #set(CMAKE_LEGACY_CYGWIN_WIN32 1)
 
+
+PROJECT(FDB_ex2)
+
+# Include necessary submodules
+set(CMAKE_MODULE_PATH
+  "${FDB_ex2_SOURCE_DIR}/cmake"
+)
+
 ######################################
 # Set up the basic build environment
 ######################################
 OPTION(FDB_INCLUDE_TESTS "Include test-classes" true)
-
-PROJECT(FDB_ex2)
-
 
 SET(EXECUTABLE_OUTPUT_PATH "${FDB_ex2_SOURCE_DIR}/bin")
 
