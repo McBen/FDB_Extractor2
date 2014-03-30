@@ -231,9 +231,6 @@ void DBExport_MySQL::TableStart(const char* _table_name)
 	//fprintf(outf, "/*!40101 SET NAMES utf8 */;\n");
 	fputs("\n",outf);
 
-	// TODO: fprintf(outf, "BEGIN TRANSACTION;\n");
-	//    fprintf(outf, "\nEND TRANSACTION;\n");
-
 	table_name = _table_name;
 	fprintf(outf, "DROP TABLE IF EXISTS `%s`;\n", table_name);
 	fprintf(outf, "CREATE TABLE `%s` (\n", table_name);
@@ -257,8 +254,18 @@ void DBExport_MySQL::TableField(const std::string& name, uint32_t position, FDB_
 		case FDB_DBField::F_INT:    fprintf(outf,"INTEGER");break; 
 		case FDB_DBField::F_DWORD:  fprintf(outf,"INTEGER UNSIGNED");break; 
 		case FDB_DBField::F_FLOAT:  fprintf(outf,"REAL"); break; 
-		case FDB_DBField::F_STRING: fprintf(outf,"CHAR(%lu)",(unsigned long)size); break;
-		case FDB_DBField::F_ARRAY:  fprintf(outf,"CHAR(%lu)",(unsigned long)size); break; // TODO: make BLOB
+		case FDB_DBField::F_STRING: 
+			if ((unsigned long)size < 255)
+				fprintf(outf,"CHAR(%lu)",(unsigned long)size);
+			else
+				fprintf(outf,"TEXT");
+			break;
+		case FDB_DBField::F_ARRAY:
+			if ((unsigned long)size < 255)
+				fprintf(outf,"CHAR(%lu)",(unsigned long)size);
+			else
+				fprintf(outf,"TEXT");
+			break; // TODO: make BLOB
 		default:
 			assert(false);
 			break;
@@ -300,7 +307,7 @@ void DBExport_MySQL::EntryField(FDB_DBField::field_type type, void*data)
 			fprintf(outf,"%g",*(float*)data);
 			break; 
 		case FDB_DBField::F_STRING: 
-			fprintf(outf,"'%s'", EscapeSQLITE3_String((char*)data).c_str());
+			fprintf(outf,"'%s'", EscapeMySQL_String((char*)data).c_str());
 			break;
 		case FDB_DBField::F_ARRAY:
 			fprintf(outf,"'-?-'");

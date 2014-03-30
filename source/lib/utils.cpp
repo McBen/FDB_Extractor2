@@ -59,6 +59,29 @@ namespace std
 		return str;
 	}
 
+	string EscapeMySQL_String(const string& instr)
+	{
+	    string str=instr;
+	
+		str = ReplaceString(str, "\\", "\\\\");
+		str = ReplaceString(str, "'", "''");
+
+		if (str.find("interface") != string::npos || str.find("Interface") != string::npos || str.find("model") != string::npos || str.find(".ros") != string::npos || str.find(".wdb") != string::npos)
+		{
+			str = ReplaceString(str, "\\\\", "/");
+		}
+
+
+		return str;
+	}
+
+	string ConvertStrings(const string& instr)
+	{
+		string str = instr;
+
+		return str;
+	}
+
 	string GetROMInstallDir()
 	{
 		#if WIN32
