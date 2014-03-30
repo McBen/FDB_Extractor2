@@ -48,6 +48,8 @@ bool FDBFileDB::WriteMySQL(const char* filename)
 bool FDBFileDB::DoExport(DBExport& exporter, const char* table_name)
 {
 	field_list* fields = g_field_manager.GetFieldDefinition(f_info, data);
+    if (fields->size()==0) return true;
+
 	return ExportTable(exporter, table_name, fields);
 }
 
@@ -60,19 +62,22 @@ bool FDBFileDB::ExportTable(DBExport& exporter, const char* table_name, field_li
 	}
 	exporter.TableEnd();
 
+    if (head->entry_count>0) {
+        exporter.EntryHeader();
+	    for (uint32_t idx=0;idx<head->entry_count;++idx)
+	    {
+            exporter.EntryStart();
 
-	for (uint32_t idx=0;idx<head->entry_count;++idx)
-	{
-        exporter.EntryStart();
+            uint8_t* line = entries+idx*head->entry_size;
 
-        uint8_t* line = entries+idx*head->entry_size;
-
-		for (field_list::iterator field=fields->begin();field!=fields->end();++field)
-		{
-			exporter.EntryField(field->type,line+field->position);
-		}
-		exporter.EntryEnd();
-	}
+		    for (field_list::iterator field=fields->begin();field!=fields->end();++field)
+		    {
+			    exporter.EntryField(field->type,line+field->position);
+		    }
+		    exporter.EntryEnd();
+	    }
+        exporter.EntryFooter();
+    }
 
 	return true;
 }
@@ -118,6 +123,7 @@ bool FDBFileDB_LearnMagic::WriteSubArray(DBExport& exporter, field_list* fields,
 		exporter.TableField("u3",2,FDB_DBField::F_WORD,2);
 		exporter.TableEnd();
 
+        exporter.EntryHeader();
 		for (uint32_t idx=0;idx<head->entry_count;++idx)
 		{
 			uint8_t* line = entries+idx*head->entry_size;
@@ -141,6 +147,7 @@ bool FDBFileDB_LearnMagic::WriteSubArray(DBExport& exporter, field_list* fields,
 				exporter.EntryEnd();
 			}
 		}
+        exporter.EntryFooter();
 	}
 
 	return true;

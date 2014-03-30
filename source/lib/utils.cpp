@@ -59,25 +59,19 @@ namespace std
 		return str;
 	}
 
-	string EscapeMySQL_String(const string& instr)
+	string EscapeMySQL_String(const string& instr, bool path_convert)
 	{
 	    string str=instr;
 	
-		str = ReplaceString(str, "\\", "\\\\");
+		str = ReplaceString(str, "\n", "\\n");
 		str = ReplaceString(str, "'", "''");
 
-		if (str.find("interface") != string::npos || str.find("Interface") != string::npos || str.find("model") != string::npos || str.find(".ros") != string::npos || str.find(".wdb") != string::npos)
-		{
-			str = ReplaceString(str, "\\\\", "/");
-		}
+		if (path_convert) {
+			str = ReplaceString(str, "\\", "/");
+		} else {
+            str = ReplaceString(str, "\\", "\\\\");
+        }
 
-
-		return str;
-	}
-
-	string ConvertStrings(const string& instr)
-	{
-		string str = instr;
 
 		return str;
 	}

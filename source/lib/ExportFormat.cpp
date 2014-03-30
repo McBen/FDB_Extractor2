@@ -274,13 +274,29 @@ void DBExport_MySQL::TableField(const std::string& name, uint32_t position, FDB_
 
 void DBExport_MySQL::TableEnd()
 {
-	fprintf(outf,"\n);\n\n");
+	fprintf(outf,"\n) DEFAULT CHARSET=utf8;\n\n");
+}
+
+void DBExport_MySQL::EntryHeader()
+{
+    nof_export_lines=0;
+	fprintf(outf,"BEGIN;\n\nINSERT INTO `%s` VALUES\n ",table_name);
 }
 
 void DBExport_MySQL::EntryStart() 
 {
+    if (nof_export_lines>0) { 
+        if (nof_export_lines>1000) {
+            fprintf(outf,";\nINSERT INTO `%s` VALUES\n ",table_name);
+            nof_export_lines=0;
+        } else {
+            fprintf(outf,",\n ");
+        }
+    }
+    ++nof_export_lines;
+
 	not_first_value = false;
-	fprintf(outf,"INSERT INTO `%s` VALUES (",table_name);
+	fprintf(outf,"(");
 }
 
 void DBExport_MySQL::EntryField(FDB_DBField::field_type type, void*data) 
@@ -321,6 +337,12 @@ void DBExport_MySQL::EntryField(FDB_DBField::field_type type, void*data)
 
 void DBExport_MySQL::EntryEnd() 
 {
-	fprintf(outf,");\n");
+	fprintf(outf,")");
 }
+
+void DBExport_MySQL::EntryFooter()
+{
+	fprintf(outf,";\n\nCOMMIT;\n");
+}
+
 

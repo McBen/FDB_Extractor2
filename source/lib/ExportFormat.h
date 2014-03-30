@@ -19,9 +19,11 @@ class DBExport
 		virtual void TableStart(const char* table_name);
 		virtual void TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size ) {}
 		virtual void TableEnd() {}
+		virtual void EntryHeader() {}
 		virtual void EntryStart() {}
 		virtual void EntryField(FDB_DBField::field_type type, void*data) {}
 		virtual void EntryEnd() {}
+		virtual void EntryFooter() {}
 };
 
 
@@ -55,13 +57,16 @@ class DBExport_MySQL: public DBExport
 {
 	private:
 		const char* table_name;
+		int nof_export_lines;
 
 	public:
 		DBExport_MySQL(const std::string& _filename);
 		void TableStart(const char* _table_name);
 		void TableField(const std::string& name, uint32_t position, FDB_DBField::field_type type, size_t size );
 		void TableEnd();
+		void EntryHeader();
 		void EntryStart();
 		void EntryField(FDB_DBField::field_type type, void*data);
 		void EntryEnd();
+		void EntryFooter();
 };
