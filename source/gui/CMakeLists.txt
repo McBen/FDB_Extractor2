@@ -40,6 +40,7 @@ IF(wxWidgets_FOUND)
         ${wxWidgets_INCLUDE_DIRS}
         )
 
+    # cmake --help-policy CMP0043
     INCLUDE(${wxWidgets_USE_FILE})
 
     LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} ${wxWidgets_LIB_DIR})

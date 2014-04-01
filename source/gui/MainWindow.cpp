@@ -39,19 +39,19 @@ MainWindow::MainWindow() : BASE_DLG::MainWindow(NULL)
 		m_toolBar1->AddSeparator();
 	#endif
 
-	m_toolBar1->AddTool( 7000, _("Wiki"), wxArtProvider::GetBitmap( wxART_QUESTION, wxART_BUTTON ), wxNullBitmap, wxITEM_NORMAL, _("Open FDBex2 Webpage"), wxEmptyString, NULL ); 
-	m_toolBar1->Realize(); 
+	m_toolBar1->AddTool( 7000, _("Wiki"), wxArtProvider::GetBitmap( wxART_QUESTION, wxART_BUTTON ), wxNullBitmap, wxITEM_NORMAL, _("Open FDBex2 Webpage"), wxEmptyString, NULL );
+	m_toolBar1->Realize();
 
 
 #ifdef WIN32
 	SetIcon(wxICON(IDI_ICON1)); // TODO: BUG: Idk why this isn't working
 #endif
-	
+
 	directory_ctrl->SetDataSource(&fdb_pack);
-	
+
 	if (fdb_pack.OpenDefault())
 	{
-	    
+
 	    #if wxCHECK_VERSION(2, 9, 0)
 		wxString path=GetROMInstallDir();
 	    #else
@@ -96,14 +96,14 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 	wxString cur_dir = directory_ctrl->GetFullName(event.GetItem());
 
 	vector<FDBPackage::file_info> infos;
-	fdb_pack.GetFileInfos(cur_dir.mb_str(), infos);
+	fdb_pack.GetFileInfos(cur_dir, infos);
 
 	file_ctrl->Freeze();
 
 	file_ctrl->DeleteAllItems();
 	for (vector<FDBPackage::file_info>::iterator i=infos.begin();i!=infos.end();++i)
 	{
-                wxString  dosname = wxString(i->name, wxConvUTF8);
+        wxString  dosname = wxString::FromAscii(i->name);
 		wxFileName fname( dosname, wxPATH_DOS);
 
 		int icon = (int) GetFileTypeIcon(*i);
@@ -115,7 +115,7 @@ void MainWindow::directory_ctrlOnTreeSelChanged( wxTreeEvent& event )
 		int comp = i->compression;
 		if (comp<0||comp>4) comp=5;
 		file_ctrl->SetItem(item,3, comp_modes[comp]);
-		
+
 	  #ifdef WIN32
 		// TODO: linux alternative required
 		SYSTEMTIME SystemTime;
@@ -161,7 +161,7 @@ void MainWindow::OnLoadFDB( wxCommandEvent& event )
 
 	wxFileDialog dlg(this, _("Open FDB Files"), last_open_path, wxEmptyString,
 			       _("FDB files (*.fdb)|*.fdb"), wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_MULTIPLE);
-	
+
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_open_path = dlg.GetDirectory();
 	ShowBasePath(last_open_path);
@@ -228,12 +228,12 @@ void MainWindow::file_ctrlOnLeftDClick( wxMouseEvent& event )
 	int flags = wxLIST_HITTEST_ONITEM;
 	long idx = file_ctrl->HitTest(event.GetPosition(), flags);
 	if (idx==wxNOT_FOUND) return;
-	
+
 	wxString src = directory_ctrl->GetCurrentDir() + file_ctrl->GetItemText(idx);
 	wxString dest =  wxFileName::GetTempDir() + wxFileName::GetPathSeparator()+ file_ctrl->GetItemText(idx);
 
-	std::string res1_name = fdb_pack.ExtractFile(src.mb_str(),dest.mb_str());
-	wxString res_name(res1_name.c_str(),wxConvUTF8);
+	wxString res1_name = fdb_pack.ExtractFile(src,dest);
+	wxString res_name = wxString::FromAscii(res1_name);
 	wxASSERT(!res_name.IsEmpty());
 	if (res_name.IsEmpty()) return;
 
@@ -247,7 +247,7 @@ void MainWindow::file_ctrlOnLeftDClick( wxMouseEvent& event )
 	    #else
 	      wxExecute(res_name);
 	    #endif
-	#endif	
+	#endif
 }
 
 void MainWindow::DeleteTempFiles()
@@ -272,7 +272,7 @@ void MainWindow::OnExtractFocusFile(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal()==wxID_CANCEL) return;
 	last_export_path = dlg.GetDirectory();
 
-	fdb_pack.ExtractFile(curname.mb_str(), dlg.GetPath().mb_str());
+	fdb_pack.ExtractFile(curname, dlg.GetPath());
 }
 
 void MainWindow::OnCopyPath(wxCommandEvent& WXUNUSED(event))
@@ -308,7 +308,7 @@ void MainWindow::OnExtractFiles(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_export_path = dlg.GetPath();
 
-	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath(), cur_files);
+	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir(),dlg.GetPath(), cur_files);
 
 }
 
@@ -319,7 +319,7 @@ void MainWindow::OnExtractFolder(wxCommandEvent& WXUNUSED(event))
 	if (dlg.ShowModal() == wxID_CANCEL) return;
 	last_export_path = dlg.GetPath();
 
-	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir().mb_str(),dlg.GetPath(),wxArrayString());
+	fdb_pack.ExtractMultipleFiles(directory_ctrl->GetCurrentDir(),dlg.GetPath(),wxArrayString());
 }
 
 void MainWindow::m_extract_folderOnUpdateUI( wxUpdateUIEvent& event )

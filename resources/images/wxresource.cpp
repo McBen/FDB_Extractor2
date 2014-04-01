@@ -1,4 +1,5 @@
 #include "wxresource.h"
+#include "wx/image.h"
 
 const int resources_sizes[]={2486,2562,4650,1899,};
 const char* resources[]={

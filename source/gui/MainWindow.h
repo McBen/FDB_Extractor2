@@ -19,7 +19,7 @@ class MainWindow : public BASE_DLG::MainWindow
 
 	public:
 		MainWindow();
-		~MainWindow();
+		virtual ~MainWindow();
 
 		void directory_ctrlOnTreeSelChanged( wxTreeEvent& event );
 		void directory_ctrlOnTreeItemMenu( wxTreeEvent& event );
@@ -32,7 +32,7 @@ class MainWindow : public BASE_DLG::MainWindow
 		void OnExtractFolder(wxCommandEvent& WXUNUSED(event));
 		void OnCopyPath(wxCommandEvent& WXUNUSED(event));
 		void OnOpenWebPage(wxCommandEvent& WXUNUSED(event));
-		
+
 		void m_extract_folderOnUpdateUI( wxUpdateUIEvent& event );
 		void m_extract_fileOnUpdateUI( wxUpdateUIEvent& event );
 
