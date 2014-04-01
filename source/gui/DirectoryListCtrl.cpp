@@ -5,8 +5,8 @@
 
 using namespace std;
 
-DirectoryListCtrl::DirectoryListCtrl(wxWindow *parent, wxWindowID id, 
-					const wxPoint &pos, const wxSize &size, long style, const wxValidator &validator, const wxString &name) : 
+DirectoryListCtrl::DirectoryListCtrl(wxWindow *parent, wxWindowID id,
+					const wxPoint &pos, const wxSize &size, long style, const wxValidator &validator, const wxString &name) :
 		wxTreeCtrl(parent, id, pos, size, style, validator, name)
 {
 	p_fdb_pack = NULL;
@@ -50,10 +50,10 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 
 	wxString cur_dir = GetFullName(node);
 
-	vector<string> names;
+	wxArrayString names;
 	vector<bool> has_childs;
 
-	p_fdb_pack->GetSubDirectories(cur_dir.mb_str(wxConvUTF8), names, has_childs);
+	p_fdb_pack->GetSubDirectories(cur_dir, names, has_childs);
 
 	// clear all childs
 	wxTreeItemId n;
@@ -65,7 +65,7 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 	// fill
 	for (size_t i=0;i<names.size();++i)
 	{
-		wxTreeItemId n = InsertItem(node,0, wxString(names[i].c_str(), wxConvUTF8));
+		wxTreeItemId n = InsertItem(node,0, names[i]);
 		if (has_childs[i])
 			InsertItem(n,0,wxEmptyString);
 	}

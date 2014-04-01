@@ -5,8 +5,8 @@ class FDB_Collection;
 class DirectoryListCtrl : public wxTreeCtrl
 {
 	public:
-		DirectoryListCtrl(wxWindow *parent, wxWindowID id=wxID_ANY, 
-					const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=wxTR_DEFAULT_STYLE, 
+		DirectoryListCtrl(wxWindow *parent, wxWindowID id=wxID_ANY,
+					const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=wxTR_DEFAULT_STYLE,
 					const wxValidator &validator=wxDefaultValidator, const wxString &name=wxTreeCtrlNameStr);
 		~DirectoryListCtrl();
 

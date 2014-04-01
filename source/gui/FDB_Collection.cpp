@@ -48,7 +48,7 @@ bool FDB_Collection::OpenDefault()
 {
 	Close();
 
-	wxString dir = wxString::FromAscii(GetROMInstallDir().c_str());
+	wxString dir = wxString::FromUTF8(GetROMInstallDir().c_str());
 	if (wxDirExists(dir))
 		return Open(dir + wxT("fdb/*.fdb"));
 	else
@@ -62,10 +62,10 @@ void FDB_Collection::Close()
 	directories.clear();
 }
 
-void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& names, vector<bool>& has_childs)
+void FDB_Collection::GetSubDirectories(const wxString& base_path, wxArrayString& names, std::vector<bool>& has_childs)
 {
     const char separator = wxFileName::GetPathSeparator();
-	int len = strlen(base_path);
+
 	names.clear();
 	has_childs.clear();
 
@@ -76,24 +76,28 @@ void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& na
 		size_t count = pack->GetFileCount();
 		for (size_t i = 0;i<count;++i)
 		{
-			const char* name = pack->GetFileName(i);
-			if (strncmp(base_path,name,len)==0)
+			wxString name=wxString::FromUTF8(pack->GetFileName(i));
+			wxString rest;
+			if (name.StartsWith(base_path,&rest))
 			{
-				const char* p1 = strchr(name+len, separator);
-				if (p1) 
+				int sep_pos = rest.Find(separator);
+				if (sep_pos != wxNOT_FOUND)
 				{
-					string cur_dir(name+len, p1-(name+len));
+					wxString cur_dir = rest.Left(sep_pos);
 
-					const char* p2 = strchr(p1+1, separator);
-					vector<string>::iterator pos = std::find(names.begin(), names.end(), cur_dir);
-					if (pos ==names.end())
+					int sep_pos2 = rest.Find(separator);
+					int index = names.Index(cur_dir);
+					if (index==wxNOT_FOUND)
 					{
-						names.push_back(cur_dir);
-						has_childs.push_back(p2!=NULL);
+						names.Add(cur_dir);
+						has_childs.push_back(sep_pos2 != wxNOT_FOUND);
 					}
-					else if (p2!=NULL) 
+					else
 					{
-						has_childs[std::distance(names.begin(),pos)]=true;
+						if (sep_pos2 != wxNOT_FOUND)
+						{
+							has_childs[index]=true;
+						}
 					}
 				}
 			}
@@ -101,11 +105,10 @@ void FDB_Collection::GetSubDirectories(const char* base_path, vector<string>& na
 	}
 }
 
-void FDB_Collection::GetFileInfos(const char* base_path, std::vector<FDBPackage::file_info>& infos)
+void FDB_Collection::GetFileInfos(const wxString& base_path, std::vector<FDBPackage::file_info>& infos)
 {
     const char separator = wxFileName::GetPathSeparator();
 
-	int len = strlen(base_path);
 	infos.clear();
 
 	for (vector<FDBPackage*>::iterator ipack=packages.begin();ipack!=packages.end();++ipack)
@@ -115,10 +118,11 @@ void FDB_Collection::GetFileInfos(const char* base_path, std::vector<FDBPackage:
 		size_t count = pack->GetFileCount();
 		for (size_t i = 0;i<count;++i)
 		{
-			const char* name = pack->GetFileName(i);
-			if (strncmp(base_path,name,len)==0)
+			wxString name=wxString::FromUTF8(pack->GetFileName(i));
+			wxString rest;
+			if ( name.StartsWith(base_path, &rest) )
 			{
-				if ( strchr(name+len, separator)==NULL)
+				if (rest.find(separator)==wxNOT_FOUND)
 				{
 					FDBPackage::file_info info;
 					pack->GetFileInfo(i,info);
@@ -129,19 +133,19 @@ void FDB_Collection::GetFileInfos(const char* base_path, std::vector<FDBPackage:
 	}
 }
 
-wxString FDB_Collection::ExtractFile(const char* fname, const char* destname)
+wxString FDB_Collection::ExtractFile(const wxString& fname, const wxString& destname)
 {
 	for (vector<FDBPackage*>::iterator ipack=packages.begin();ipack!=packages.end();++ipack)
 	{
-		size_t idx = (*ipack)->FindFile(fname);
+		size_t idx = (*ipack)->FindFile(fname.mb_str());
 		if (idx!=-1)
 		{
 			FDBFile* file = (*ipack)->GetFile(idx);
 			if (file)
 			{
 				FDBPackage::e_export_format e= file->DefaultFormat();
-				bool res=  file->WriteToFile(destname, e);
-				wxString res_name( file->GetTargetName(destname, e) );
+				bool res=  file->WriteToFile(destname.mb_str(), e);
+				wxString res_name = wxString::FromUTF8( file->GetTargetName(destname.mb_str(), e).c_str());
 				delete(file);
 
 				if (res)	return res_name;
@@ -152,12 +156,11 @@ wxString FDB_Collection::ExtractFile(const char* fname, const char* destname)
 	return wxT("");
 }
 
-int FDB_Collection::CalcFileCount(const char* src_dir, const wxArrayString& files)
+int FDB_Collection::CalcFileCount(const wxString& src_dir, const wxArrayString& files)
 {
 	if (files.size()>0) return files.size();
 
 	size_t count=0;
-	int len = strlen(src_dir);
 
 	for (vector<FDBPackage*>::iterator ipack=packages.begin();ipack!=packages.end();++ipack)
 	{
@@ -166,15 +169,15 @@ int FDB_Collection::CalcFileCount(const char* src_dir, const wxArrayString& file
 		size_t fc = pack->GetFileCount();
 		for (size_t i = 0;i<fc;++i)
 		{
-			const char* name = pack->GetFileName(i);
-			if (strncmp(src_dir,name,len)==0) ++count;
+			wxString name=wxString::FromUTF8(pack->GetFileName(i));
+			if (name.StartsWith(src_dir)) ++count;
 		}
 	}
 
 	return count;
 }
 
-bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const wxString& dest_dir, const wxArrayString& files)
+bool FDB_Collection::ExtractMultipleFiles(const wxString& src_dir, const wxString& dest_dir, const wxArrayString& files)
 {
 	int total = CalcFileCount(src_dir, files);
 
@@ -183,7 +186,6 @@ bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const wxString& d
 	dlg.Show();
 
 	bool res=false;
-	int len = strlen(src_dir);
 
 	for (vector<FDBPackage*>::iterator ipack=packages.begin();ipack!=packages.end();++ipack)
 	{
@@ -192,21 +194,21 @@ bool FDB_Collection::ExtractMultipleFiles(const char* src_dir, const wxString& d
 		size_t count = pack->GetFileCount();
 		for (size_t i = 0;i<count;++i)
 		{
-			const char* name = pack->GetFileName(i);
-			if (strncmp(src_dir,name,len)==0)
+            wxString full_name=wxString::FromUTF8(pack->GetFileName(i));
+			wxString file_name;
+			if (full_name.StartsWith(src_dir,&file_name))
 			{
-				wxString fname=wxString::FromAscii(name+len);
-				if ( (files.size()==0) || (files.Index(fname)!= wxNOT_FOUND) )
+				if ( (files.size()==0) || (files.Index(file_name)!= wxNOT_FOUND) )
 				{
-                    wxString fullname = wxString::FromAscii(name);
-					wxFileName dest(dest_dir+wxT("/")+fullname);
-					if (files.size()>0) dest = dest_dir+wxT("/")+fname;
+					wxFileName dest(dest_dir + wxFileName::GetPathSeparator());
+					if (files.size()>0) dest.AppendDir(file_name);
+					else                dest.AppendDir(full_name);
 
 					dest.Mkdir(511,wxPATH_MKDIR_FULL);
 					res |= pack->ExtractFile(i,dest.GetFullPath().mb_str(), FDBPackage::EX_NONE);
-					dlg.Step(fullname);
+					dlg.Step(full_name);
 
-					if (dlg.IsCanceled) 
+					if (dlg.IsCanceled)
 					{
 						return false;
 					}
