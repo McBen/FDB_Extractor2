@@ -50,7 +50,7 @@ void DirectoryListCtrl::FillDirTree(const wxTreeItemId& node)
 
 	wxString cur_dir = GetFullName(node);
 
-	wxArrayString names;
+    wxArrayString names;
 	vector<bool> has_childs;
 
 	p_fdb_pack->GetSubDirectories(cur_dir, names, has_childs);

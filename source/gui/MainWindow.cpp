@@ -232,8 +232,7 @@ void MainWindow::file_ctrlOnLeftDClick( wxMouseEvent& event )
 	wxString src = directory_ctrl->GetCurrentDir() + file_ctrl->GetItemText(idx);
 	wxString dest =  wxFileName::GetTempDir() + wxFileName::GetPathSeparator()+ file_ctrl->GetItemText(idx);
 
-	wxString res1_name = fdb_pack.ExtractFile(src,dest);
-	wxString res_name = wxString::FromAscii(res1_name);
+	wxString res_name = fdb_pack.ExtractFile(src,dest);
 	wxASSERT(!res_name.IsEmpty());
 	if (res_name.IsEmpty()) return;
 
