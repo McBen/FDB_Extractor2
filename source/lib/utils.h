@@ -13,6 +13,10 @@ namespace std
 	string GetROMInstallDir();
 }
 
+bool IsValidUTF8Char(const uint8_t* run,int max_chars);
+bool IsValidUTF8String(const uint8_t* run,int len);
+void MakeValidUTF8String(std::string& str);
+
 #ifndef WIN32
     int _getch();
 #else

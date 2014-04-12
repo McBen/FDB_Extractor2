@@ -16,20 +16,31 @@ bool FDBFileStringDB::WriteINI(const char* filename)
 {
     FILE* outf;
     if (fopen_s(&outf, filename, "wb")) return false;
-	if (!outf) return false;
+    if (!outf) return false;
 
     const char* run = (const char*)data;
     const char* end = (const char*)data+data_size;
     while (run<end)
     {
 
-    	const s_entry* ent = reinterpret_cast<const s_entry*>(run);
+        const s_entry* ent = reinterpret_cast<const s_entry*>(run);
         run+= 64+4+ent->v_len;
-
         assert(strlen(ent->value)+1 == ent->v_len);
 
-        std::string value = ReplaceString(std::string(ent->value),"\n","\\n");
-        fprintf(outf,"\"%s\"=\"%s\"\n",ent->key,value.c_str());
+        std::string value = ent->value;
+        std::string key = ent->key;
+
+        MakeValidUTF8String(value);
+        MakeValidUTF8String(key);
+
+        value = ReplaceString(value,"\n","\\n");
+        value = ReplaceString(value ,"\t","\\t");
+        if (value=="\xf")  value = ""; // special in string.db
+
+        assert(IsValidUTF8String((uint8_t*) value.c_str(),value.size()));
+        assert(IsValidUTF8String((uint8_t*) key.c_str(),key.size()));
+
+        fprintf(outf,"\"%s\"=\"%s\"\n", key.c_str(), value.c_str());
     }
 
     fclose(outf);
@@ -85,7 +96,6 @@ bool FDBFileStringDB::WriteSQLITE(const char* filename)
 	fclose(outf);
 	return true;
 }
-
 
 bool FDBFileStringDB::WriteMySQL(const char* filename)
 {

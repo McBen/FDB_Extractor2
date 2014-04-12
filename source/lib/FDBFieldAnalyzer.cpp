@@ -24,7 +24,6 @@ void FDBFieldAnalyzer::Do( field_list& result )
  	TestFieldTypes(result);
 }
 
-
 void FDBFieldAnalyzer::LoadFieldDef( field_list& fields )
 {
 	fields.clear();
@@ -98,7 +97,6 @@ void FDBFieldAnalyzer::FillFieldDef( field_list& result )
 	}
 
 }
-
 
 void FDBFieldAnalyzer::TestFieldTypes(field_list& fields)
 {
@@ -259,38 +257,6 @@ int FDBFieldAnalyzer::StringChance(ani_list& finfo, uint32_t pos, size_t s)
     return res/s;
 }
 
-bool IsValidUTF8(const uint8_t* run,int max_chars)
-{
-    // U+0000..U+007F     00..7F
-    if (*run < 0x20 && *run!=10 && *run!=0 && *run!=13) return false;
-    if (*run < 0x80) return true;
-    if (*run > 0xf4) return false;
-
-    // U+0080..U+07FF     C2..DF     80..BF
-    if (max_chars<2) return false;
-    if (*run>=0xc2 && *run<=0xdf)   return (run[1]>=0x80 && run[1]<=0xbf);
-
-    //  U+0800..U+0FFF     E0         A0..BF      80..BF
-    if (max_chars<3) return false;
-    if (*run==0xe0)   return (run[1]>=0xa0 && run[1]<=0xbf) && (run[2]>=0x80 && run[2]<=0xbf);
-    //  U+1000..U+CFFF     E1..EC     80..BF      80..BF
-    if (*run>=0xe1 && *run<=0xec)   return (run[1]>=0x80 && run[1]<=0xbf) && (run[2]>=0x80 && run[2]<=0xbf);
-    //  U+D000..U+D7FF     ED         80..9F      80..BF
-    if (*run==0xed)   return (run[1]>=0x80 && run[1]<=0x9f) && (run[2]>=0x80 && run[2]<=0xbf);
-    //   U+E000..U+FFFF     EE..EF     80..BF      80..BF
-    if (*run>=0xee && *run<=0xef)   return (run[1]>=0x80 && run[1]<=0xbf) && (run[2]>=0x80 && run[2]<=0xbf);
-
-    //  U+10000..U+3FFFF   F0         90..BF      80..BF     80..BF
-    if (max_chars<4) return false;
-    if (*run==0xf0)   return (run[1]>=0x90 && run[1]<=0xbf) && (run[2]>=0x80 && run[2]<=0xbf)  && (run[3]>=0x80 && run[3]<=0xbf);
-    // U+40000..U+FFFFF   F1..F3     80..BF      80..BF     80..BF
-    if (*run>=0xf1 && *run<=0xf3)   return (run[1]>=0x80 && run[1]<=0xbf) && (run[2]>=0x80 && run[2]<=0xbf)  && (run[3]>=0x80 && run[3]<=0xbf);
-    // U+100000..U+10FFFF F4         80..8F      80..BF     80..BF
-    if (*run==0xf4)   return (run[1]>=0x80 && run[1]<=0x8f) && (run[2]>=0x80 && run[2]<=0xbf) && (run[3]>=0x80 && run[3]<=0xbf);
-
-    return false;
-}
-
 std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 {
 	// prepare
@@ -333,7 +299,7 @@ std::vector<FDBFieldAnalyzer::aninfo>  FDBFieldAnalyzer::FieldAnalysis()
 
             if (cur_byte->IsValidType(FDB_DBField::F_STRING))
             {
-                if (!IsValidUTF8(run,rest))  cur_byte->InvalidType(FDB_DBField::F_STRING);
+                if (!IsValidUTF8Char(run,rest))  cur_byte->InvalidType(FDB_DBField::F_STRING);
                 else
                 if (isprint(*run) || !*run) cur_byte->IncType(FDB_DBField::F_STRING);
             }
