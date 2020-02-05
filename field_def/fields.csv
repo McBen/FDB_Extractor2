@@ -4035,11 +4035,11 @@ data\questdetailobject.db;irequest_killstr5;0530;04;2;Quest-Goal prefix (Q_REQUE
 data\questdetailobject.db;iquestgrouplv;0534;04;2;
 data\questdetailobject.db;ireward_honor;0538;04;2;
 data\questdetailobject.db;ireward_tp;053c;04;2;
-data\questdetailobject.db;;0540;04;2;
-data\questdetailobject.db;;0544;04;2;
-data\questdetailobject.db;;0548;04;2;
-data\questdetailobject.db;;054c;04;2;
-data\questdetailobject.db;;0550;04;2;
+data\questdetailobject.db;iquest_starter1;0540;04;2;
+data\questdetailobject.db;iquest_starter2;0544;04;2;
+data\questdetailobject.db;iquest_starter3;0548;04;2;
+data\questdetailobject.db;iquest_starter4;054c;04;2;
+data\questdetailobject.db;iquest_starter5;0550;04;2;
 data\questdetailobject.db;ideletequestitem1;0554;04;2;
 data\questdetailobject.db;ideletequestitem2;0558;04;2;
 data\questdetailobject.db;ideletequestitem3;055c;04;2;
